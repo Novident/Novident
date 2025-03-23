@@ -2,6 +2,7 @@ import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/project_rule_mixin.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_manuscript_existence_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_trash_folder_existence_rule.dart';
+import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_trash_has_no_duplicates_rule.dart';
 import 'package:novident_remake/src/domain/exceptions/bad_project_state_exception.dart';
 
 /// These are all the rules that we have to run
@@ -14,6 +15,7 @@ class ProjectRules {
   const ProjectRules._();
   static final List<ProjectRule> _rules = <ProjectRule>[
     EnsureTrashFolderExistenceRule(),
+    EnsureTrashHasNoDuplicatesRule(),
     EnsureManuscriptExistenceRule(),
   ];
 
