@@ -9,6 +9,7 @@ import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/file.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
+import 'package:novident_remake/src/domain/enums/enums.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/interfaces/node_has_name.dart';
@@ -23,6 +24,7 @@ import 'package:novident_remake/src/domain/logger/tree_logger.dart';
 /// local storage that can contains a wide variety of file types
 final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasName {
   final List<Node> _children;
+  final FolderType type;
   final NodeTrashedOptions trashOptions;
   final String name;
   final Delta content;
@@ -36,6 +38,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
     required this.content,
     required this.name,
     required super.details,
+    this.type = FolderType.normal,
     this.trashOptions = const NodeTrashedOptions.nonTrashed(),
     bool isExpanded = false,
   })  : _children = children,
@@ -52,6 +55,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
     required this.content,
     required this.name,
     required super.details,
+    this.type = FolderType.normal,
     this.trashOptions = const NodeTrashedOptions.nonTrashed(),
     bool isExpanded = false,
   })  : _children = children,
@@ -440,6 +444,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
               ),
       ),
       name: json['name'] as String,
+      type: FolderType.values[json['type'] as int? ?? 0],
       trashOptions:
           NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
       isExpanded: json['expanded'] as bool,
@@ -472,6 +477,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
           NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       isExpanded: json['expanded'] as bool,
+      type: FolderType.values[json['type'] as int? ?? 0],
       children: List.from(
         (json['children'] as List<dynamic>).map(
           (el) {
@@ -503,6 +509,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
     return {
       'isFolder': true,
       'details': details.toJson(),
+      'type': type.index,
       'content': content.toJson(),
       'name': name,
       'trashOptions': trashOptions.toJson(),
@@ -530,6 +537,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
       isExpanded.hashCode ^
       _children.hashCode ^
       name.hashCode ^
+      type.hashCode ^
       trashOptions.hashCode ^
       content.hashCode;
 
@@ -543,6 +551,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
           other._children,
         ) &&
         name == other.name &&
+        type == other.type &&
         trashOptions == other.trashOptions &&
         content == other.content;
   }
@@ -555,6 +564,7 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
         'trashOptions: $trashOptions, '
         'name: $name, '
         'content: $content, '
+        'type: ${type.name},'
         'children: $_children'
         ')';
   }

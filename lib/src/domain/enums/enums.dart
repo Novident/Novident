@@ -4,7 +4,7 @@ enum LetterCase { uppercase, lowercase, normal }
 
 enum Filters { older, newer, name, reverse, defaultF }
 
-enum ActionOPeration {
+enum ActionOperation {
   addAsChildren,
   removeChild,
   updateChild,
@@ -16,6 +16,6 @@ enum ActionOPeration {
 // used by the compiler to add indent based in the selection of ones of theses options
 enum IndentType { everyLines, justAfterFirstLine, alwaysAfterAHeader }
 
-enum DirectoryType { manuscript, research, trash, usual, templateSheet }
+enum FolderType { normal, templateSheet, research, manuscript,  trash,   }
 
-enum FileOutput { pdf, html, epub, txt, docx, md }
+enum CompileTo { pdf, html, epub, txt, docx, md }
