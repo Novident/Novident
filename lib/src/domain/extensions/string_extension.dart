@@ -2,7 +2,9 @@ import 'package:novident_remake/src/domain/project_defaults.dart';
 
 extension UppercaseCaseStringExtension on String {
   String capitalize() {
-    return isEmpty || length < 2 ? this : "${this[0].toUpperCase()}${substring(1)}";
+    return isEmpty || length < 2
+        ? this
+        : "${this[0].toUpperCase()}${substring(1)}";
   }
 
   (String, int) capitalizeByIndex({int? startIndex, required int endIndex}) {

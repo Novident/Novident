@@ -51,7 +51,8 @@ final class ReplaceRomanNumberPlaceholderRule with PlaceholderRule {
                 ) +
                 1;
             context.documentVariables.add(match.group(1)!);
-            String str = (digitIndex < 1 ? 1 : digitIndex).toRomanNumeralString()!;
+            String str =
+                (digitIndex < 1 ? 1 : digitIndex).toRomanNumeralString()!;
             if (isUppercase) {
               str = str.toUpperCase();
             } else if (isLowercase) {

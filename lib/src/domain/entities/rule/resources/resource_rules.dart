@@ -25,4 +25,3 @@ final class ResourceRules {
 mixin ResourceRule {
   bool validate(Delta delta);
 }
-

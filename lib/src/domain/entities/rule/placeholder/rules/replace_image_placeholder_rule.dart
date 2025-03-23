@@ -55,8 +55,9 @@ final class ReplaceImagePlaceholderRule with PlaceholderRule {
                   file is! NodeHasValue<Delta> && (file is! NodeHasResource)) {
                 return [];
               }
-              final String imagePath =
-                  file.cast<NodeHasResource>().resource(ResourceType.image) as String;
+              final String imagePath = file
+                  .cast<NodeHasResource>()
+                  .resource(ResourceType.image) as String;
               if (imagePath.isEmpty) return [];
               return <Operation>[
                 Operation.insert(<String, String>{'image': imagePath})
@@ -67,8 +68,9 @@ final class ReplaceImagePlaceholderRule with PlaceholderRule {
             if (file == null || (file is! NodeHasResource)) {
               return <Operation>[];
             }
-            final String imagePath =
-                file.cast<NodeHasResource>().resource(ResourceType.image) as String;
+            final String imagePath = file
+                .cast<NodeHasResource>()
+                .resource(ResourceType.image) as String;
             if (imagePath.isEmpty) return [];
             final String? width = properties
                 .where((String element) => element.startsWith('w='))
@@ -124,8 +126,9 @@ final class ReplaceImagePlaceholderRule with PlaceholderRule {
               file is! NodeHasValue<Delta> && (file is! NodeHasResource)) {
             return [];
           }
-          final String imagePath =
-              file.cast<NodeHasResource>().resource(ResourceType.image) as String;
+          final String imagePath = file
+              .cast<NodeHasResource>()
+              .resource(ResourceType.image) as String;
           if (imagePath.isEmpty) return [];
           return <Operation>[
             Operation.insert(<String, String>{'image': imagePath})
@@ -139,10 +142,12 @@ final class ReplaceImagePlaceholderRule with PlaceholderRule {
         final String imagePath =
             file.cast<NodeHasResource>().resource(ResourceType.image) as String;
         if (imagePath.isEmpty) return [];
-        final String? width =
-            properties.where((String element) => element.startsWith('w=')).firstOrNull;
-        final String? height =
-            properties.where((String element) => element.startsWith('h=')).firstOrNull;
+        final String? width = properties
+            .where((String element) => element.startsWith('w='))
+            .firstOrNull;
+        final String? height = properties
+            .where((String element) => element.startsWith('h='))
+            .firstOrNull;
         return <Operation>[
           Operation.insert(
             <String, String>{'image': imagePath},

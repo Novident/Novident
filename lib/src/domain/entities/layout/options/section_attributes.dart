@@ -33,7 +33,8 @@ class SectionAttributes {
     this.link,
     this.indent = -1,
   })  : assert(lineHeight <= 3.0 && lineHeight >= 1.0, ''),
-        assert(indent == -1 || indent > 0 && indent <= 4, 'Invalid indent $indent'),
+        assert(indent == -1 || indent > 0 && indent <= 4,
+            'Invalid indent $indent'),
         assert(
           align.equals('left') ||
               align.equals('right') ||
@@ -182,7 +183,8 @@ class SectionAttributes {
 
   String toJson() => json.encode(toMap());
 
-  factory SectionAttributes.fromJson(String source) => SectionAttributes.fromMap(
+  factory SectionAttributes.fromJson(String source) =>
+      SectionAttributes.fromMap(
         json.decode(source) as Map<String, dynamic>,
       );
 

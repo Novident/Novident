@@ -17,6 +17,7 @@ extension ProjectDeltaContentExtension on Delta {
       context,
     );
   }
+
   /// Replace all the placeholders keys that are used commonly
   /// into the Novident projects
   Delta replaceIndexKeys(CompilerContext context) {

@@ -10,7 +10,8 @@ final class EnsureTrashFolderExistenceRule with ProjectRule {
   @override
   bool check(Project project) {
     final Node? trash = project.root.visitNode(
-        shouldGetNode: (node) => node is Folder && node.type == FolderType.trash);
+        shouldGetNode: (node) =>
+            node is Folder && node.type == FolderType.trash);
     return trash != null;
   }
 

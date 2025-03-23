@@ -41,7 +41,8 @@ class Author {
     if (index == 'all') {
       return getAuthors().map<String>((String author) {
         // if has no spaces, then get the name
-        if (author.isEmpty || !author.contains(PatternDefaults.whitespacesPattern)) {
+        if (author.isEmpty ||
+            !author.contains(PatternDefaults.whitespacesPattern)) {
           return author;
         }
         return author
@@ -51,7 +52,8 @@ class Author {
             .elementAt(1);
       }).join(',');
     }
-    final String value = getAuthors().elementAt(int.parse(index).nonNegativeDecrease());
+    final String value =
+        getAuthors().elementAt(int.parse(index).nonNegativeDecrease());
     return value.split(PatternDefaults.whitespacesPattern).elementAt(1);
   }
 

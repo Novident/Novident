@@ -38,13 +38,16 @@ class LayoutSectionManager extends Equatable {
 
   factory LayoutSectionManager.fromMap(Map<String, dynamic> map) {
     return LayoutSectionManager(
-      titleSection: LayoutSection.fromMap(map['titleSection'] as Map<String, dynamic>),
+      titleSection:
+          LayoutSection.fromMap(map['titleSection'] as Map<String, dynamic>),
       metadataSection:
           LayoutSection.fromMap(map['metadataSection'] as Map<String, dynamic>),
       synopsisSection:
           LayoutSection.fromMap(map['synopsisSection'] as Map<String, dynamic>),
-      notesSection: LayoutSection.fromMap(map['notesSection'] as Map<String, dynamic>),
-      textSection: LayoutSection.fromMap(map['textSection'] as Map<String, dynamic>),
+      notesSection:
+          LayoutSection.fromMap(map['notesSection'] as Map<String, dynamic>),
+      textSection:
+          LayoutSection.fromMap(map['textSection'] as Map<String, dynamic>),
     );
   }
 

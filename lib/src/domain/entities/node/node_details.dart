@@ -5,7 +5,8 @@ import 'package:novident_remake/src/utils/id_generators.dart';
 
 /// Represents a [NodeDetails] into the tree a make possible
 /// identify it into tree and make operations with them
-class NodeDetails implements Comparable<NodeDetails>, ClonableMixin<NodeDetails> {
+class NodeDetails
+    implements Comparable<NodeDetails>, ClonableMixin<NodeDetails> {
   final String id;
   final int level;
   Node? _owner;
@@ -63,11 +64,13 @@ class NodeDetails implements Comparable<NodeDetails>, ClonableMixin<NodeDetails>
 
   factory NodeDetails.withLevel([int? level, Node? owner]) {
     level ??= 0;
-    return NodeDetails.byId(level: level, id: IdGenerator.gen(version: 4), owner: owner);
+    return NodeDetails.byId(
+        level: level, id: IdGenerator.gen(version: 4), owner: owner);
   }
 
   factory NodeDetails.zero([Node? owner]) {
-    return NodeDetails.byId(level: 0, id: IdGenerator.gen(version: 4), owner: owner);
+    return NodeDetails.byId(
+        level: 0, id: IdGenerator.gen(version: 4), owner: owner);
   }
 
   factory NodeDetails.fromJson(Map<String, dynamic> json) {

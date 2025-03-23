@@ -9,7 +9,8 @@ extension ListExtension<T> on List<T> {
     }
   }
 
-  List<T> updateWhere({required T data, required ConditionalPredicate<T> predicate}) {
+  List<T> updateWhere(
+      {required T data, required ConditionalPredicate<T> predicate}) {
     final List<T> temp = <T>[...this];
     for (int i = 0; i < temp.length; i++) {
       final T currentData = temp.elementAt(i);
@@ -52,7 +53,8 @@ extension ListExtension<T> on List<T> {
       }
     }
     return where((T element) {
-      return predicate(element);
-    }).firstOrNull != null;
+          return predicate(element);
+        }).firstOrNull !=
+        null;
   }
 }

@@ -25,12 +25,11 @@ void main() {
   });
 
   test('shouldn\'t be NodeHasResource', () {
-    final Node folder = Folder(children: [], content: Delta(), name: '', details: NodeDetails.base());
+    final Node folder = Folder(
+        children: [], content: Delta(), name: '', details: NodeDetails.base());
     expect(
       folder is NodeHasResource,
       isFalse,
     );
   });
-
-
 }

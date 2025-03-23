@@ -53,7 +53,8 @@ extension DeltaDenormilazer on Delta {
   Delta denormalize() {
     if (isEmpty) return this;
 
-    final List<Map<String, dynamic>> denormalizedOps = map<List<Map<String, dynamic>>>(
+    final List<Map<String, dynamic>> denormalizedOps =
+        map<List<Map<String, dynamic>>>(
       (Operation op) => _denormalize(
         op.toJson(),
       ),
@@ -74,7 +75,8 @@ extension DeltaDenormilazer on Delta {
       return <Map<String, dynamic>>[op];
     }
 
-    final List<String> newlinedArray = tokenizeWithNewLines(insertValue.toString());
+    final List<String> newlinedArray =
+        tokenizeWithNewLines(insertValue.toString());
 
     if (newlinedArray.length == 1) {
       return <Map<String, dynamic>>[op];

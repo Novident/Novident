@@ -16,6 +16,12 @@ enum ActionOperation {
 // used by the compiler to add indent based in the selection of ones of theses options
 enum IndentType { everyLines, justAfterFirstLine, alwaysAfterAHeader }
 
-enum FolderType { normal, templateSheet, research, manuscript,  trash,   }
+enum FolderType {
+  normal,
+  templateSheet,
+  research,
+  manuscript,
+  trash,
+}
 
 enum CompileTo { pdf, html, epub, txt, docx, md }

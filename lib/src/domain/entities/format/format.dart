@@ -66,8 +66,9 @@ class Format extends Equatable {
       id: id ?? this.id,
       scope: scope ?? this.scope,
       //pageFormat: pageFormat ?? this.pageFormat,
-      originalProject:
-          setToNullOriginalProject ? null : originalProject ?? this.originalProject,
+      originalProject: setToNullOriginalProject
+          ? null
+          : originalProject ?? this.originalProject,
       name: name ?? this.name,
       canChange: canChange ?? this.canChange,
       replacements: replacements ?? this.replacements,

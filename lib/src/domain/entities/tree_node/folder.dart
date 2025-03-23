@@ -22,7 +22,8 @@ import 'package:novident_remake/src/domain/logger/tree_logger.dart';
 ///
 /// You can take this implementation as a directory from your
 /// local storage that can contains a wide variety of file types
-final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasName {
+final class Folder extends Node
+    with NodeVisitor, NodeHasValue<Delta>, NodeHasName {
   final List<Node> _children;
   final FolderType type;
   final NodeTrashedOptions trashOptions;
@@ -126,7 +127,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
       if (shouldGetNode(node)) {
         return node;
       }
-      final Node? foundedNode = node.visitAllNodes(shouldGetNode: shouldGetNode);
+      final Node? foundedNode =
+          node.visitAllNodes(shouldGetNode: shouldGetNode);
       if (foundedNode != null) return foundedNode;
     }
     return null;
@@ -208,7 +210,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
   ///
   /// This opertion could be heavy based on the deep of the nodes
   /// into the [Folder]
-  bool existNodeWhere(bool Function(Node node) predicate, [List<Node>? subChildren]) {
+  bool existNodeWhere(bool Function(Node node) predicate,
+      [List<Node>? subChildren]) {
     final currentChildren = subChildren;
     for (int i = 0; i < (currentChildren ?? _children).length; i++) {
       final node = (currentChildren ?? _children).elementAt(i);
@@ -222,7 +225,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
     return false;
   }
 
-  Node? childBeforeThis(NodeDetails node, bool alsoInChildren, [int? indexNode]) {
+  Node? childBeforeThis(NodeDetails node, bool alsoInChildren,
+      [int? indexNode]) {
     if (indexNode != null) {
       final element = elementAtOrNull(indexNode);
       if (element != null) {
@@ -236,14 +240,16 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
         if (i - 1 == -1) return null;
         return elementAt(i - 1);
       } else if (treeNode is Folder && treeNode.isNotEmpty && alsoInChildren) {
-        final backNode = treeNode.childBeforeThis(node, alsoInChildren, indexNode);
+        final backNode =
+            treeNode.childBeforeThis(node, alsoInChildren, indexNode);
         if (backNode != null) return backNode;
       }
     }
     return null;
   }
 
-  Node? childAfterThis(NodeDetails node, bool alsoInChildren, [int? indexNode]) {
+  Node? childAfterThis(NodeDetails node, bool alsoInChildren,
+      [int? indexNode]) {
     if (indexNode != null) {
       final element = elementAtOrNull(indexNode);
       if (element != null) {
@@ -257,7 +263,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
         if (i + 1 >= length) return null;
         return elementAt(i + 1);
       } else if (treeNode is Folder && treeNode.isNotEmpty && alsoInChildren) {
-        final nextChild = treeNode.childAfterThis(node, alsoInChildren, indexNode);
+        final nextChild =
+            treeNode.childAfterThis(node, alsoInChildren, indexNode);
         if (nextChild != null) return nextChild;
       }
     }
@@ -412,7 +419,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
                   return Document.fromJson(el as Map<String, dynamic>);
                 }
                 if (el['isFolder'] != null) {
-                  final Folder? folder = Folder.fromJsonTest(el as Map<String, dynamic>);
+                  final Folder? folder =
+                      Folder.fromJsonTest(el as Map<String, dynamic>);
                   return folder!;
                 }
                 throw Exception(
@@ -420,7 +428,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
                   'types supported. Expected Document or Folder types',
                 );
               })
-            : (jsonDecode(json['children'] as String) as List<String>).map<Node>(
+            : (jsonDecode(json['children'] as String) as List<String>)
+                .map<Node>(
                 (element) {
                   final map = jsonDecode(element) as Map<String, dynamic>;
                   if (map['isRoot'] != null) {
@@ -445,8 +454,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
       ),
       name: json['name'] as String,
       type: FolderType.values[json['type'] as int? ?? 0],
-      trashOptions:
-          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
+      trashOptions: NodeTrashedOptions.fromJson(
+          json['trashOptions'] as Map<String, dynamic>),
       isExpanded: json['expanded'] as bool,
       details: NodeDetails.fromJson(
         (json['details'] is String
@@ -473,8 +482,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
         json['details'] as Map<String, dynamic>,
       ),
       content: Delta.fromJson(json['content'] as List<dynamic>),
-      trashOptions:
-          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
+      trashOptions: NodeTrashedOptions.fromJson(
+          json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       isExpanded: json['expanded'] as bool,
       type: FolderType.values[json['type'] as int? ?? 0],
@@ -491,7 +500,8 @@ final class Folder extends Node with NodeVisitor, NodeHasValue<Delta>, NodeHasNa
               return Document.fromJson(el as Map<String, dynamic>);
             }
             if (el['isFolder'] != null) {
-              final Folder? folder = Folder.fromJson(el as Map<String, dynamic>);
+              final Folder? folder =
+                  Folder.fromJson(el as Map<String, dynamic>);
               return folder!;
             }
             throw Exception(

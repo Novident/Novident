@@ -36,7 +36,8 @@ extension MapExtension<K, V> on Map<K, V> {
     return entry.value;
   }
 
-  bool updateValueWhere({required MapEntryPredicate<K, V> predicate, required V value}) {
+  bool updateValueWhere(
+      {required MapEntryPredicate<K, V> predicate, required V value}) {
     final MapEntry<K, V>? entry = entries
         .where((MapEntry<K, V> element) => predicate(
               element.key,
@@ -71,7 +72,8 @@ extension MapExtension<K, V> on Map<K, V> {
     return entries;
   }
 
-  Iterable<Map<K, V>>? firstEntriesWhere({required MapEntryPredicate<K, V> predicate}) {
+  Iterable<Map<K, V>>? firstEntriesWhere(
+      {required MapEntryPredicate<K, V> predicate}) {
     final Iterable<Map<K, V>> entries = this
         .entries
         .where((MapEntry<K, V> element) => predicate(

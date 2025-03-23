@@ -27,7 +27,8 @@ class LayoutSettingsIndent {
     return LayoutSettingsIndent(
       applyChanges: applyChanges ?? this.applyChanges,
       indentParagraph: indentParagraph ?? this.indentParagraph,
-      indentJustAfterFirstParagraph: indentAfterFirst ?? indentJustAfterFirstParagraph,
+      indentJustAfterFirstParagraph:
+          indentAfterFirst ?? indentJustAfterFirstParagraph,
     );
   }
 
@@ -52,7 +53,8 @@ class LayoutSettingsIndent {
         toMap(),
       );
 
-  factory LayoutSettingsIndent.fromJson(String source) => LayoutSettingsIndent.fromMap(
+  factory LayoutSettingsIndent.fromJson(String source) =>
+      LayoutSettingsIndent.fromMap(
         json.decode(source) as Map<String, dynamic>,
       );
 

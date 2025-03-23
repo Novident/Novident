@@ -13,7 +13,8 @@ import 'package:novident_remake/src/domain/entities/layout/options/section_attri
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/entities/tree_node/file.dart' show Document;
+import 'package:novident_remake/src/domain/entities/tree_node/file.dart'
+    show Document;
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/project_delta_content_extension.dart';
@@ -156,7 +157,10 @@ final class Layout extends Equatable {
             attributes: shareThisAttributesToAll ??
                 metaAttr ??
                 SectionAttributes.common(
-                    align: "left", fontSize: 12, automaticIndent: false, bold: false),
+                    align: "left",
+                    fontSize: 12,
+                    automaticIndent: false,
+                    bold: false),
           ),
           synopsisSection: LayoutSection(
             show: showSynopsis ?? false,
@@ -164,7 +168,10 @@ final class Layout extends Equatable {
             attributes: shareThisAttributesToAll ??
                 synopsisAttr ??
                 SectionAttributes.common(
-                    align: "left", fontSize: 12, automaticIndent: false, bold: false),
+                    align: "left",
+                    fontSize: 12,
+                    automaticIndent: false,
+                    bold: false),
           ),
           notesSection: LayoutSection(
             show: showNotes ?? false,
@@ -172,7 +179,10 @@ final class Layout extends Equatable {
             attributes: shareThisAttributesToAll ??
                 notesAttr ??
                 SectionAttributes.common(
-                    align: "left", fontSize: 12, automaticIndent: false, bold: false),
+                    align: "left",
+                    fontSize: 12,
+                    automaticIndent: false,
+                    bold: false),
           ),
           textSection: LayoutSection(
             show: showText ?? true,
@@ -238,15 +248,17 @@ final class Layout extends Equatable {
       assignedSection: map['assignedSection'] as String,
       settings: map['settings'] == null
           ? LayoutSettingsIndent.common()
-          : LayoutSettingsIndent.fromMap(map['settings'] as Map<String, dynamic>),
+          : LayoutSettingsIndent.fromMap(
+              map['settings'] as Map<String, dynamic>),
       newPageOptions: map['pageOptions'] != null
           ? NewPageOptions.fromMap(map['pageOptions'] as Map<String, dynamic>)
           : NewPageOptions.common(),
-      layoutManager:
-          LayoutSectionManager.fromMap((map['layoutManager'] as Map<String, dynamic>)),
-      titleOptions: TitleOptions.fromMap(map['titleOptions'] as Map<String, dynamic>),
-      separatorSections:
-          SeparatorOptions.fromMap(map['separatorSections'] as Map<String, dynamic>),
+      layoutManager: LayoutSectionManager.fromMap(
+          (map['layoutManager'] as Map<String, dynamic>)),
+      titleOptions:
+          TitleOptions.fromMap(map['titleOptions'] as Map<String, dynamic>),
+      separatorSections: SeparatorOptions.fromMap(
+          map['separatorSections'] as Map<String, dynamic>),
     );
   }
 
@@ -282,7 +294,8 @@ final class Layout extends Equatable {
 
     ///if font family is ["by-layout"] then layout decide the font family
     bool assignFamilyBySection = false;
-    if (fontFamily.equals(Constant.kDefaultFormatFontFamily, caseSensitive: false)) {
+    if (fontFamily.equals(Constant.kDefaultFormatFontFamily,
+        caseSensitive: false)) {
       fontFamily = "";
       assignFamilyBySection = true;
     }
@@ -295,7 +308,8 @@ final class Layout extends Equatable {
     final LayoutSection textMapped = layoutManager.textSection;
     final bool showTitle = titleMapped.show;
     final bool showSynopsis = synopsisMapped.show;
-    if (context.shouldWritePageOptions && newPageOptions.newLinesCount.value > 0) {
+    if (context.shouldWritePageOptions &&
+        newPageOptions.newLinesCount.value > 0) {
       context.shouldWritePageOptions = false;
       // adds all the new lines before the content
       applyNewPageOptions().forEach(delta.push);
@@ -351,7 +365,8 @@ final class Layout extends Equatable {
       if (fontFamily.isEmpty) {
         fontFamily = textMapped.attributes.fontFamily;
       }
-      Delta content = file.cast<NodeHasValue<Delta>>().value.replacePlaceholders(context);
+      Delta content =
+          file.cast<NodeHasValue<Delta>>().value.replacePlaceholders(context);
       if (textMapped.overrideTextSection) {
         final Map<String, dynamic>? inlineAttributes =
             textMapped.attributes.toQuillMap(inline: true).getNullIfEmpty();

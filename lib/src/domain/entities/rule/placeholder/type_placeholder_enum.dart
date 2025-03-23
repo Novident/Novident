@@ -1,4 +1,3 @@
-
 enum TypePlaceholder {
   indexs,
   dates,

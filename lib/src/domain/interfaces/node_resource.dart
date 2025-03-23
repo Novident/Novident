@@ -4,13 +4,13 @@
 mixin NodeHasResource {
   /// This checks first is the Node follows the Resource standard
   bool get isResource;
-  
+
   /// This get the resource
   Object? resource(ResourceType type);
 }
 
 enum ResourceType {
-  image, 
+  image,
   video,
   formula,
   hyperlink,

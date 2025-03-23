@@ -78,12 +78,15 @@ void main() {
       final Delta expected = Delta()..insert('TEST CONTent\n');
       final NewPageOptions newPageOptions =
           NewPageOptions(newLinesCount: 0, charactersToUpperCase: 9);
-      final Delta? plainTextCapitalized = newPageOptions.toUpperCase(delta: plainText);
+      final Delta? plainTextCapitalized =
+          newPageOptions.toUpperCase(delta: plainText);
       expect(plainTextCapitalized, isNotNull);
       expect(plainTextCapitalized, expected);
     });
 
-    test('Should capitalize a more complex delta by index that contains new lines', () {
+    test(
+        'Should capitalize a more complex delta by index that contains new lines',
+        () {
       final List<Operation> operationsWithNewLines = [
         Operation.insert('\ntest ', {'size': 12}),
         Operation.insert('\n\n\n\n'),

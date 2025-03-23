@@ -15,7 +15,9 @@ class Project {
   @override
   bool operator ==(covariant Project other) {
     if (identical(this, other)) return true;
-    return id == other.id && projectName == other.projectName && root == other.root;
+    return id == other.id &&
+        projectName == other.projectName &&
+        root == other.root;
   }
 
   @override

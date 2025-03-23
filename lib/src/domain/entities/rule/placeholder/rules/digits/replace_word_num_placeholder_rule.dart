@@ -57,7 +57,8 @@ final class ReplaceWordNumberPlaceholderRule with PlaceholderRule {
                 ) +
                 1;
             context.documentVariables.add(match.group(1)!);
-            String str = parser.parse(digitIndex < 1 ? 1 : digitIndex, context.language);
+            String str =
+                parser.parse(digitIndex < 1 ? 1 : digitIndex, context.language);
             if (isTitlecase) {
               str = str.capitalize();
             } else if (isWordNumUppercase) {
@@ -101,7 +102,8 @@ final class ReplaceWordNumberPlaceholderRule with PlaceholderRule {
             ) +
             1;
         context.documentVariables.add(match.group(1)!);
-        String str = parser.parse(digitIndex < 1 ? 1 : digitIndex, context.language);
+        String str =
+            parser.parse(digitIndex < 1 ? 1 : digitIndex, context.language);
         if (isTitlecase) {
           str = str.capitalize();
         } else if (isWordNumUppercase) {

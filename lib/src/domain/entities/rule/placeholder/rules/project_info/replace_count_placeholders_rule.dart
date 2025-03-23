@@ -23,7 +23,7 @@ final class ReplaceWordCountPlaceholderRule with PlaceholderRule {
     return delta.toQuery
         .replace(
           target: pattern.pattern,
-      replace: context.wordsCount.toString(),
+          replace: context.wordsCount.toString(),
           range: null,
           onlyOnce: false,
         )

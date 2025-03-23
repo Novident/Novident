@@ -49,8 +49,10 @@ class TitleOptions {
   Delta buildPrefix() {
     final Delta delta = Delta();
     if (titlePrefix.isEmpty) return delta;
-    Map<String, dynamic> blockAttributes = attrPreffix.toQuillMap(inline: false);
-    Map<String, dynamic> inlineAttributes = attrPreffix.toQuillMap(inline: true);
+    Map<String, dynamic> blockAttributes =
+        attrPreffix.toQuillMap(inline: false);
+    Map<String, dynamic> inlineAttributes =
+        attrPreffix.toQuillMap(inline: true);
     if (titlePrefix.hasNewLine) {
       final List<String> tokenized = tokenizeWithNewLines(
         titlePrefix,
@@ -58,7 +60,8 @@ class TitleOptions {
       );
       bool isBeginningOfPart = true;
       for (final String str in tokenized) {
-        final bool isNewline = str == ProjectDefaults.kDefaultLayoutNewlineRepresentation;
+        final bool isNewline =
+            str == ProjectDefaults.kDefaultLayoutNewlineRepresentation;
         final String effectiveStr = isNewline ? '\n' : str;
         if (!isNewline && isBeginningOfPart) {
           isBeginningOfPart = false;
@@ -85,8 +88,10 @@ class TitleOptions {
   Delta buildSuffix() {
     final Delta delta = Delta();
     if (titleSuffix.isEmpty) return delta;
-    final Map<String, dynamic> blockAttributes = attrPreffix.toQuillMap(inline: false);
-    final Map<String, dynamic> inlineAttributes = attrPreffix.toQuillMap(inline: true);
+    final Map<String, dynamic> blockAttributes =
+        attrPreffix.toQuillMap(inline: false);
+    final Map<String, dynamic> inlineAttributes =
+        attrPreffix.toQuillMap(inline: true);
     if (titleSuffix.hasNewLine) {
       final List<String> tokenized = tokenizeWithNewLines(
         titleSuffix,
@@ -94,13 +99,15 @@ class TitleOptions {
       );
       bool isBeginningOfPart = true;
       for (final String str in tokenized) {
-        final bool isNewline = str == ProjectDefaults.kDefaultLayoutNewlineRepresentation;
+        final bool isNewline =
+            str == ProjectDefaults.kDefaultLayoutNewlineRepresentation;
         final String effectiveStr = isNewline ? '\n' : str;
         if (!isNewline && isBeginningOfPart) {
           isBeginningOfPart = false;
         }
         if (isNewline) {
-          delta.insert(effectiveStr, isBeginningOfPart ? null : blockAttributes);
+          delta.insert(
+              effectiveStr, isBeginningOfPart ? null : blockAttributes);
           continue;
         }
         delta.insert(effectiveStr, inlineAttributes);
@@ -153,7 +160,8 @@ class TitleOptions {
     return TitleOptions(
       titlePrefix: map['titlePrefix'] as String,
       titleSuffix: map['titleSuffix'] as String,
-      lettercasePreffix: LetterCase.values[map['lettercasePreffix'] as int? ?? 2],
+      lettercasePreffix:
+          LetterCase.values[map['lettercasePreffix'] as int? ?? 2],
       lettercaseSuffix: LetterCase.values[map['lettercaseSuffix'] as int? ?? 2],
       suffix: map['suffix'] as String?,
       preffix: map['preffix'] as String?,

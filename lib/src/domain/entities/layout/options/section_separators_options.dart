@@ -22,9 +22,12 @@ class SeparatorOptions {
     LayoutSeparator? afterSection,
   }) {
     return SeparatorOptions(
-      separateBeforeSection: beforeSection ?? SingleReturnSeparatorStrategy.instance,
-      separatorBetweenSection: betweenSection ?? SingleReturnSeparatorStrategy.instance,
-      separatorAfterSection: afterSection ?? SingleReturnSeparatorStrategy.instance,
+      separateBeforeSection:
+          beforeSection ?? SingleReturnSeparatorStrategy.instance,
+      separatorBetweenSection:
+          betweenSection ?? SingleReturnSeparatorStrategy.instance,
+      separatorAfterSection:
+          afterSection ?? SingleReturnSeparatorStrategy.instance,
       overrideSeparatorAfter: true,
       ignoreBlankLinesWithStyles: true,
     );
@@ -38,10 +41,14 @@ class SeparatorOptions {
     bool? ignoreBlankLinesWithStyles,
   }) {
     return SeparatorOptions(
-      separateBeforeSection: separateBeforeSection ?? this.separateBeforeSection,
-      separatorBetweenSection: separatorBetweenSection ?? this.separatorBetweenSection,
-      overrideSeparatorAfter: overrideSeparatorAfter ?? this.overrideSeparatorAfter,
-      separatorAfterSection: separatorAfterSection ?? this.separatorAfterSection,
+      separateBeforeSection:
+          separateBeforeSection ?? this.separateBeforeSection,
+      separatorBetweenSection:
+          separatorBetweenSection ?? this.separatorBetweenSection,
+      overrideSeparatorAfter:
+          overrideSeparatorAfter ?? this.overrideSeparatorAfter,
+      separatorAfterSection:
+          separatorAfterSection ?? this.separatorAfterSection,
       ignoreBlankLinesWithStyles:
           ignoreBlankLinesWithStyles ?? this.ignoreBlankLinesWithStyles,
     );

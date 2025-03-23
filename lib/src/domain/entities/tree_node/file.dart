@@ -17,7 +17,8 @@ import '../node/node.dart';
 ///
 /// You can see this implementation as a file from a directory
 /// that can contain all type data into itself
-final class Document extends Node with NodeHasValue<Delta>, NodeHasName, NodeHasResource {
+final class Document extends Node
+    with NodeHasValue<Delta>, NodeHasName, NodeHasResource {
   final String name;
   final Delta content;
   final String synopsis;
@@ -92,8 +93,8 @@ final class Document extends Node with NodeHasValue<Delta>, NodeHasName, NodeHas
     }
     return Document(
       synopsis: json['synopsis'] as String? ?? '',
-      trashOptions:
-          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
+      trashOptions: NodeTrashedOptions.fromJson(
+          json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       details: NodeDetails.fromJson(json['details'] as Map<String, dynamic>),
       content: Delta.fromJson(
@@ -167,8 +168,8 @@ final class Document extends Node with NodeHasValue<Delta>, NodeHasName, NodeHas
   Object? resource(ResourceType type) {
     if (!isResource) return null;
     if (type == ResourceType.image) {
-      return (content.getFirstEmbed()?.delta.first.data as Map<String, dynamic>)['image']
-          as String;
+      return (content.getFirstEmbed()?.delta.first.data
+          as Map<String, dynamic>)['image'] as String;
     }
     return content.getFirstEmbed()?.delta.first.data;
   }

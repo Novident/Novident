@@ -85,7 +85,8 @@ final class Root extends Node with NodeVisitor {
       if (shouldGetNode(node)) {
         return node;
       }
-      final Node? foundedNode = node.visitAllNodes(shouldGetNode: shouldGetNode);
+      final Node? foundedNode =
+          node.visitAllNodes(shouldGetNode: shouldGetNode);
       if (foundedNode != null) return foundedNode;
     }
     return null;
@@ -151,7 +152,8 @@ final class Root extends Node with NodeVisitor {
   ///
   /// This opertion could be heavy based on the deep of the nodes
   /// into the [Folder]
-  bool existNodeWhere(bool Function(Node node) predicate, [List<Node>? subChildren]) {
+  bool existNodeWhere(bool Function(Node node) predicate,
+      [List<Node>? subChildren]) {
     final currentChildren = subChildren;
     for (int i = 0; i < (currentChildren ?? children).length; i++) {
       final node = (currentChildren ?? children).elementAt(i);
@@ -165,7 +167,8 @@ final class Root extends Node with NodeVisitor {
     return false;
   }
 
-  Node? childBeforeThis(NodeDetails node, bool alsoInChildren, [int? indexNode]) {
+  Node? childBeforeThis(NodeDetails node, bool alsoInChildren,
+      [int? indexNode]) {
     if (indexNode != null) {
       final element = elementAtOrNull(indexNode);
       if (element != null) {
@@ -179,14 +182,16 @@ final class Root extends Node with NodeVisitor {
         if (i - 1 == -1) return null;
         return elementAt(i - 1);
       } else if (treeNode is Folder && treeNode.isNotEmpty && alsoInChildren) {
-        final backNode = treeNode.childBeforeThis(node, alsoInChildren, indexNode);
+        final backNode =
+            treeNode.childBeforeThis(node, alsoInChildren, indexNode);
         if (backNode != null) return backNode;
       }
     }
     return null;
   }
 
-  Node? childAfterThis(NodeDetails node, bool alsoInChildren, [int? indexNode]) {
+  Node? childAfterThis(NodeDetails node, bool alsoInChildren,
+      [int? indexNode]) {
     if (indexNode != null) {
       final element = elementAtOrNull(indexNode);
       if (element != null) {
@@ -200,7 +205,8 @@ final class Root extends Node with NodeVisitor {
         if (i + 1 >= length) return null;
         return elementAt(i + 1);
       } else if (treeNode is Folder && treeNode.isNotEmpty && alsoInChildren) {
-        final nextChild = treeNode.childAfterThis(node, alsoInChildren, indexNode);
+        final nextChild =
+            treeNode.childAfterThis(node, alsoInChildren, indexNode);
         if (nextChild != null) return nextChild;
       }
     }
@@ -345,7 +351,8 @@ final class Root extends Node with NodeVisitor {
                   'types supported. Expected Document or Folder types',
                 );
               })
-            : (jsonDecode(json['children'] as String) as List<String>).map<Node>(
+            : (jsonDecode(json['children'] as String) as List<String>)
+                .map<Node>(
                 (element) {
                   final map = jsonDecode(element) as Map<String, dynamic>;
                   if (map['isRoot'] != null) {
@@ -388,7 +395,8 @@ final class Root extends Node with NodeVisitor {
                   return Document.fromJson(el as Map<String, dynamic>);
                 }
                 if (el['isFolder'] != null) {
-                  final Folder? folder = Folder.fromJson(el as Map<String, dynamic>);
+                  final Folder? folder =
+                      Folder.fromJson(el as Map<String, dynamic>);
                   return folder!;
                 }
                 throw Exception(
@@ -396,7 +404,8 @@ final class Root extends Node with NodeVisitor {
                   'types supported. Expected Document or Folder types',
                 );
               })
-            : (jsonDecode(json['children'] as String) as List<String>).map<Node>(
+            : (jsonDecode(json['children'] as String) as List<String>)
+                .map<Node>(
                 (element) {
                   final map = jsonDecode(element) as Map<String, dynamic>;
                   if (map['isRoot'] != null) {

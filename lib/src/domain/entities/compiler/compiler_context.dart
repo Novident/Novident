@@ -58,7 +58,8 @@ class CompilerContext {
 
   Node? queryResource(String resourceName) {
     for (final Node node in resources) {
-      if (node is NodeHasName && resourceName.equals((node as NodeHasName).nodeName)) {
+      if (node is NodeHasName &&
+          resourceName.equals((node as NodeHasName).nodeName)) {
         return node;
       }
     }

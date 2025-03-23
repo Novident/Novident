@@ -60,6 +60,6 @@ class NodeTrashedOptions implements ClonableMixin<NodeTrashedOptions> {
 
   @override
   String toString() {
-    return 'NodeTrashedOptions(trashed: $isTrashed, at: $at, end: $end)'; 
+    return 'NodeTrashedOptions(trashed: $isTrashed, at: $at, end: $end)';
   }
 }

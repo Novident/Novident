@@ -64,7 +64,8 @@ class NewPageOptions extends Equatable {
     bool addCommaAfterNewLine = false,
   }) {
     final comma = _getCommaIfNeeded(addCommaAfterNewLine);
-    final Operation toCopy = Operation.insert('$comma${customNewLine ?? '\n'}$comma');
+    final Operation toCopy =
+        Operation.insert('$comma${customNewLine ?? '\n'}$comma');
     if ((newLines == null || newLines < 1) && newLinesCount.value < 1) {
       return <Operation>[];
     }
@@ -94,7 +95,8 @@ class NewPageOptions extends Equatable {
   }) {
     return NewPageOptions(
       newLinesCount: newLinesCount ?? this.newLinesCount.value,
-      charactersToUpperCase: charactersToUpperCase ?? this.charactersToUpperCase.value,
+      charactersToUpperCase:
+          charactersToUpperCase ?? this.charactersToUpperCase.value,
     );
   }
 
