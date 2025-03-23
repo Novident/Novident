@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart' show immutable;
 import 'package:novident_remake/src/domain/constants.dart';
+import 'package:novident_remake/src/domain/entities/format/replacement_values.dart';
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/enums/project_format_scope.dart';
 import 'package:novident_remake/src/domain/interfaces/node_visitor.dart';
 import 'package:novident_remake/src/utils/id_generators.dart';
-import 'package:novident_remake/src/utils/typedefs.dart';
 
 @immutable
 class Format extends Equatable {
