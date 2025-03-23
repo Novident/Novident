@@ -42,12 +42,15 @@ final class Folder extends Node
     this.type = FolderType.normal,
     this.trashOptions = const NodeTrashedOptions.nonTrashed(),
     bool isExpanded = false,
+    bool doRedepthCheck = false,
   })  : _children = children,
         _isExpanded = isExpanded {
     for (final Node child in children) {
       child.owner = this;
     }
-    redepthChildren(checkFirst: true);
+    if (doRedepthCheck) {
+      redepthChildren(checkFirst: true);
+    }
   }
 
   @visibleForTesting
@@ -143,6 +146,31 @@ final class Folder extends Node
       }
     }
     return null;
+  }
+
+  @override
+  int countAllNodes({required Predicate countNode}) {
+    int count = 0;
+    for (int i = 0; i < length; i++) {
+      final Node node = elementAt(i);
+      if (countNode(node)) {
+        count++;
+      }
+      count += node.countAllNodes(countNode: countNode);
+    }
+    return count;
+  }
+
+  @override
+  int countNodes({required Predicate countNode}) {
+    int count = 0;
+    for (int i = 0; i < length; i++) {
+      final Node node = elementAt(i);
+      if (countNode(node)) {
+        count++;
+      }
+    }
+    return count;
   }
 
   /// Check if the id of the node exist in the root

@@ -78,6 +78,16 @@ final class Document extends Node
     return null;
   }
 
+  @override
+  int countAllNodes({required Predicate countNode}) {
+    return countNode(this) ? 1 : 0;
+  }
+
+  @override
+  int countNodes({required Predicate countNode}) {
+    return countNode(this) ? 1 : 0;
+  }
+
   static Document fromJson(Map<String, dynamic> json) {
     if (json['isFile'] == null) {
       throw IllegalTypeConvertionException(

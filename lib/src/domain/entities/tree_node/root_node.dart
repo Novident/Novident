@@ -103,6 +103,31 @@ final class Root extends Node with NodeVisitor {
     return null;
   }
 
+  @override
+  int countAllNodes({required Predicate countNode}) {
+    int count = 0;
+    for (int i = 0; i < length; i++) {
+      final Node node = elementAt(i);
+      if (countNode(node)) {
+        count++;
+      }
+      count += node.countAllNodes(countNode: countNode);
+    }
+    return count;
+  }
+
+  @override
+  int countNodes({required Predicate countNode}) {
+    int count = 0;
+    for (int i = 0; i < length; i++) {
+      final Node node = elementAt(i);
+      if (countNode(node)) {
+        count++;
+      }
+    }
+    return count;
+  }
+
   /// Check if the id of the node exist in the root
   /// of the [Folder] without checking into its children
   @override

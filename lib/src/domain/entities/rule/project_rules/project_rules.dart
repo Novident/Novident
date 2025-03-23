@@ -1,5 +1,6 @@
 import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/project_rule_mixin.dart';
+import 'package:novident_remake/src/domain/entities/rule/project_rules/project_status_response.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_manuscript_existence_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_trash_folder_existence_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_trash_has_no_duplicates_rule.dart';
@@ -21,8 +22,9 @@ class ProjectRules {
 
   static bool checkProjectState(Project project) {
     for (final ProjectRule rule in _rules) {
-      if (!rule.isValid(project)) {
-        throw BadProjectStateException(reason: rule.whatFails(project));
+      final ProjectStatusResponse response = rule.isValid(project);
+      if (!response.isValid) {
+        throw BadProjectStateException(reason: response.failReason!);
       }
     }
     return true;
