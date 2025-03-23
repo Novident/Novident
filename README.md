@@ -1,4 +1,4 @@
-![app_invert_logo_nov (remake)](https://github.com/CatHood0/Novident-App/assets/114286961/0b5c9732-d101-4bcf-97a9-8f149d4fa230)
+<img src="https://github.com/CatHood0/Novident-App/assets/114286961/0b5c9732-d101-4bcf-97a9-8f149d4fa230" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
 
 # Novident
 
