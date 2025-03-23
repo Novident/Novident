@@ -1,0 +1,76 @@
+import 'package:flutter_quill/quill_delta.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
+import 'package:novident_remake/src/domain/entities/compiler/compiler_metadata.dart';
+import 'package:novident_remake/src/domain/entities/layout/layout.dart';
+import 'package:novident_remake/src/domain/entities/layout/options/section_attributes.dart';
+import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
+import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_remake/src/domain/entities/node/node_details.dart';
+import 'package:novident_remake/src/domain/entities/project/author/author.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/file.dart';
+
+void main() {
+  final Layout layout = Layout.basic(
+    showTitle: true,
+    titleOptions: TitleOptions(
+      titlePrefix: 'This is a header prefix¶',
+      titleSuffix: '',
+      attrPreffix: SectionAttributes.common(align: 'center'),
+      attrSuffix: SectionAttributes.common(align: 'center'),
+      lettercasePreffix: LetterCase.uppercase,
+      lettercaseSuffix: LetterCase.uppercase,
+    ),
+  );
+  final CompilerContext context = CompilerContext(
+    resources: <Node>[],
+    documentVariables: <String>[],
+    shouldWritePageOptions: false,
+    currentDocument: Document.empty(details: NodeDetails.zero()),
+    language: 'en',
+    charsCount: 20,
+    wordsCount: 7,
+    linecount: 1,
+    author: Author(),
+    metadata: CompilerMetadata.starter(),
+    rawProjectName: '',
+    jumpToDocument: (value) {
+      return null;
+    },
+    placeholderDisabled: false,
+  );
+
+  test('should transform basic content', () {
+    final Document doc = Document(
+      details: NodeDetails.zero(),
+      content: Delta()..insert('And, <\$wc> this is an example part of text\n'),
+      name: 'Basic document name',
+    );
+    context.currentDocument = doc;
+    final Delta result = layout.build(
+      doc,
+      context,
+    );
+    expect(
+      result,
+      Delta()
+        ..insert(
+          'This is a header prefix',
+          {'size': 12.0, 'family': 'arial'},
+        )
+        ..insert(
+          '\n',
+          {'line-height': 1.0, 'align': 'center'},
+        )
+        ..insert(
+          'Basic document name',
+          {'size': 16.0, 'family': 'arial'},
+        )
+        ..insert(
+          '\n',
+          {'line-height': 1.0, 'align': 'left'},
+        )
+        ..insert('And, 7 this is an example part of text\n'),
+    );
+  });
+}
