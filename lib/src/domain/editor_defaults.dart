@@ -2,15 +2,17 @@ class EditorDefaults {
   static const double kDefaultLineHeight = 1.0;
   static const String kDefaultFontSize = '12';
   static const String kDefaultFontFamily = 'arial';
-  static const Map<String, String> fontSizes = <String, String>{
+
+  static const Map<String, String> kDefaultEditorFontSizes = <String, String>{
     "Tiny": "small",
-    "Normal": "16", //clear to make the transform assign DEFAULT_FONT_SIZE -> 12
+    "Normal": "16",
     "Large": "large",
     "Huge": "huge",
     "Subtitle": "23",
     "Title": "28",
   };
-  static const Map<String, String> fontFamilies = <String, String>{
+
+  static const Map<String, String> kDefaultFontFamilies = <String, String>{
     "Monospace": "monospace",
     "Raleway": "Raleway",
     "Arial": "arial",
@@ -22,7 +24,8 @@ class EditorDefaults {
     "Tinos": "Tinos",
   };
 
-  static const List<double> default_heading_size = <double>[
+  /// These are heading sizes used by the compiler to 
+  static const List<double> kDefaultHeadingSizes = <double>[
     29.5,
     26.5,
     23,
@@ -30,15 +33,15 @@ class EditorDefaults {
     17,
     15.5
   ];
-  static const List<double> spacing = <double>[1.0, 1.15, 1.5, 2.0];
-  static const List<double> default_editor_spacing = <double>[
+
+  static const List<double> kDefaultLineheights = <double>[
     1.0,
     1.15,
     1.5,
     2.0
   ];
 
-  static const List<int> sizes = <int>[
+  static const List<int> kDefaultLayoutEditorFontSizes = <int>[
     8,
     10,
     12,
