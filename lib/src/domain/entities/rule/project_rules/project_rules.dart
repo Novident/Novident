@@ -18,7 +18,7 @@ class ProjectRules {
   ];
 
   static bool checkProjectState(Project project) {
-    for (final rule in _rules) {
+    for (final ProjectRule rule in _rules) {
       if (!rule.isValid(project)) {
         throw BadProjectStateException(reason: rule.whatFails(project));
       }
