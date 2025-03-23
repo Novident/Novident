@@ -52,7 +52,7 @@ final class Root extends Node with NodeVisitor {
   void redepthChildren({int? currentLevel, bool checkFirst = false}) {
     void redepth(List<Node> unformattedChildren, int currentLevel) {
       for (int i = 0; i < unformattedChildren.length; i++) {
-        final node = unformattedChildren.elementAt(i);
+        final Node node = unformattedChildren.elementAt(i);
         unformattedChildren[i] = node.copyWith(
           details: node.details.copyWith(level: currentLevel + 1),
         );
@@ -288,31 +288,31 @@ final class Root extends Node with NodeVisitor {
     notify();
   }
 
-  bool remove(Node element) {
+  bool remove(Node element, {bool shouldNotify = true}) {
     final removed = children.remove(element);
-    notify();
+    if (shouldNotify) notify();
     return removed;
   }
 
-  Node removeLast() {
+  Node removeLast({bool shouldNotify = true}) {
     final Node value = children.removeLast();
-    notify();
+    if (shouldNotify) notify();
     return value;
   }
 
-  void removeWhere(bool Function(Node) callback) {
+  void removeWhere(bool Function(Node) callback, {bool shouldNotify = true}) {
     children.removeWhere(callback);
-    notify();
+    if (shouldNotify) notify();
   }
 
-  Node removeAt(int index) {
+  Node removeAt(int index, {bool shouldNotify = true}) {
     final Node value = children.removeAt(index);
-    notify();
+    if (shouldNotify) notify();
     return value;
   }
 
   void operator []=(int index, Node newNodeState) {
-    if (index < 0) return;
+    if (index < 0 || children[index] == newNodeState) return;
     if (newNodeState.owner != this) {
       newNodeState.owner = this;
     }

@@ -178,12 +178,17 @@ final class Folder extends Node
     NodeDetails? details,
     Delta? content,
     String? name,
+    FolderType? type,
+    NodeTrashedOptions? trashOptions,
     List<Node>? children,
     bool? isExpanded,
   }) {
     return Folder(
       children: children ?? _children,
       details: details ?? this.details,
+      type: type ?? this.type,
+      trashOptions: trashOptions ?? this.trashOptions,
+      isExpanded: isExpanded ?? this.isExpanded,
       name: name ?? this.name,
       content: content ?? this.content,
     );

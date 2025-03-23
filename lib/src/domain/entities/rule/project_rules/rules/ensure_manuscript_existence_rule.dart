@@ -8,7 +8,7 @@ final class EnsureManuscriptExistenceRule with ProjectRule {
   const EnsureManuscriptExistenceRule();
 
   @override
-  bool check(Project project) {
+  bool isValid(Project project) {
     final Node? manuscript = project.root.visitNode(
       shouldGetNode: (node) =>
           node is Folder && node.type == FolderType.manuscript,
