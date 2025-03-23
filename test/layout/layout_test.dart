@@ -30,6 +30,7 @@ void main() {
     language: 'en',
     charsCount: 20,
     wordsCount: 7,
+    processPlaceholderAtEnd: false,
     linecount: 1,
     author: Author(),
     metadata: CompilerMetadata.starter(),
@@ -71,6 +72,43 @@ void main() {
           {'line-height': 1.0, 'align': 'left'},
         )
         ..insert('And, 7 this is an example part of text\n'),
+    );
+  });
+
+  test('should transform basic content without process placeholder yet', () {
+    // with this, we tell to the context to no process the
+    // placeholders until the Compilation ends
+    context.processPlaceholderAtEnd = true;
+    final Document doc = Document(
+      details: NodeDetails.zero(),
+      content: Delta()..insert('And, <\$wc> this is an example part of text\n'),
+      name: 'Basic document name',
+    );
+    context.currentDocument = doc;
+    final Delta result = layout.build(
+      doc,
+      context,
+    );
+    expect(
+      result,
+      Delta()
+        ..insert(
+          'This is a header prefix',
+          {'size': 12.0, 'family': 'arial'},
+        )
+        ..insert(
+          '\n',
+          {'line-height': 1.0, 'align': 'center'},
+        )
+        ..insert(
+          'Basic document name',
+          {'size': 16.0, 'family': 'arial'},
+        )
+        ..insert(
+          '\n',
+          {'line-height': 1.0, 'align': 'left'},
+        )
+        ..insert('And, <\$wc> this is an example part of text\n'),
     );
   });
 }

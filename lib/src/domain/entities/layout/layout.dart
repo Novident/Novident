@@ -365,8 +365,11 @@ final class Layout extends Equatable {
       if (fontFamily.isEmpty) {
         fontFamily = textMapped.attributes.fontFamily;
       }
-      Delta content =
-          file.cast<NodeHasValue<Delta>>().value.replacePlaceholders(context);
+      Delta content = file.cast<NodeHasValue<Delta>>().value;
+      if (!context.processPlaceholderAtEnd) {
+        content = content.replacePlaceholders(context);
+      }
+
       if (textMapped.overrideTextSection) {
         final Map<String, dynamic>? inlineAttributes =
             textMapped.attributes.toQuillMap(inline: true).getNullIfEmpty();

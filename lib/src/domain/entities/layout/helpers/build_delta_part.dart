@@ -7,5 +7,6 @@ Delta buildDeltaPart(
   CompilerContext context,
 ) {
   if (delta.isEmpty) return delta;
+  if (context.processPlaceholderAtEnd) return delta;
   return delta.replacePlaceholders(context);
 }

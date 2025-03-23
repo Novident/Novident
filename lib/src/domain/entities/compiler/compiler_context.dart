@@ -21,6 +21,7 @@ class CompilerContext {
   final ReplacementsValues? customPatterns;
   final Author author;
   final CompilerMetadata metadata;
+  bool processPlaceholderAtEnd;
 
   /// If the rules are disabled
   /// then this will take that value
@@ -52,6 +53,7 @@ class CompilerContext {
     required this.rawProjectName,
     required this.jumpToDocument,
     required this.placeholderDisabled,
+    this.processPlaceholderAtEnd = false,
     this.customPatterns,
     this.time,
   });

@@ -24,7 +24,7 @@ class EditorDefaults {
     "Tinos": "Tinos",
   };
 
-  /// These are heading sizes used by the compiler to 
+  /// These are heading sizes used by the compiler to
   static const List<double> kDefaultHeadingSizes = <double>[
     29.5,
     26.5,
@@ -34,12 +34,7 @@ class EditorDefaults {
     15.5
   ];
 
-  static const List<double> kDefaultLineheights = <double>[
-    1.0,
-    1.15,
-    1.5,
-    2.0
-  ];
+  static const List<double> kDefaultLineheights = <double>[1.0, 1.15, 1.5, 2.0];
 
   static const List<int> kDefaultLayoutEditorFontSizes = <int>[
     8,
