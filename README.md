@@ -1,6 +1,8 @@
-<img src="https://github.com/CatHood0/Novident-App/assets/114286961/0b5c9732-d101-4bcf-97a9-8f149d4fa230" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+<p>
+    <img src="https://github.com/CatHood0/Novident-App/assets/114286961/0b5c9732-d101-4bcf-97a9-8f149d4fa230" alt="Logo of Novident app" style="display: block; margin-left: auto; margin-right: auto; width: 100%"/>
+</p>
 
-# Novident
+<h1 style="text-align: center"> Novident </h1> 
 
 Novident is a open source alternative to the famous software: Scrivener. it has too many features that makes itself a greater option to writer our novels or researchs.
 
