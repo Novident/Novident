@@ -57,7 +57,7 @@ void main() {
     );
   });
 
-  test('should fail trash check', () {
+  test('should fail trash check and pass later', () {
     project.root.add(
       Folder(
         children: [],
@@ -72,6 +72,12 @@ void main() {
       throwsA(
         isA<BadProjectStateException>(),
       ),
+    );
+    project.root.removeLast();
+
+    expect(
+      ProjectRules.checkProjectState(project),
+      isTrue,
     );
   });
 }
