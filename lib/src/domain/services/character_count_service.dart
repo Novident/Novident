@@ -1,4 +1,5 @@
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/services/editor_service.dart';
 
 class CharacterCountService extends EditorService<Document, int> {
@@ -9,6 +10,6 @@ class CharacterCountService extends EditorService<Document, int> {
 
   @override
   int execute(Document data) {
-    return data.toPlainText().length;
+    return data.toPlainText().removeNewLines.length;
   }
 }

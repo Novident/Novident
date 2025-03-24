@@ -56,6 +56,11 @@ extension ShortStringExtension on String {
         defaultReplace,
       );
 
+  String get removeNewLines => replaceAll(
+        RegExp(r'\n+'),
+        '',
+      );
+
   String replaceNewLine({
     bool asDelta = true,
     bool caseSensitive = false,

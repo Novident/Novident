@@ -12,6 +12,7 @@ class WordCountService extends EditorService<Document, int> {
   @override
   int execute(Document data) {
     final String plainText = data.toPlainText();
+    if (plainText == '\n') return 0;
     final int count = _wordCountPattern.allMatches(plainText).length;
     return count;
   }
