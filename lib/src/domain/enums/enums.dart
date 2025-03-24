@@ -4,6 +4,8 @@ enum LetterCase { uppercase, lowercase, normal }
 
 enum Filters { older, newer, name, reverse, defaultF }
 
+enum Selection { folder, document, both, none, unknown }
+
 enum ActionOperation {
   addAsChildren,
   removeChild,

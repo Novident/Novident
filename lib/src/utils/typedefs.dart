@@ -4,4 +4,4 @@
 // ignore: unused_element
 typedef _ReplacementsValues = Map<String, dynamic>;
 
-typedef MapEntryPredicate<K, V> = bool Function(K key, V? value);
+typedef MapEntryPredicate<K, V> = bool Function(K key, V value);

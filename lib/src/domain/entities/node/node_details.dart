@@ -5,14 +5,15 @@ import 'package:novident_remake/src/utils/id_generators.dart';
 
 /// Represents a [NodeDetails] into the tree a make possible
 /// identify it into tree and make operations with them
-class NodeDetails
-    implements Comparable<NodeDetails>, ClonableMixin<NodeDetails> {
+class NodeDetails implements Comparable<NodeDetails>, ClonableMixin<NodeDetails> {
   final String id;
   final int level;
+  final Object? value;
   Node? _owner;
 
   NodeDetails({
     required this.level,
+    this.value,
     Node? owner,
   })  : _owner = owner,
         id = IdGenerator.gen();
@@ -21,12 +22,14 @@ class NodeDetails
   NodeDetails.testing({
     required this.level,
     required this.id,
+    this.value,
     Node? owner,
   }) : _owner = owner;
 
   NodeDetails.byId({
     required this.level,
     required this.id,
+    this.value,
     Node? owner,
   }) : _owner = owner;
 
@@ -45,37 +48,53 @@ class NodeDetails
     return copyWith(level: level);
   }
 
-  NodeDetails copyWith({int? level, String? id, Node? owner}) {
+  NodeDetails copyWith({int? level, String? id, Node? owner, Object? value}) {
     return NodeDetails.byId(
       level: level ?? this.level,
       id: id ?? this.id,
+      value: value ?? this.value,
       owner: owner ?? this.owner,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'level': level, 'id': id, 'owner': owner};
+    return {
+      'level': level,
+      'id': id,
+      'owner': owner,
+      'value': value,
+    };
   }
 
   factory NodeDetails.base([String? id, Node? owner]) {
     return NodeDetails.byId(
-        level: 0, id: id ?? IdGenerator.gen(version: 4), owner: owner);
+      level: 0,
+      id: id ?? IdGenerator.gen(version: 4),
+      owner: owner,
+    );
   }
 
   factory NodeDetails.withLevel([int? level, Node? owner]) {
     level ??= 0;
     return NodeDetails.byId(
-        level: level, id: IdGenerator.gen(version: 4), owner: owner);
+      level: level,
+      id: IdGenerator.gen(version: 4),
+      owner: owner,
+    );
   }
 
   factory NodeDetails.zero([Node? owner]) {
     return NodeDetails.byId(
-        level: 0, id: IdGenerator.gen(version: 4), owner: owner);
+      level: 0,
+      id: IdGenerator.gen(version: 4),
+      owner: owner,
+    );
   }
 
   factory NodeDetails.fromJson(Map<String, dynamic> json) {
     return NodeDetails.byId(
       level: json['level'] as int,
+      value: json['value'] as Object?,
       id: json['id'] as String,
       owner: json['owner'] as Node?,
     );
@@ -85,6 +104,7 @@ class NodeDetails
   String toString() {
     return 'Level: $level, '
         'ID: ${id.substring(0, id.length < 4 ? id.length : 4)}, '
+        'value: $value, '
         'Owner: $owner';
   }
 
@@ -98,18 +118,22 @@ class NodeDetails
   }
 
   @override
-  int get hashCode => level.hashCode ^ owner.hashCode ^ id.hashCode;
+  int get hashCode => level.hashCode ^ value.hashCode ^ owner.hashCode ^ id.hashCode;
 
   @override
   bool operator ==(covariant NodeDetails other) {
     if (identical(this, other)) return true;
-    return level == other.level && id == other.id && owner == other.owner;
+    return level == other.level &&
+        id == other.id &&
+        owner == other.owner &&
+        value == other.value;
   }
 
   @override
   NodeDetails clone() {
     return NodeDetails.byId(
       level: level,
+      value: value,
       owner: owner,
       id: id,
     );
