@@ -7,6 +7,7 @@ import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
+import 'package:novident_remake/src/domain/interfaces/node_can_be_trashed.dart';
 import 'package:novident_remake/src/domain/interfaces/node_has_name.dart';
 import 'package:novident_remake/src/domain/interfaces/node_resource.dart';
 import 'package:novident_remake/src/domain/interfaces/node_visitor.dart';
@@ -18,7 +19,7 @@ import '../node/node.dart';
 /// You can see this implementation as a file from a directory
 /// that can contain all type data into itself
 final class Document extends Node
-    with NodeHasValue<Delta>, NodeHasName, NodeHasResource {
+    with NodeHasValue<Delta>, NodeHasName, NodeHasResource, NodeCanBeTrashed {
   final String name;
   final Delta content;
   final String synopsis;
@@ -40,6 +41,14 @@ final class Document extends Node
   }) : content = Delta();
 
   @override
+  NodeTrashedOptions get trashStatus => trashOptions;
+
+  @override
+  Document setTrashState() {
+    return copyWith(trashOptions: NodeTrashedOptions.now());
+  }
+
+  @override
   String get nodeName => name;
 
   @override
@@ -52,7 +61,7 @@ final class Document extends Node
       name: name,
       synopsis: synopsis,
       trashOptions: trashOptions,
-      content: Delta.from(content),
+      content: content,
     );
   }
 
@@ -137,7 +146,7 @@ final class Document extends Node
   }
 
   @override
-  Node copyWith({
+  Document copyWith({
     NodeDetails? details,
     Delta? content,
     String? name,

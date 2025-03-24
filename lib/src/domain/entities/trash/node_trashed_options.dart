@@ -20,6 +20,10 @@ class NodeTrashedOptions implements ClonableMixin<NodeTrashedOptions> {
         at = null,
         end = null;
 
+  NodeTrashedOptions.now({this.end})
+      : isTrashed = true,
+        at = DateTime.now();
+
   Map<String, dynamic> toJson() {
     return {
       'trashed': isTrashed,

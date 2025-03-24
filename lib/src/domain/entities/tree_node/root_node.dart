@@ -4,19 +4,17 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_remake/src/domain/entities/node/node_container.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/file.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
-import 'package:novident_remake/src/domain/interfaces/node_visitor.dart';
 
 /// [Root] represents the main tree part of the tree, where
 /// all the files are being contained
-final class Root extends Node with NodeVisitor {
-  final List<Node> children;
-
+final class Root extends NodeContainer {
   Root({
-    required this.children,
+    required super.children,
   })  : assert(
           children.whereType<Root>().isEmpty,
           'Root children cannot '
@@ -35,11 +33,11 @@ final class Root extends Node with NodeVisitor {
 
   @visibleForTesting
   Root.testing({
-    required this.children,
+    required super.children,
   })  : assert(
           children.whereType<Root>().isEmpty,
           'Root children cannot '
-          'contain any Root node type',
+          'contain other Root\'s node type',
         ),
         super(
           details: NodeDetails.byId(
@@ -56,7 +54,7 @@ final class Root extends Node with NodeVisitor {
         unformattedChildren[i] = node.copyWith(
           details: node.details.copyWith(level: currentLevel + 1),
         );
-        if (node is Folder && node.isNotEmpty) {
+        if (node is NodeContainer && node.isNotEmpty) {
           redepth(node.children, currentLevel + 1);
         }
       }
@@ -76,84 +74,6 @@ final class Root extends Node with NodeVisitor {
 
     redepth(children, currentLevel ?? 0);
     notify();
-  }
-
-  @override
-  Node? visitAllNodes({required Predicate shouldGetNode}) {
-    for (int i = 0; i < length; i++) {
-      final Node node = elementAt(i);
-      if (shouldGetNode(node)) {
-        return node;
-      }
-      final Node? foundedNode =
-          node.visitAllNodes(shouldGetNode: shouldGetNode);
-      if (foundedNode != null) return foundedNode;
-    }
-    return null;
-  }
-
-  @override
-  Node? visitNode({required Predicate shouldGetNode}) {
-    for (int i = 0; i < length; i++) {
-      final Node node = elementAt(i);
-      if (shouldGetNode(node)) {
-        return node;
-      }
-    }
-    return null;
-  }
-
-  @override
-  int countAllNodes({required Predicate countNode}) {
-    int count = 0;
-    for (int i = 0; i < length; i++) {
-      final Node node = elementAt(i);
-      if (countNode(node)) {
-        count++;
-      }
-      count += node.countAllNodes(countNode: countNode);
-    }
-    return count;
-  }
-
-  @override
-  int countNodes({required Predicate countNode}) {
-    int count = 0;
-    for (int i = 0; i < length; i++) {
-      final Node node = elementAt(i);
-      if (countNode(node)) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-  /// Check if the id of the node exist in the root
-  /// of the [Folder] without checking into its children
-  @override
-  bool exist(String nodeId) {
-    for (int i = 0; i < length; i++) {
-      if (elementAt(i).details.id == nodeId) return true;
-    }
-    return false;
-  }
-
-  /// Check if the id of the node exist into the [Folder]
-  /// checking in its children without limitations
-  ///
-  /// This opertion could be heavy based on the deep of the nodes
-  /// into the [Folder]
-  @override
-  bool deepExist(String nodeId) {
-    for (int i = 0; i < length; i++) {
-      final node = elementAt(i);
-      if (node.details.id == nodeId) {
-        return true;
-      }
-      final foundedNode = node.deepExist(nodeId);
-      if (foundedNode) return true;
-    }
-    return false;
   }
 
   @override
@@ -236,117 +156,6 @@ final class Root extends Node with NodeVisitor {
       }
     }
     return null;
-  }
-
-  Node elementAt(int index) {
-    return children.elementAt(index);
-  }
-
-  Node? elementAtOrNull(int index) {
-    return children.elementAtOrNull(index);
-  }
-
-  bool contains(Object object) {
-    return children.contains(object);
-  }
-
-  void clearAndOverrideState(List<Node> newChildren) {
-    clear();
-    addAll(newChildren);
-  }
-
-  Node get first => children.first;
-  Node get last => children.last;
-  Node? get lastOrNull => children.lastOrNull;
-  Node? get firstOrNull => children.firstOrNull;
-  Iterator<Node> get iterator => children.iterator;
-  Iterable<Node> get reversed => children.reversed;
-  bool get isEmpty => children.isEmpty;
-  bool get hasNoChildren => children.isEmpty;
-  bool get isNotEmpty => !isEmpty;
-  int get length => children.length;
-
-  int indexWhere(bool Function(Node) callback) {
-    return children.indexWhere(callback);
-  }
-
-  int indexOf(Node element, int start) {
-    return children.indexOf(element, start);
-  }
-
-  Node firstWhere(bool Function(Node) callback) {
-    return children.firstWhere(callback);
-  }
-
-  Node lastWhere(bool Function(Node) callback) {
-    return children.lastWhere(callback);
-  }
-
-  void add(Node element) {
-    if (element.owner != this) {
-      element.owner = this;
-    }
-    children.add(element);
-    notify();
-  }
-
-  void addAll(Iterable<Node> children) {
-    for (final child in children) {
-      if (child.owner != this) {
-        child.owner = this;
-      }
-      this.children.add(child);
-    }
-    notify();
-  }
-
-  void insert(int index, Node element) {
-    if (element.owner != this) {
-      element.owner = this;
-    }
-    children.insert(index, element);
-    notify();
-  }
-
-  void clear() {
-    children.clear();
-    notify();
-  }
-
-  bool remove(Node element, {bool shouldNotify = true}) {
-    final removed = children.remove(element);
-    if (shouldNotify) notify();
-    return removed;
-  }
-
-  Node removeLast({bool shouldNotify = true}) {
-    final Node value = children.removeLast();
-    if (shouldNotify) notify();
-    return value;
-  }
-
-  void removeWhere(bool Function(Node) callback, {bool shouldNotify = true}) {
-    children.removeWhere(callback);
-    if (shouldNotify) notify();
-  }
-
-  Node removeAt(int index, {bool shouldNotify = true}) {
-    final Node value = children.removeAt(index);
-    if (shouldNotify) notify();
-    return value;
-  }
-
-  void operator []=(int index, Node newNodeState) {
-    if (index < 0 || children[index] == newNodeState) return;
-    if (newNodeState.owner != this) {
-      newNodeState.owner = this;
-    }
-    children[index] = newNodeState;
-    notify();
-  }
-
-  Node operator [](int index) {
-    return children[index];
   }
 
   @visibleForTesting
