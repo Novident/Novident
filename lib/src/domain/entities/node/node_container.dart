@@ -144,57 +144,57 @@ abstract class NodeContainer extends Node {
     return _children.lastWhere(callback);
   }
 
-  void add(Node element) {
+  void add(Node element, {bool shouldNotify = true}) {
     if (element.owner != this) {
       element.owner = this;
     }
     _children.add(element);
-    notify();
+    if (shouldNotify) notify();
   }
 
-  void addAll(Iterable<Node> children) {
+  void addAll(Iterable<Node> children, {bool shouldNotify = true}) {
     for (final Node child in children) {
       if (child.owner != this) {
         child.owner = this;
       }
       _children.add(child);
     }
-    notify();
+    if (shouldNotify) notify();
   }
 
-  void insert(int index, Node element) {
+  void insert(int index, Node element, {bool shouldNotify = true}) {
     if (element.owner != this) {
       element.owner = this;
     }
     _children.insert(index, element);
-    notify();
+    if (shouldNotify) notify();
   }
 
-  void clear() {
+  void clear({bool shouldNotify = true}) {
     _children.clear();
-    notify();
+    if (shouldNotify) notify();
   }
 
-  bool remove(Node element) {
+  bool remove(Node element, {bool shouldNotify = true}) {
     final removed = _children.remove(element);
-    notify();
+    if (shouldNotify) notify();
     return removed;
   }
 
-  Node removeLast() {
+  Node removeLast({bool shouldNotify = true}) {
     final Node value = _children.removeLast();
-    notify();
+    if (shouldNotify) notify();
     return value;
   }
 
-  void removeWhere(bool Function(Node) callback) {
+  void removeWhere(bool Function(Node) callback, {bool shouldNotify = true}) {
     _children.removeWhere(callback);
-    notify();
+    if (shouldNotify) notify();
   }
 
-  Node removeAt(int index) {
+  Node removeAt(int index, {bool shouldNotify = true}) {
     final Node value = _children.removeAt(index);
-    notify();
+    if (shouldNotify) notify();
     return value;
   }
 
