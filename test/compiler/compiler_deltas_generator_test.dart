@@ -1,6 +1,8 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:novident_remake/src/data/processors/processor_configurations.dart';
+import 'package:novident_remake/src/data/processors/processor_result.dart';
 import 'package:novident_remake/src/data/processors/project_processor.dart';
 import 'package:novident_remake/src/domain/constants.dart';
 import 'package:novident_remake/src/domain/entities/format/format.dart';

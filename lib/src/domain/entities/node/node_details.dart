@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart' show Node;
-import 'package:novident_remake/src/domain/interfaces/clonable_mixin.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/clonable_mixin.dart';
 import 'package:novident_remake/src/utils/id_generators.dart';
 
 /// Represents a [NodeDetails] into the tree a make possible
