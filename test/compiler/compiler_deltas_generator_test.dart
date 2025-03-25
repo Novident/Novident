@@ -44,6 +44,15 @@ void main() {
         },
       ),
       manuscriptChildren: [
+        Document(
+          details: NodeDetails.withLevel(0),
+          content: Delta()
+            ..insert('This is just a simple doc into the root of the project')
+            ..insert('\n'),
+          name: 'Doc name 2.1',
+          synopsis: '',
+          trashOptions: NodeTrashedOptions.nonTrashed(),
+        ),
         Folder(
           content: Delta(),
           name: 'Chapter 1',
@@ -79,7 +88,7 @@ void main() {
             Document(
               details: NodeDetails.withLevel(2),
               content: Delta()
-                ..insert('This is just a simple doc into Chapter 2')
+                ..insert('This is just a simple doc into Chapter 2 ')
                 ..insert('document where we test how this ')
                 ..insert('\n'),
               name: 'Doc name 2.1',
@@ -89,7 +98,7 @@ void main() {
             Document(
               details: NodeDetails.withLevel(2),
               content: Delta()
-                ..insert('This is just a simple secundary doc into Chapter 2')
+                ..insert('This is just a simple secundary doc into Chapter 2 ')
                 ..insert('document where we test how this ')
                 ..insert('\n'),
               name: 'Doc name 2.2',
@@ -121,9 +130,12 @@ void main() {
             separatorOptions: SeparatorOptions.common(
               beforeSection: SingleReturnSeparatorStrategy.instance,
               betweenSection: CustomSeparatorStrategy(
-                  breakAfter: false, content: '--Basic group--'),
+                breakAfter: false,
+                content: '\n--Basic group--\n',
+              ),
               afterSection: SingleReturnSeparatorStrategy.instance,
             ),
+            showTitle: false,
             showText: true,
             textAttr: SectionAttributes.common(
               fontSize: 13,
@@ -133,7 +145,7 @@ void main() {
             id: 'l2',
             assigned: '#1',
             separatorOptions: SeparatorOptions.common(
-              afterSection: PageBreakSeparatorStrategy.instance,
+              beforeSection: PageBreakSeparatorStrategy.instance,
             ),
             name: 'Chapter heading',
             showTitle: true,

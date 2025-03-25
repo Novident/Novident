@@ -7,6 +7,7 @@ import 'package:novident_remake/src/domain/entities/compiler/compiler_metadata.d
 import 'package:novident_remake/src/domain/entities/format/format.dart';
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
+import 'package:novident_remake/src/domain/entities/layout/separators/layout_separator.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/node/node_container.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
@@ -116,7 +117,7 @@ final class ProjectProcessor {
         final String beforeSeparatorContent =
             separator.separateBeforeSection.buildSeparator();
         final String betweenSeparatorContent =
-            separator.separateBeforeSection.buildSeparator();
+            separator.separatorBetweenSection.buildSeparator();
         // before
         _deltaBuffer
             .push(beforeSeparatorContent.toOperation().cast<Operation>());
@@ -149,15 +150,15 @@ final class ProjectProcessor {
 
       // after separator
       if (!node.isFolder || node.isNormalFolder) {
+        final LayoutSeparator afterOption = !separator.overrideSeparatorAfter
+            ? SingleReturnSeparatorStrategy.instance
+            : separator.separatorAfterSection;
         // if the [breakAfterUse] is true
         // will separate the current content with the next one
         // to simulate that we are creating different pages
-        _onNeedBreak(
-            node, documents, separator.separatorAfterSection.breakAfterUse);
-        _context.shouldWritePageOptions =
-            separator.separatorAfterSection.breakAfterUse;
-        final String afterSeparatorContent =
-            separator.separateBeforeSection.buildSeparator();
+        _onNeedBreak(node, documents, afterOption.breakAfterUse);
+        _context.shouldWritePageOptions = afterOption.breakAfterUse;
+        final String afterSeparatorContent = afterOption.buildSeparator();
         _deltaBuffer
             .push(afterSeparatorContent.toOperation().cast<Operation>());
       }
