@@ -18,6 +18,7 @@ import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_can_be_trashed.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_type.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
 import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/default_counts_impl.dart';
@@ -37,13 +38,14 @@ final class Folder extends NodeContainer
         NodeHasName,
         NodeCanBeTrashed,
         NodeCanAttachSections,
+        NodeHasType<FolderType>,
         WordCounterMixin,
         CharacterCountMixin,
         LineCounterMixin,
         DefaultWordCount,
         DefaultCharCount,
         DefaultLineCount {
-  final FolderType type;
+  final FolderType folderType;
   final NodeTrashedOptions trashOptions;
   final String attachedSection;
   final String name;
@@ -59,7 +61,7 @@ final class Folder extends NodeContainer
     required this.name,
     required super.details,
     this.attachedSection = ProjectDefaults.kStructuredBasedSectionId,
-    this.type = FolderType.normal,
+    this.folderType = FolderType.normal,
     this.trashOptions = const NodeTrashedOptions.nonTrashed(),
     bool isExpanded = false,
     bool doRedepthCheck = false,
@@ -79,7 +81,7 @@ final class Folder extends NodeContainer
     required this.name,
     required super.details,
     this.attachedSection = '',
-    this.type = FolderType.normal,
+    this.folderType = FolderType.normal,
     this.trashOptions = const NodeTrashedOptions.nonTrashed(),
     bool isExpanded = false,
   }) : _isExpanded = isExpanded;
@@ -90,6 +92,9 @@ final class Folder extends NodeContainer
     _isExpanded = expand;
     notify();
   }
+
+  @override
+  FolderType get type => folderType;
 
   @override
   String get countValue => content.toPlain();
@@ -165,13 +170,13 @@ final class Folder extends NodeContainer
   /// adjust the depth level of the children
   void redepthChildren({int? currentLevel, bool checkFirst = false}) {
     assert(level >= 0, 'level cannot be less than zero');
-    final Node? parent = type == FolderType.trash
+    final Node? parent = folderType == FolderType.trash
         ? null
         : jumpToParent(
             stopAt: (Node node) =>
-                node is Folder && node.type == FolderType.trash);
+                node is Folder && node.folderType == FolderType.trash);
     final bool trashChildrenIfNeeded =
-        parent != null || type == FolderType.trash;
+        parent != null || folderType == FolderType.trash;
 
     void redepth(List<Node> unformattedChildren, int currentLevel) {
       currentLevel = level;
@@ -217,7 +222,7 @@ final class Folder extends NodeContainer
     NodeDetails? details,
     Delta? content,
     String? name,
-    FolderType? type,
+    FolderType? folderType,
     String? attachedSection,
     NodeTrashedOptions? trashOptions,
     List<Node>? children,
@@ -226,7 +231,7 @@ final class Folder extends NodeContainer
     return Folder(
       children: children ?? this.children,
       details: details ?? this.details,
-      type: type ?? this.type,
+      folderType: folderType ?? this.folderType,
       trashOptions: trashOptions ?? this.trashOptions,
       attachedSection: attachedSection ?? this.attachedSection,
       isExpanded: isExpanded ?? this.isExpanded,
@@ -379,7 +384,7 @@ final class Folder extends NodeContainer
       ),
       name: json['name'] as String,
       attachedSection: json['attachedSection'] as String,
-      type: FolderType.values[json['type'] as int? ?? 0],
+      folderType: FolderType.values[json['type'] as int? ?? 0],
       trashOptions: NodeTrashedOptions.fromJson(
           json['trashOptions'] as Map<String, dynamic>),
       isExpanded: json['expanded'] as bool,
@@ -412,9 +417,9 @@ final class Folder extends NodeContainer
           json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       isExpanded: json['expanded'] as bool,
-      type: FolderType.values[json['type'] as int? ?? 0],
+      folderType: FolderType.values[json['type'] as int? ?? 0],
       attachedSection: json['attachedSection'] as String,
-      children: List.from(
+      children: List<Node>.from(
         (json['children'] as List<dynamic>).map(
           (el) {
             if (el['isRoot'] != null) {
@@ -446,7 +451,7 @@ final class Folder extends NodeContainer
     return {
       'isFolder': true,
       'details': details.toJson(),
-      'type': type.index,
+      'type': folderType.index,
       'content': content.toJson(),
       'name': name,
       'attachedSection': attachedSection,
@@ -476,7 +481,7 @@ final class Folder extends NodeContainer
       children.hashCode ^
       attachedSection.hashCode ^
       name.hashCode ^
-      type.hashCode ^
+      folderType.hashCode ^
       trashOptions.hashCode ^
       content.hashCode;
 
@@ -491,7 +496,7 @@ final class Folder extends NodeContainer
           other.children,
         ) &&
         name == other.name &&
-        type == other.type &&
+        folderType == other.folderType &&
         trashOptions == other.trashOptions &&
         content == other.content;
   }
@@ -505,7 +510,7 @@ final class Folder extends NodeContainer
         'attachedSection: $attachedSection, '
         'name: $name, '
         'content: $content, '
-        'type: ${type.name},'
+        'type: ${folderType.name},'
         'children: $children'
         ')';
   }

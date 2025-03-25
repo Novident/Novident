@@ -14,6 +14,7 @@ import 'package:novident_remake/src/domain/enums/enums.dart';
 
 Project generateBasicProject({
   List<Node>? manuscriptChildren,
+  List<Node>? rootNodes,
   SectionTypeConfigurations? sectionConfig,
   List<Section>? sections,
   Format? format,
@@ -33,18 +34,26 @@ Project generateBasicProject({
     ),
     root: Root(
       children: <Node>[
+        ...?rootNodes,
         Folder(
           content: Delta(),
           name: 'Manuscript',
-          type: FolderType.manuscript,
+          folderType: FolderType.manuscript,
           children: <Node>[...?manuscriptChildren],
+          details: NodeDetails.zero(),
+        ),
+        Folder(
+          content: Delta(),
+          name: 'Research',
+          folderType: FolderType.research,
+          children: <Node>[],
           details: NodeDetails.zero(),
         ),
         Folder(
           children: <Node>[],
           content: Delta(),
           name: 'Trash',
-          type: FolderType.trash,
+          folderType: FolderType.trash,
           details: NodeDetails.zero(),
         ),
       ],

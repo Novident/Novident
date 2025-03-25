@@ -19,15 +19,8 @@ import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.d
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/enums/enums.dart';
-import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
-import 'package:novident_remake/src/domain/extensions/nodes_extensions.dart';
-import 'package:novident_remake/src/domain/extensions/object_extension.dart';
-import 'package:novident_remake/src/domain/extensions/project_extensions.dart';
-import 'package:novident_remake/src/domain/extensions/string_extension.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_resource.dart';
+import 'package:novident_remake/src/domain/extensions/extensions.dart';
+import 'package:novident_remake/src/domain/interfaces/interfaces.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
 final class ProjectProcessor {

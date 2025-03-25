@@ -2,6 +2,8 @@ library;
 
 export 'folder_type.dart';
 export 'compile_to.dart';
+export 'workspace_view_type.dart';
+export 'project_format_scope.dart';
 
 enum SelectedMatter { front, back }
 

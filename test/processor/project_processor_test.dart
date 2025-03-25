@@ -1,5 +1,4 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:novident_remake/src/data/processors/processor_configurations.dart';
 import 'package:novident_remake/src/data/processors/processor_result.dart';
@@ -43,7 +42,7 @@ void main() {
           '1': '#2',
         },
       ),
-      manuscriptChildren: [
+      rootNodes: <Node>[
         Document(
           details: NodeDetails.withLevel(0),
           content: Delta()
@@ -53,6 +52,8 @@ void main() {
           synopsis: '',
           trashOptions: NodeTrashedOptions.nonTrashed(),
         ),
+      ],
+      manuscriptChildren: [
         Folder(
           content: Delta(),
           name: 'Chapter 1',
@@ -98,8 +99,7 @@ void main() {
             Document(
               details: NodeDetails.withLevel(2),
               content: Delta()
-                ..insert('This is just a simple secundary doc into Chapter 2 ')
-                ..insert('document where we test how this ')
+                ..insert('And, this is just a simple secundary doc')
                 ..insert('\n'),
               name: 'Doc name 2.2',
               synopsis: '',
@@ -175,9 +175,39 @@ void main() {
       project,
       ProcessorConfiguration(),
     );
-    debugPrint(result.documents
-        .map((e) => e.content)
-        .join('\n--Page break--\n')
-        .toString());
+    expect(
+        result.documents
+            .map((
+              Document e,
+            ) =>
+                e.value)
+            .toList(),
+        <Delta>[
+          // basic group
+          Delta()
+            ..insert('\n--Basic group--\n')
+            ..insert(
+                'This is just a simple doc into the root of the project\n\n'),
+          // chapter 1
+          Delta()
+            ..insert(
+                'Chapter 1', {'size': 12.0, 'bold': true, 'family': 'arial'})
+            ..insert('\n', {'line-height': 1.0, 'align': 'center'})
+            // the same line, but is more easy read it at this way
+            ..insert('This is just a simple doc document where we ')
+            ..insert(
+                'test how this \n\nAnd, This is just a simple secundary doc ')
+            ..insert('document where we test how this \n\n'),
+          // chapter 2
+          Delta()
+            ..insert(
+                'Chapter 2', {'size': 12.0, 'bold': true, 'family': 'arial'})
+            ..insert('\n', {'line-height': 1.0, 'align': 'center'})
+            // the same line, but is more easy read it at this way
+            ..insert(
+                'This is just a simple doc into Chapter 2 document where we ')
+            ..insert(
+                'test how this \n\nAnd, this is just a simple secundary doc\n\n')
+        ]);
   });
 }

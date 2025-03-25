@@ -2,8 +2,10 @@ import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/project_rule_mixin.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/project_status_response.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_manuscript_existence_rule.dart';
+import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_research_existence_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_trash_folder_existence_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_trash_has_no_duplicates_rule.dart';
+import 'package:novident_remake/src/domain/entities/rule/project_rules/rules/ensure_trashed_files_are_in_trash_rule.dart';
 import 'package:novident_remake/src/domain/exceptions/bad_project_state_exception.dart';
 
 /// These are all the rules that we have to run
@@ -12,12 +14,15 @@ import 'package:novident_remake/src/domain/exceptions/bad_project_state_exceptio
 /// These rules ensure that the imported/exported project
 /// has the correct values, structure, content, and the current
 /// standards
+//TODO: add the rules that are necessary for the state of the project
 class ProjectRules {
   const ProjectRules._();
   static final List<ProjectRule> _rules = <ProjectRule>[
     EnsureTrashFolderExistenceRule(),
     EnsureTrashHasNoDuplicatesRule(),
     EnsureManuscriptExistenceRule(),
+    EnsureResearchExistenceRule(),
+    EnsureTrashedNodesAreIntoTrashRule(),
   ];
 
   static bool checkProjectState(Project project) {

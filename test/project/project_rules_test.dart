@@ -1,11 +1,15 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/project_rules.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/enums/enums.dart';
 import 'package:novident_remake/src/domain/exceptions/bad_project_state_exception.dart';
+import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
+import 'package:novident_remake/src/domain/extensions/nodes_extensions.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_type.dart';
 
 import 'generators/basic_project.dart';
 
@@ -57,14 +61,14 @@ void main() {
     );
   });
 
-  test('should fail trash check and pass later', () {
+  test('should fail trash duplicate check and pass later', () {
     project.root.add(
       Folder(
         children: [],
         content: Delta(),
         name: 'Trash2',
         details: NodeDetails.zero(),
-        type: FolderType.trash,
+        folderType: FolderType.trash,
       ),
     );
     expect(
@@ -78,6 +82,18 @@ void main() {
     expect(
       ProjectRules.checkProjectState(project),
       isTrue,
+    );
+  });
+
+  test('should fail research check', () {
+    project.root.removeWhere((node) =>
+        node is NodeHasType<FolderType> &&
+        node.cast<NodeHasType<FolderType>>().type == FolderType.research);
+    expect(
+      () => ProjectRules.checkProjectState(project),
+      throwsA(
+        isA<BadProjectStateException>(),
+      ),
     );
   });
 }

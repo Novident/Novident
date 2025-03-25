@@ -62,7 +62,7 @@ class NodeDetails
     return {
       'level': level,
       'id': id,
-      'owner': owner,
+      'owner': owner?.toJson(),
       'value': value,
     };
   }
