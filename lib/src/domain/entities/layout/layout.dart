@@ -16,6 +16,7 @@ import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
+import 'package:novident_remake/src/domain/extensions/nodes_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/project_delta_content_extension.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
@@ -284,12 +285,16 @@ final class Layout extends Equatable {
   /// [file]: Document node to process
   /// [context]: Compilation context
   /// [fontFamily]: is the font family configured to the Node (can be overridden by sections)
-  Delta build(
+  Delta applyLayout(
     Node file,
     CompilerContext context, {
     String fontFamily = EditorDefaults.kDefaultFontFamily,
   }) {
     final Delta delta = Delta();
+    // we do not accept non normal folders
+    if (file.isFolder && !file.isNormalFolder) {
+      return delta;
+    }
 
     ///if font family is ["by-layout"] then layout decide the font family
     bool assignFamilyBySection = false;
@@ -306,6 +311,7 @@ final class Layout extends Equatable {
     final LayoutSection notesMapped = layoutManager.notesSection;
     final LayoutSection textMapped = layoutManager.textSection;
     final bool showTitle = titleMapped.show;
+    final bool showText = textMapped.show;
     final bool showSynopsis = synopsisMapped.show;
     if (context.shouldWritePageOptions &&
         newPageOptions.newLinesCount.value > 0) {
@@ -314,19 +320,21 @@ final class Layout extends Equatable {
       applyNewPageOptions().forEach(delta.push);
     }
 
-    if (showTitle) {
-      final Delta? title = titleMapped.buildDelta(
-        options: titleOptions,
-        context: context,
-        assignFamilyBySection: assignFamilyBySection,
-        fontFamily: fontFamily,
-        content:
-            '${titleOptions.preffix ?? ''}${file.cast<NodeHasName>().nodeName}${titleOptions.suffix ?? ''}',
-        ignorePreffixSuffix: false,
-      );
-      if (title != null && title.isNotEmpty) {
-        title.operations.forEach(delta.push);
-      }
+    final Delta? title = titleMapped.buildDelta(
+      options: titleOptions,
+      context: context,
+      assignFamilyBySection: assignFamilyBySection,
+      fontFamily: fontFamily,
+      content: '${titleOptions.preffix ?? ''}'
+          // we always add the title section
+          // but, we verify first, if the showTitle is true
+          // to pass the name of the file
+          '${!showTitle ? '' : file.cast<NodeHasName>().nodeName}'
+          '${titleOptions.suffix ?? ''}',
+      ignorePreffixSuffix: false,
+    );
+    if (title != null && title.isNotEmpty) {
+      title.operations.forEach(delta.push);
     }
     //metadata section
     if (metadataMapped.show) {
@@ -360,7 +368,7 @@ final class Layout extends Equatable {
       */
     }
     //text section
-    if (textMapped.show) {
+    if (showText) {
       if (fontFamily.isEmpty) {
         fontFamily = textMapped.attributes.fontFamily;
       }
@@ -372,9 +380,9 @@ final class Layout extends Equatable {
       if (textMapped.overrideTextSection) {
         final Map<String, dynamic>? inlineAttributes =
             textMapped.attributes.toQuillMap(inline: true).getNullIfEmpty();
-        //fontFamily,
         final Map<String, dynamic>? blockAttributes =
             textMapped.attributes.toQuillMap(inline: false).getNullIfEmpty();
+
         content = content.overrideAttributes(
           inlineAttributes ?? <String, dynamic>{},
           blockAttributes ?? <String, dynamic>{},

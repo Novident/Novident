@@ -19,6 +19,7 @@ class CompilerContext {
   Document? currentDocument;
   bool processPlaceholderAtEnd;
   DateTime? time;
+  int? runningCompileOnLevel;
 
   /// If the rules are disabled
   /// then this will take that value

@@ -1,4 +1,5 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
+import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:novident_remake/src/data/processors/processor_configurations.dart';
 import 'package:novident_remake/src/data/processors/processor_result.dart';
 import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
@@ -7,6 +8,7 @@ import 'package:novident_remake/src/domain/entities/format/format.dart';
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_remake/src/domain/entities/node/node_container.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
@@ -17,20 +19,23 @@ import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/enums/enums.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
+import 'package:novident_remake/src/domain/extensions/nodes_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/object_extension.dart';
 import 'package:novident_remake/src/domain/extensions/project_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_resource.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
 final class ProjectProcessor {
   ProjectProcessor._();
-  static final List<Document> _docsProcessed = <Document>[];
+  static final List<Node> _nodesBeingProcessed = <Node>[];
   static final Delta _deltaBuffer = Delta();
   static late CompilerContext _context;
 
+  //TODO: implement folder and documents separators (given by Format class)
   static ProcessorResult process(
       Project project, ProcessorConfiguration configuration) {
     assert(
@@ -40,51 +45,19 @@ final class ProjectProcessor {
     _context = _buildContext(project);
     final List<Document> documents = <Document>[];
     final Format format = project.config.format ?? Format.empty();
-    for (final Node node in project.root.where(
-      (nd) =>
-          nd is Folder &&
-          nd.type.isNotTrashFolder &&
-          nd.type.isNotResearchFolder &&
-          nd.type.isNotTemplatesSheetFolder,
-    )) {
-      final SectionTypeConfigurations sectionConfig =
-          project.config.sectionManager.config;
-      if (node is! NodeCanAttachSections) {
-        continue;
-      }
-      final String section = _getSectionForNode(
-        node is Folder,
-        node.details,
-        sectionConfig,
-        node.cast<NodeCanAttachSections>().section,
-      );
+    _context.runningCompileOnLevel = 0;
+    _build(
+        documents: documents,
+        project: project,
+        format: format,
+        children: project.root.where(
+          (nd) =>
+              nd is Folder &&
+              nd.type.isNotTrashFolder &&
+              nd.type.isNotResearchFolder &&
+              nd.type.isNotTemplatesSheetFolder,
+        ));
 
-      final Layout? layout = format.getLayoutWhere(
-        predicate: (Layout layout) => layout.assignedSection.equals(
-          section,
-        ),
-      );
-
-      if (section.isEmpty || layout.isNull) {
-        if (node is NodeHasValue<Delta>) {
-          for (final Operation op
-              in node.cast<NodeHasValue<Delta>>().value.operations) {
-            _deltaBuffer.push(op);
-          }
-        }
-        continue;
-      }
-      final Delta delta = layout!.build(node, _context);
-      final SeparatorOptions separator = layout.separatorSections;
-      if (separator.separateBeforeSection.breakAfterUse) {}
-
-      if (node is Document) {
-        _docsProcessed.add(node);
-      }
-      if (node is Folder) {}
-
-      if (separator.separatorAfterSection.breakAfterUse) {}
-    }
     if (_deltaBuffer.isNotEmpty) {
       documents.add(
         Document(
@@ -99,8 +72,100 @@ final class ProjectProcessor {
     return ProcessorResult(documents: documents);
   }
 
+  static void _build({
+    required List<Document> documents,
+    required Project project,
+    required Format format,
+    required Iterable<Node> children,
+  }) {
+    for (final Node node in children) {
+      // we need to ignore this node types
+      if (node is NodeHasResource || node is! NodeCanAttachSections) continue;
+      final SectionTypeConfigurations sectionConfig =
+          project.config.sectionManager.config;
+      final String section = _getSectionForNode(
+        node is Folder,
+        node.details,
+        sectionConfig,
+        node.cast<NodeCanAttachSections>().section,
+      );
+      _nodesBeingProcessed.add(node);
+
+      final Layout? layout = format.getLayoutWhere(
+        predicate: (Layout layout) => layout.assignedSection.equals(
+          section,
+        ),
+      );
+
+      final bool hasNoMatch = section.isEmpty || layout.isNull;
+      if (hasNoMatch) {
+        _onNoSectionMatch(node);
+        continue;
+      }
+
+      final SeparatorOptions separator = layout!.separatorSections;
+      // Since, we do not check, if the node is a Manuscript, TemplatesSheet,
+      // Research, or any of that kind
+      // we need to check if the node is not a Folder applies the [SeparatorOptions]
+      // given by the [Layout]
+      //
+      // If it is, then must be normal to apply the [SeparatorOptions]
+      // given by the [Layout]
+      //
+      if (!node.isFolder || node.isNormalFolder) {
+        final String beforeSeparatorContent =
+            separator.separateBeforeSection.buildSeparator();
+        final String betweenSeparatorContent =
+            separator.separateBeforeSection.buildSeparator();
+        // before
+        _deltaBuffer
+            .push(beforeSeparatorContent.toOperation().cast<Operation>());
+        _onNeedBreak(
+            node, documents, separator.separateBeforeSection.breakAfterUse);
+        // between
+        _deltaBuffer
+            .push(betweenSeparatorContent.toOperation().cast<Operation>());
+        _onNeedBreak(
+            node, documents, separator.separatorBetweenSection.breakAfterUse);
+      }
+
+      final Delta delta = layout.applyLayout(node, _context);
+      // here we write the content of the node
+      delta.operations.forEach(_deltaBuffer.push);
+
+      if (node is NodeContainer && node.isNotEmpty) {
+        // sets the new level that will be used during build content
+        // to simulates that we are at that point
+        _context.runningCompileOnLevel = node.details.level + 1;
+        _build(
+          documents: documents,
+          project: project,
+          format: format,
+          children: node.children,
+        );
+        // get the current level again
+        _context.runningCompileOnLevel = node.details.level;
+      }
+
+      // after separator
+      if (!node.isFolder || node.isNormalFolder) {
+        // if the [breakAfterUse] is true
+        // will separate the current content with the next one
+        // to simulate that we are creating different pages
+        _onNeedBreak(
+            node, documents, separator.separatorAfterSection.breakAfterUse);
+        _context.shouldWritePageOptions =
+            separator.separatorAfterSection.breakAfterUse;
+        final String afterSeparatorContent =
+            separator.separateBeforeSection.buildSeparator();
+        _deltaBuffer
+            .push(afterSeparatorContent.toOperation().cast<Operation>());
+      }
+    }
+  }
+
   static void _reloadDocumentsProcess() {
-    _docsProcessed.clear();
+    _nodesBeingProcessed.clear();
   }
 
   static String _getSectionForNode(
@@ -118,6 +183,46 @@ final class ProjectProcessor {
       return sectionId.nonNull;
     }
     return section;
+  }
+
+  static void _onNoSectionMatch(Node node) {
+    if (node is NodeHasValue<Delta>) {
+      for (final Operation op
+          in node.cast<NodeHasValue<Delta>>().value.operations) {
+        _deltaBuffer.push(op);
+      }
+    }
+  }
+
+  /// Breaks the current content with the next one
+  static void _onNeedBreak(
+      Node node, List<Document> documents, bool needBreak) {
+    if (!needBreak) {
+      _context.shouldWritePageOptions = false;
+      return;
+    }
+    if (_deltaBuffer.isNotEmpty) {
+      documents.add(
+        node is Document
+            ? node.cast<Document>().copyWith(
+                  content: Delta.from(_deltaBuffer),
+                  name: _nodesBeingProcessed.length == 1
+                      ? node.cast<NodeHasName>().nodeName
+                      : _nodesBeingProcessed
+                          .cast<NodeHasName>()
+                          .map((NodeHasName e) => e.nodeName)
+                          .join(','),
+                )
+            : Document(
+                details: node.details,
+                content: Delta.from(_deltaBuffer),
+                name: node.cast<NodeHasName>().nodeName,
+              ),
+      );
+      _deltaBuffer.operations.clear();
+      _reloadDocumentsProcess();
+      _context.shouldWritePageOptions = true;
+    }
   }
 
   static CompilerContext _buildContext(Project project) {

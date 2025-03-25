@@ -4,7 +4,7 @@ part of '../separators/layout_separator.dart';
 /// next content to be writted in a complete different
 /// page that the current one
 @immutable
-class PageBreakSeparatorStrategy extends LayoutSeparator<String> {
+class PageBreakSeparatorStrategy extends LayoutSeparator {
   const PageBreakSeparatorStrategy._();
 
   static PageBreakSeparatorStrategy get instance => _instance == null
@@ -26,7 +26,7 @@ class PageBreakSeparatorStrategy extends LayoutSeparator<String> {
   }
 
   @override
-  bool operator ==(covariant LayoutSeparator<String> other) {
+  bool operator ==(covariant PageBreakSeparatorStrategy other) {
     if (identical(this, other)) return true;
     return id == other.id;
   }

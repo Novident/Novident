@@ -5,14 +5,15 @@ import 'package:novident_remake/src/domain/entities/compiler/compiler_metadata.d
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_attributes.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/document_resource.dart';
 
 void main() {
   final Layout layout = Layout.basic(
     showTitle: true,
+    showText: true,
     titleOptions: TitleOptions(
       titlePrefix: 'This is a header prefix¶',
       titleSuffix: '',
@@ -23,7 +24,7 @@ void main() {
     ),
   );
   final CompilerContext context = CompilerContext(
-    resources: <Node>[],
+    resources: <DocumentResource>[],
     documentVariables: <String>[],
     shouldWritePageOptions: false,
     currentDocument: Document.empty(details: NodeDetails.zero()),
@@ -48,7 +49,7 @@ void main() {
       name: 'Basic document name',
     );
     context.currentDocument = doc;
-    final Delta result = layout.build(
+    final Delta result = layout.applyLayout(
       doc,
       context,
     );
@@ -85,7 +86,7 @@ void main() {
       name: 'Basic document name',
     );
     context.currentDocument = doc;
-    final Delta result = layout.build(
+    final Delta result = layout.applyLayout(
       doc,
       context,
     );

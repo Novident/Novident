@@ -2,7 +2,7 @@ part of '../separators/layout_separator.dart';
 
 /// Returns the content given by the user
 @immutable
-class CustomSeparatorStrategy extends LayoutSeparator<String> {
+class CustomSeparatorStrategy extends LayoutSeparator {
   const CustomSeparatorStrategy({
     required this.breakAfter,
     required this.content,

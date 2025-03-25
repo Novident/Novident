@@ -51,14 +51,20 @@ void main() {
           children: <Node>[
             Document(
               details: NodeDetails.withLevel(2),
-              content: Delta(),
+              content: Delta()
+                ..insert('This is just a simple doc ')
+                ..insert('document where we test how this ')
+                ..insert('\n'),
               name: 'Doc name 1',
               synopsis: '',
               trashOptions: NodeTrashedOptions.nonTrashed(),
             ),
             Document(
               details: NodeDetails.withLevel(2),
-              content: Delta(),
+              content: Delta()
+                ..insert('And, This is just a simple secundary doc ')
+                ..insert('document where we test how this ')
+                ..insert('\n'),
               name: 'Doc name 2',
               synopsis: '',
               trashOptions: NodeTrashedOptions.nonTrashed(),
@@ -72,14 +78,20 @@ void main() {
           children: <Node>[
             Document(
               details: NodeDetails.withLevel(2),
-              content: Delta(),
+              content: Delta()
+                ..insert('This is just a simple doc into Chapter 2')
+                ..insert('document where we test how this ')
+                ..insert('\n'),
               name: 'Doc name 2.1',
               synopsis: '',
               trashOptions: NodeTrashedOptions.nonTrashed(),
             ),
             Document(
               details: NodeDetails.withLevel(2),
-              content: Delta(),
+              content: Delta()
+                ..insert('This is just a simple secundary doc into Chapter 2')
+                ..insert('document where we test how this ')
+                ..insert('\n'),
               name: 'Doc name 2.2',
               synopsis: '',
               trashOptions: NodeTrashedOptions.nonTrashed(),
@@ -121,7 +133,7 @@ void main() {
             id: 'l2',
             assigned: '#1',
             separatorOptions: SeparatorOptions.common(
-              afterSection: EmptyLineSeparatorStrategy.instance,
+              afterSection: PageBreakSeparatorStrategy.instance,
             ),
             name: 'Chapter heading',
             showTitle: true,
@@ -151,6 +163,9 @@ void main() {
       project,
       ProcessorConfiguration(),
     );
-    debugPrint(result.documents.toString());
+    debugPrint(result.documents
+        .map((e) => e.content)
+        .join('\n--Page break--\n')
+        .toString());
   });
 }

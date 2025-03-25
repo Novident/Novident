@@ -3,7 +3,7 @@ part of '../separators/layout_separator.dart';
 /// Breaks the current line to
 /// separator old and new content by a '\n'
 @immutable
-class EmptyLineSeparatorStrategy extends LayoutSeparator<String> {
+class EmptyLineSeparatorStrategy extends LayoutSeparator {
   const EmptyLineSeparatorStrategy._();
 
   static EmptyLineSeparatorStrategy get instance => _instance == null
@@ -25,7 +25,7 @@ class EmptyLineSeparatorStrategy extends LayoutSeparator<String> {
   String get id => '1';
 
   @override
-  bool operator ==(covariant LayoutSeparator<String> other) {
+  bool operator ==(covariant EmptyLineSeparatorStrategy other) {
     if (identical(this, other)) return true;
     return id == other.id;
   }

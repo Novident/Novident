@@ -15,7 +15,7 @@ class Constant {
 
   static const String kDefaultFormatFontFamily = "by-layout";
 
-  static final LayoutSeparator<String> kDefaultSeparatorStrategy =
+  static final LayoutSeparator kDefaultSeparatorStrategy =
       EmptyLineSeparatorStrategy.instance;
   static const String kDefaultAppName = 'Novident';
 

@@ -19,14 +19,14 @@ part 'custom_separator.dart';
 /// * [CustomSeparatorStrategy]: Returns the content given by the user.
 /// * EmptyLineSeparatorStrategy: Breaks the current line to separator old and new content by a '\n'.
 @immutable
-abstract class LayoutSeparator<T> {
+abstract class LayoutSeparator {
   const LayoutSeparator();
 
   /// This decides if the separator will break the page
   @mustBeOverridden
   bool get breakAfterUse;
 
-  T buildSeparator();
+  String buildSeparator();
 
   /// This is the id that identifies to that separator
   /// every id must be different
@@ -35,7 +35,7 @@ abstract class LayoutSeparator<T> {
 
   @override
   @mustBeOverridden
-  bool operator ==(covariant LayoutSeparator<T> other);
+  bool operator ==(covariant LayoutSeparator other);
 
   @override
   @mustBeOverridden

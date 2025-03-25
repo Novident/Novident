@@ -21,7 +21,7 @@ void main() {
     final Node doc = Document.empty(details: NodeDetails.zero(null));
     expect(
       doc is NodeHasResource,
-      isTrue,
+      isFalse,
     );
   });
 

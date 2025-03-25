@@ -4,7 +4,7 @@ part of '../separators/layout_separator.dart';
 ///
 /// This strategy just want to allow to the next document
 /// to be writted together with the previous content
-class SingleReturnSeparatorStrategy extends LayoutSeparator<String> {
+class SingleReturnSeparatorStrategy extends LayoutSeparator {
   const SingleReturnSeparatorStrategy._();
 
   static SingleReturnSeparatorStrategy get instance => _instance == null
@@ -20,13 +20,13 @@ class SingleReturnSeparatorStrategy extends LayoutSeparator<String> {
 
   /// This decides if the separator will break the page
   @override
-  bool get breakAfterUse => true;
+  bool get breakAfterUse => false;
 
   @override
   String get id => '2';
 
   @override
-  bool operator ==(covariant LayoutSeparator<String> other) {
+  bool operator ==(covariant SingleReturnSeparatorStrategy other) {
     if (identical(this, other)) return true;
     return id == other.id;
   }
