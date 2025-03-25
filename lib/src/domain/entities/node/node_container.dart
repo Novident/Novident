@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/interfaces/node_visitor.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
 
 @internal
 abstract class NodeContainer extends Node {
@@ -11,9 +11,37 @@ abstract class NodeContainer extends Node {
     required super.details,
   }) : _children = children;
 
+  /// Get all the nodes that satifies the predicate
+  Iterable<Node> where(ConditionalPredicate<Node> predicate) {
+    final List<Node> nodes = <Node>[];
+    for (final Node node in children) {
+      if (predicate(node)) {
+        nodes.add(node);
+      }
+    }
+    return nodes;
+  }
+
+  /// Get all the nodes that satifies the predicate traversing
+  /// into every node that is NodeContainer and gettings its children
+  Iterable<Node> whereDeep(ConditionalPredicate<Node> predicate) {
+    final List<Node> nodes = <Node>[];
+    for (final Node node in children) {
+      if (predicate(node)) {
+        nodes.add(node);
+      } else if (node is NodeContainer) {
+        nodes.addAll(node.whereDeep(predicate));
+      }
+    }
+    return nodes;
+  }
+
   @override
-  Node? visitAllNodes({required Predicate shouldGetNode}) {
-    for (int i = 0; i < length; i++) {
+  Node? visitAllNodes(
+      {required Predicate shouldGetNode, bool reversed = false}) {
+    for (int i = reversed ? length - 1 : 0;
+        reversed ? i >= 0 : i < length;
+        reversed ? i-- : i++) {
       final Node node = elementAt(i);
       if (shouldGetNode(node)) {
         return node;
@@ -26,8 +54,10 @@ abstract class NodeContainer extends Node {
   }
 
   @override
-  Node? visitNode({required Predicate shouldGetNode}) {
-    for (int i = 0; i < length; i++) {
+  Node? visitNode({required Predicate shouldGetNode, bool reversed = false}) {
+    for (int i = reversed ? length - 1 : 0;
+        reversed ? i >= 0 : i < length;
+        reversed ? i-- : i++) {
       final Node node = elementAt(i);
       if (shouldGetNode(node)) {
         return node;

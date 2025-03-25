@@ -1,3 +1,8 @@
+library;
+
+export 'folder_type.dart';
+export 'compile_to.dart';
+
 enum SelectedMatter { front, back }
 
 enum LetterCase { uppercase, lowercase, normal }
@@ -17,13 +22,3 @@ enum ActionOperation {
 
 // used by the compiler to add indent based in the selection of ones of theses options
 enum IndentType { everyLines, justAfterFirstLine, alwaysAfterAHeader }
-
-enum FolderType {
-  normal,
-  templateSheet,
-  research,
-  manuscript,
-  trash,
-}
-
-enum CompileTo { pdf, html, epub, txt, docx, md }

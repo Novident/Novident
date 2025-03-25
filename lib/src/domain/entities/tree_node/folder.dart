@@ -2,22 +2,27 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/node/node_container.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
-import 'package:novident_remake/src/domain/entities/tree_node/file.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/enums/enums.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
-import 'package:novident_remake/src/domain/interfaces/node_can_attach_sections.dart';
-import 'package:novident_remake/src/domain/interfaces/node_can_be_trashed.dart';
-import 'package:novident_remake/src/domain/interfaces/node_has_name.dart';
-import 'package:novident_remake/src/domain/interfaces/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_can_be_trashed.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
+import 'package:novident_remake/src/domain/interfaces/project/default_counts_impl.dart';
+import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';
+import 'package:novident_remake/src/domain/interfaces/project/word_counter_mixin.dart';
 import 'package:novident_remake/src/domain/logger/tree_logger.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
@@ -27,7 +32,17 @@ import 'package:novident_remake/src/domain/project_defaults.dart';
 /// You can take this implementation as a directory from your
 /// local storage that can contains a wide variety of file types
 final class Folder extends NodeContainer
-    with NodeHasValue<Delta>, NodeHasName, NodeCanBeTrashed, NodeCanAttachSections {
+    with
+        NodeHasValue<Delta>,
+        NodeHasName,
+        NodeCanBeTrashed,
+        NodeCanAttachSections,
+        WordCounterMixin,
+        CharacterCountMixin,
+        LineCounterMixin,
+        DefaultWordCount,
+        DefaultCharCount,
+        DefaultLineCount {
   final FolderType type;
   final NodeTrashedOptions trashOptions;
   final String attachedSection;
@@ -77,6 +92,48 @@ final class Folder extends NodeContainer
   }
 
   @override
+  String get countValue => content.toPlain();
+
+  @override
+  int charCount({bool acceptWhitespaces = false}) {
+    int counter = 0;
+    for (final Node node in children) {
+      if (node is CharacterCountMixin) {
+        counter += node.cast<CharacterCountMixin>().charCount(
+              acceptWhitespaces: acceptWhitespaces,
+            );
+      }
+    }
+    return counter + super.charCount(acceptWhitespaces: acceptWhitespaces);
+  }
+
+  @override
+  int lineCount({bool acceptEmptyLines = true}) {
+    int counter = 0;
+    for (final Node node in children) {
+      if (node is LineCounterMixin) {
+        counter += node.cast<LineCounterMixin>().lineCount(
+              acceptEmptyLines: acceptEmptyLines,
+            );
+      }
+    }
+    return counter + super.lineCount(acceptEmptyLines: acceptEmptyLines);
+  }
+
+  @override
+  int wordCount({bool ignorePunctuation = false}) {
+    int counter = 0;
+    for (final Node node in children) {
+      if (node is WordCounterMixin) {
+        counter += node.cast<WordCounterMixin>().wordCount(
+              ignorePunctuation: ignorePunctuation,
+            );
+      }
+    }
+    return counter + super.wordCount(ignorePunctuation: ignorePunctuation);
+  }
+
+  @override
   String get section => attachedSection;
 
   @override
@@ -111,8 +168,10 @@ final class Folder extends NodeContainer
     final Node? parent = type == FolderType.trash
         ? null
         : jumpToParent(
-            stopAt: (Node node) => node is Folder && node.type == FolderType.trash);
-    final bool trashChildrenIfNeeded = parent != null || type == FolderType.trash;
+            stopAt: (Node node) =>
+                node is Folder && node.type == FolderType.trash);
+    final bool trashChildrenIfNeeded =
+        parent != null || type == FolderType.trash;
 
     void redepth(List<Node> unformattedChildren, int currentLevel) {
       currentLevel = level;
@@ -198,7 +257,8 @@ final class Folder extends NodeContainer
   ///
   /// This opertion could be heavy based on the deep of the nodes
   /// into the [Folder]
-  bool existNodeWhere(bool Function(Node node) predicate, [List<Node>? subChildren]) {
+  bool existNodeWhere(bool Function(Node node) predicate,
+      [List<Node>? subChildren]) {
     final currentChildren = subChildren;
     for (int i = 0; i < (currentChildren ?? children).length; i++) {
       final node = (currentChildren ?? children).elementAt(i);
@@ -212,7 +272,8 @@ final class Folder extends NodeContainer
     return false;
   }
 
-  Node? childBeforeThis(NodeDetails node, bool alsoInChildren, [int? indexNode]) {
+  Node? childBeforeThis(NodeDetails node, bool alsoInChildren,
+      [int? indexNode]) {
     if (indexNode != null) {
       final element = elementAtOrNull(indexNode);
       if (element != null) {
@@ -226,14 +287,16 @@ final class Folder extends NodeContainer
         if (i - 1 == -1) return null;
         return elementAt(i - 1);
       } else if (treeNode is Folder && treeNode.isNotEmpty && alsoInChildren) {
-        final backNode = treeNode.childBeforeThis(node, alsoInChildren, indexNode);
+        final backNode =
+            treeNode.childBeforeThis(node, alsoInChildren, indexNode);
         if (backNode != null) return backNode;
       }
     }
     return null;
   }
 
-  Node? childAfterThis(NodeDetails node, bool alsoInChildren, [int? indexNode]) {
+  Node? childAfterThis(NodeDetails node, bool alsoInChildren,
+      [int? indexNode]) {
     if (indexNode != null) {
       final element = elementAtOrNull(indexNode);
       if (element != null) {
@@ -247,7 +310,8 @@ final class Folder extends NodeContainer
         if (i + 1 >= length) return null;
         return elementAt(i + 1);
       } else if (treeNode is Folder && treeNode.isNotEmpty && alsoInChildren) {
-        final nextChild = treeNode.childAfterThis(node, alsoInChildren, indexNode);
+        final nextChild =
+            treeNode.childAfterThis(node, alsoInChildren, indexNode);
         if (nextChild != null) return nextChild;
       }
     }
@@ -280,7 +344,8 @@ final class Folder extends NodeContainer
                   return Document.fromJson(el as Map<String, dynamic>);
                 }
                 if (el['isFolder'] != null) {
-                  final Folder? folder = Folder.fromJsonTest(el as Map<String, dynamic>);
+                  final Folder? folder =
+                      Folder.fromJsonTest(el as Map<String, dynamic>);
                   return folder!;
                 }
                 throw Exception(
@@ -288,7 +353,8 @@ final class Folder extends NodeContainer
                   'types supported. Expected Document or Folder types',
                 );
               })
-            : (jsonDecode(json['children'] as String) as List<String>).map<Node>(
+            : (jsonDecode(json['children'] as String) as List<String>)
+                .map<Node>(
                 (element) {
                   final map = jsonDecode(element) as Map<String, dynamic>;
                   if (map['isRoot'] != null) {
@@ -314,8 +380,8 @@ final class Folder extends NodeContainer
       name: json['name'] as String,
       attachedSection: json['attachedSection'] as String,
       type: FolderType.values[json['type'] as int? ?? 0],
-      trashOptions:
-          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
+      trashOptions: NodeTrashedOptions.fromJson(
+          json['trashOptions'] as Map<String, dynamic>),
       isExpanded: json['expanded'] as bool,
       details: NodeDetails.fromJson(
         (json['details'] is String
@@ -342,8 +408,8 @@ final class Folder extends NodeContainer
         json['details'] as Map<String, dynamic>,
       ),
       content: Delta.fromJson(json['content'] as List<dynamic>),
-      trashOptions:
-          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
+      trashOptions: NodeTrashedOptions.fromJson(
+          json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       isExpanded: json['expanded'] as bool,
       type: FolderType.values[json['type'] as int? ?? 0],
@@ -361,7 +427,8 @@ final class Folder extends NodeContainer
               return Document.fromJson(el as Map<String, dynamic>);
             }
             if (el['isFolder'] != null) {
-              final Folder? folder = Folder.fromJson(el as Map<String, dynamic>);
+              final Folder? folder =
+                  Folder.fromJson(el as Map<String, dynamic>);
               return folder!;
             }
             throw Exception(

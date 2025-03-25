@@ -35,7 +35,8 @@ extension MapExtension<K, V> on Map<K, V> {
     return entry.value;
   }
 
-  bool updateValueWhere({required MapEntryPredicate<K, V> predicate, required V value}) {
+  bool updateValueWhere(
+      {required MapEntryPredicate<K, V> predicate, required V value}) {
     final MapEntry<K, V>? entry = entries
         .where((MapEntry<K, V> element) => predicate(
               element.key,
@@ -70,7 +71,8 @@ extension MapExtension<K, V> on Map<K, V> {
     return entries;
   }
 
-  Iterable<Map<K, V>>? firstEntriesWhere({required MapEntryPredicate<K, V> predicate}) {
+  Iterable<Map<K, V>>? firstEntriesWhere(
+      {required MapEntryPredicate<K, V> predicate}) {
     final Iterable<Map<K, V>> entries = this
         .entries
         .where((MapEntry<K, V> element) => predicate(
@@ -127,9 +129,10 @@ extension ShiftLevelsMapExtension on Map<String, String> {
     final Map<String, String> newLevels = <String, String>{};
     bool shouldAdjust = false;
 
-    // order every entry by its level 
+    // order every entry by its level
     entries.sort(
-      (MapEntry<String, String> a, MapEntry<String, String> b) => int.parse(a.key).compareTo(
+      (MapEntry<String, String> a, MapEntry<String, String> b) =>
+          int.parse(a.key).compareTo(
         int.parse(b.key),
       ),
     );
@@ -137,19 +140,20 @@ extension ShiftLevelsMapExtension on Map<String, String> {
     for (final MapEntry<String, String> entry in entries) {
       final int currentLevel = int.parse(entry.key);
 
-      // ignores this element 
+      // ignores this element
       if (currentLevel == removalLevel) {
         shouldAdjust = true;
         continue;
       }
 
-      // adjust elements after the deleted item level 
+      // adjust elements after the deleted item level
       final int newLevel = shouldAdjust ? currentLevel - 1 : currentLevel;
 
-      // checks if the adjust that we made is correct 
+      // checks if the adjust that we made is correct
       if (shouldAdjust &&
           newLevel != (int.parse(newLevels.keys.lastOrNull ?? '-1') + 1)) {
-        throw StateError('Niveles inconsistentes después de eliminar $removalLevel');
+        throw StateError(
+            'Niveles inconsistentes después de eliminar $removalLevel');
       }
 
       newLevels['$newLevel'] = entry.value;

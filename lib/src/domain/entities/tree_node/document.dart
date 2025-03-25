@@ -1,18 +1,20 @@
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter_quill/quill_delta.dart' show Delta;
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
-import 'package:novident_remake/src/domain/entities/rule/resources/resource_rules.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
-import 'package:novident_remake/src/domain/interfaces/node_can_attach_sections.dart';
-import 'package:novident_remake/src/domain/interfaces/node_can_be_trashed.dart';
-import 'package:novident_remake/src/domain/interfaces/node_has_name.dart';
-import 'package:novident_remake/src/domain/interfaces/node_resource.dart';
-import 'package:novident_remake/src/domain/interfaces/node_visitor.dart';
-import 'package:novident_remake/src/domain/interfaces/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_can_be_trashed.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
+import 'package:novident_remake/src/domain/interfaces/project/default_counts_impl.dart';
+import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';
+import 'package:novident_remake/src/domain/interfaces/project/word_counter_mixin.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 import '../node/node.dart';
 
@@ -24,9 +26,14 @@ final class Document extends Node
     with
         NodeHasValue<Delta>,
         NodeHasName,
-        NodeHasResource,
         NodeCanBeTrashed,
-        NodeCanAttachSections {
+        NodeCanAttachSections,
+        WordCounterMixin,
+        CharacterCountMixin,
+        LineCounterMixin,
+        DefaultWordCount,
+        DefaultCharCount,
+        DefaultLineCount {
   final String name;
   final String attachedSection;
   final Delta content;
@@ -49,6 +56,9 @@ final class Document extends Node
     this.synopsis = '',
     this.trashOptions = const NodeTrashedOptions.nonTrashed(),
   }) : content = Delta();
+
+  @override
+  String get countValue => content.toPlain();
 
   @override
   String get section => attachedSection;
@@ -128,8 +138,8 @@ final class Document extends Node
     }
     return Document(
       synopsis: json['synopsis'] as String? ?? '',
-      trashOptions:
-          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
+      trashOptions: NodeTrashedOptions.fromJson(
+          json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       attachedSection: json['attachedSection'] as String,
       details: NodeDetails.fromJson(json['details'] as Map<String, dynamic>),
@@ -201,18 +211,5 @@ final class Document extends Node
         attachedSection.equals(other.attachedSection) &&
         synopsis.equals(other.synopsis) &&
         name == other.name;
-  }
-
-  @override
-  bool get isResource => ResourceRules.checkResource(content);
-
-  @override
-  Object? resource(ResourceType type) {
-    if (!isResource) return null;
-    if (type == ResourceType.image) {
-      return (content.getFirstEmbed()?.delta.first.data as Map<String, dynamic>)['image']
-          as String;
-    }
-    return content.getFirstEmbed()?.delta.first.data;
   }
 }

@@ -113,14 +113,15 @@ class SectionTypeConfigurations {
   ///
   /// because there arent more deeper levels and, to duplicate the default
   /// behavior of Scrivener (using the last as the default for other more deep nodes)
-  String? getSectionIdForLevel({required Node node, required Selection contentType}) {
+  String? getSectionIdForLevel(
+      {required int level, required Selection selection}) {
     final Map<String, String> targetMap =
-        contentType == Selection.folder ? outlineFolder : outlineDocs;
+        selection == Selection.folder ? outlineFolder : outlineDocs;
 
     if (targetMap.isEmpty) return null;
 
     final int effectiveLevel = findEffectiveLevel(
-      node.level,
+      level,
       targetMap,
     );
     return targetMap['$effectiveLevel'];
@@ -138,7 +139,8 @@ class SectionTypeConfigurations {
         contentType == Selection.folder ? outlineFolder : outlineDocs;
 
     if (!targetMap.containsKey('$level')) {
-      throw ArgumentError('No $contentType configuration exists for level $level');
+      throw ArgumentError(
+          'No $contentType configuration exists for level $level');
     }
 
     targetMap['$level'] = newSectionId;
@@ -163,18 +165,22 @@ class SectionTypeConfigurations {
       return;
     }
     final bool isFolder = selection == Selection.folder;
-    final Map<String, String> currentLevels = isFolder ? outlineFolder : outlineDocs;
+    final Map<String, String> currentLevels =
+        isFolder ? outlineFolder : outlineDocs;
 
     final String nextLevelKey =
         currentLevels.isEmpty ? '0' : '${getMaxLevel(selection) + 1}';
 
-    final Map<String, String> newLevels = {...currentLevels, nextLevelKey: section};
+    final Map<String, String> newLevels = {
+      ...currentLevels,
+      nextLevelKey: section
+    };
     (isFolder ? outlineFolder : outlineDocs)
       ..clear()
       ..addAll(newLevels);
   }
 
-  /// Removes a Section ID and updates its internal state 
+  /// Removes a Section ID and updates its internal state
   ///
   /// If you remove level 2:
   ///        ↓
@@ -237,16 +243,18 @@ class SectionTypeConfigurations {
 
   factory SectionTypeConfigurations.fromMap(Map<String, dynamic> map) {
     return SectionTypeConfigurations(
-      outlineFolder:
-          Map<String, String>.from((map['outlineFolder'] as Map<String, dynamic>)),
-      outlineDocs: Map<String, String>.from((map['outlineDocs'] as Map<String, dynamic>)),
+      outlineFolder: Map<String, String>.from(
+          (map['outlineFolder'] as Map<String, dynamic>)),
+      outlineDocs: Map<String, String>.from(
+          (map['outlineDocs'] as Map<String, dynamic>)),
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory SectionTypeConfigurations.fromJson(String source) =>
-      SectionTypeConfigurations.fromMap(json.decode(source) as Map<String, dynamic>);
+      SectionTypeConfigurations.fromMap(
+          json.decode(source) as Map<String, dynamic>);
 
   @override
   bool operator ==(covariant SectionTypeConfigurations other) {

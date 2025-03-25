@@ -1,4 +1,30 @@
 import 'package:novident_remake/src/domain/project_defaults.dart';
+import 'package:novident_remake/src/domain/string_contants.dart';
+
+extension StringStadistics on String {
+  Iterable<String> where(bool Function(String) f) {
+    final List<int> filtered =
+        runes.where((e) => f(String.fromCharCode(e))).toList();
+    return Iterable<String>.generate(filtered.length, (index) {
+      return String.fromCharCode(filtered[index]);
+    });
+  }
+
+  bool get isNumeric => runes.every(StringContants.isNumeric);
+
+  bool get isPunctuation => runes.every(StringContants.isPunctuation);
+
+  bool get isChar => runes.every(StringContants.isChar);
+
+  bool get isWhiteSpace => runes.every(StringContants.isWhiteSpace);
+
+  String generateUnicodeString(int length) =>
+      StringContants.generateUnicodeString(length);
+}
+
+extension NonNullableString on String? {
+  String get nonNull => this == null ? '' : this!;
+}
 
 extension UppercaseCaseStringExtension on String {
   String capitalize() {

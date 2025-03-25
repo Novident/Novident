@@ -38,8 +38,8 @@ final class ReplaceDocumentTitlePlaceholderRule with PlaceholderRule {
             return <Operation>[
               Operation.insert(
                 isUppercase(type)
-                    ? context.currentDocument.nodeName.toUpperCase()
-                    : context.currentDocument.nodeName,
+                    ? context.currentDocument!.nodeName.toUpperCase()
+                    : context.currentDocument!.nodeName,
                 attributes,
               ),
             ];
@@ -65,8 +65,8 @@ final class ReplaceDocumentTitlePlaceholderRule with PlaceholderRule {
         return <Operation>[
           Operation.insert(
             isUppercase(type)
-                ? context.currentDocument.nodeName.toUpperCase()
-                : context.currentDocument.nodeName,
+                ? context.currentDocument!.nodeName.toUpperCase()
+                : context.currentDocument!.nodeName,
             attributes,
           ),
         ];

@@ -5,7 +5,8 @@ import 'package:novident_remake/src/utils/id_generators.dart';
 
 /// Represents a [NodeDetails] into the tree a make possible
 /// identify it into tree and make operations with them
-class NodeDetails implements Comparable<NodeDetails>, ClonableMixin<NodeDetails> {
+class NodeDetails
+    implements Comparable<NodeDetails>, ClonableMixin<NodeDetails> {
   final String id;
   final int level;
   final Object? value;
@@ -118,7 +119,8 @@ class NodeDetails implements Comparable<NodeDetails>, ClonableMixin<NodeDetails>
   }
 
   @override
-  int get hashCode => level.hashCode ^ value.hashCode ^ owner.hashCode ^ id.hashCode;
+  int get hashCode =>
+      level.hashCode ^ value.hashCode ^ owner.hashCode ^ id.hashCode;
 
   @override
   bool operator ==(covariant NodeDetails other) {

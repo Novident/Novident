@@ -13,14 +13,13 @@ import 'package:novident_remake/src/domain/entities/layout/options/section_attri
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/entities/tree_node/file.dart'
-    show Document;
+import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/project_delta_content_extension.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
-import 'package:novident_remake/src/domain/interfaces/node_has_name.dart';
-import 'package:novident_remake/src/domain/interfaces/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 import 'package:novident_remake/src/utils/id_generators.dart';
 
@@ -103,11 +102,11 @@ final class Layout extends Equatable {
     double? fontSize,
     bool? boldTitle,
     bool? underlineTitle,
-    bool? showTitle,
-    bool? showMetadata,
-    bool? showSynopsis,
-    bool? showNotes,
-    bool? showText,
+    bool showTitle = false,
+    bool showMetadata = false,
+    bool showSynopsis = false,
+    bool showNotes = false,
+    bool showText = false,
     double? titleLineSpacing,
     double? textLineSpacing,
     TitleOptions? titleOptions,
@@ -131,7 +130,7 @@ final class Layout extends Equatable {
         name: name ?? ProjectDefaults.kDefaultUnnamedLayout,
         layoutManager: LayoutSectionManager(
           titleSection: LayoutSection(
-            show: showTitle ?? false,
+            show: showTitle,
             title: 'Section title',
             attributes: shareThisAttributesToAll != null
                 ? shareThisAttributesToAll.copyWith(
@@ -152,7 +151,7 @@ final class Layout extends Equatable {
                     ),
           ),
           metadataSection: LayoutSection(
-            show: showMetadata ?? false,
+            show: showMetadata,
             title: 'Metadata',
             attributes: shareThisAttributesToAll ??
                 metaAttr ??
@@ -163,7 +162,7 @@ final class Layout extends Equatable {
                     bold: false),
           ),
           synopsisSection: LayoutSection(
-            show: showSynopsis ?? false,
+            show: showSynopsis,
             title: 'Synopsis',
             attributes: shareThisAttributesToAll ??
                 synopsisAttr ??
@@ -174,7 +173,7 @@ final class Layout extends Equatable {
                     bold: false),
           ),
           notesSection: LayoutSection(
-            show: showNotes ?? false,
+            show: showNotes,
             title: 'Notes',
             attributes: shareThisAttributesToAll ??
                 notesAttr ??
@@ -185,7 +184,7 @@ final class Layout extends Equatable {
                     bold: false),
           ),
           textSection: LayoutSection(
-            show: showText ?? true,
+            show: showText,
             overrideTextSection: false,
             overrideAlign: false,
             title: '',
@@ -284,7 +283,7 @@ final class Layout extends Equatable {
   ///
   /// [file]: Document node to process
   /// [context]: Compilation context
-  /// [fontFamily]: Base font family (can be overridden by sections)
+  /// [fontFamily]: is the font family configured to the Node (can be overridden by sections)
   Delta build(
     Node file,
     CompilerContext context, {

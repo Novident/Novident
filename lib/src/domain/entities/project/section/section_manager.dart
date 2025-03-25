@@ -36,7 +36,8 @@ class SectionManager {
       if (skipCount == 0) return iterator.current;
       skipCount--;
     }
-    throw IndexError.withLength(index, index - skipCount, indexable: this, name: "index");
+    throw IndexError.withLength(index, index - skipCount,
+        indexable: this, name: "index");
   }
 
   Section? elementAtOrNull(int index) {
@@ -50,7 +51,7 @@ class SectionManager {
   }) {
     return SectionManager(
       sections: sections ?? this.sections,
-      config: config ?? this.config, 
+      config: config ?? this.config,
     );
   }
 
@@ -61,7 +62,8 @@ class SectionManager {
           (x) => Section.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      config: SectionTypeConfigurations.fromMap(map['config'] as Map<String, dynamic>),
+      config: SectionTypeConfigurations.fromMap(
+          map['config'] as Map<String, dynamic>),
     );
   }
 

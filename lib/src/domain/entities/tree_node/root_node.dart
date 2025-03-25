@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/node/node_container.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
-import 'package:novident_remake/src/domain/entities/tree_node/file.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
 

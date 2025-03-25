@@ -3,9 +3,11 @@ import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/document_resource.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
-import 'package:novident_remake/src/domain/interfaces/node_has_value.dart';
-import 'package:novident_remake/src/domain/interfaces/node_resource.dart';
+import 'package:novident_remake/src/domain/extensions/object_extension.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_resource.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
 final class ReplaceImagePlaceholderRule with PlaceholderRule {
@@ -50,27 +52,25 @@ final class ReplaceImagePlaceholderRule with PlaceholderRule {
             // Note: if empty means the tag has just the name reference like: <$img:BookImage>
             final List<String> properties = data.split(';');
             if (properties.isEmpty) {
-              final Node? file = context.queryResource(data);
-              if (file == null ||
-                  file is! NodeHasValue<Delta> && (file is! NodeHasResource)) {
-                return [];
+              final DocumentResource? file =
+                  context.queryResource(data.split(':').last);
+              if (file == null || file.content.isEmpty) {
+                return <Operation>[];
               }
-              final String imagePath = file
-                  .cast<NodeHasResource>()
-                  .resource(ResourceType.image) as String;
-              if (imagePath.isEmpty) return [];
+              final String effectiveImageData =
+                  file.resource(ResourceType.image) as String;
+              if (effectiveImageData.isEmpty) return [];
               return <Operation>[
-                Operation.insert(<String, String>{'image': imagePath})
+                Operation.insert(<String, String>{'image': effectiveImageData})
               ];
             }
             final String fileName = properties.first;
-            final Node? file = context.queryResource(fileName);
-            if (file == null || (file is! NodeHasResource)) {
+            final DocumentResource? file = context.queryResource(fileName);
+            if (file.isNull || file!.content.isEmpty) {
               return <Operation>[];
             }
-            final String imagePath = file
-                .cast<NodeHasResource>()
-                .resource(ResourceType.image) as String;
+            final String imagePath =
+                file.resource(ResourceType.image) as String;
             if (imagePath.isEmpty) return [];
             final String? width = properties
                 .where((String element) => element.startsWith('w='))

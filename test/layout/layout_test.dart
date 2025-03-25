@@ -8,7 +8,7 @@ import 'package:novident_remake/src/domain/entities/layout/options/title_options
 import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
-import 'package:novident_remake/src/domain/entities/tree_node/file.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 
 void main() {
   final Layout layout = Layout.basic(

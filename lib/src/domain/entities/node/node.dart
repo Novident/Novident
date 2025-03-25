@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/node/node_notifier.dart';
-import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart'
-    show Root;
-import 'package:novident_remake/src/domain/interfaces/clonable_mixin.dart';
-import 'package:novident_remake/src/domain/interfaces/node_visitor.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/clonable_mixin.dart';
+import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
 
 abstract class Node extends NodeNotifier with NodeVisitor, ClonableMixin<Node> {
   final NodeDetails details;
