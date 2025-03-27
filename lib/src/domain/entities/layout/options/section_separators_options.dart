@@ -20,6 +20,7 @@ class SeparatorOptions {
     LayoutSeparator? beforeSection,
     LayoutSeparator? betweenSection,
     LayoutSeparator? afterSection,
+    bool overrideSeparatorAfter = true,
   }) {
     return SeparatorOptions(
       separateBeforeSection:
@@ -28,7 +29,7 @@ class SeparatorOptions {
           betweenSection ?? SingleReturnSeparatorStrategy.instance,
       separatorAfterSection:
           afterSection ?? SingleReturnSeparatorStrategy.instance,
-      overrideSeparatorAfter: true,
+      overrideSeparatorAfter: overrideSeparatorAfter,
       ignoreBlankLinesWithStyles: true,
     );
   }
