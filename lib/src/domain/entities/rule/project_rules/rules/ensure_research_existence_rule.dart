@@ -14,7 +14,7 @@ final class EnsureResearchExistenceRule with ProjectRule {
       shouldGetNode: (Node node) =>
           node is Folder && node.type == FolderType.research,
     );
-    final bool isValid = research != null;
+    final bool isValid = research != null && research.atRoot;
     return ProjectStatusResponse(
       isValid: isValid,
       failReason: isValid

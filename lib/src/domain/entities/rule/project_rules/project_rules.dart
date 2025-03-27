@@ -14,15 +14,21 @@ import 'package:novident_remake/src/domain/exceptions/bad_project_state_exceptio
 /// These rules ensure that the imported/exported project
 /// has the correct values, structure, content, and the current
 /// standards
-//TODO: add the rules that are necessary for the state of the project
 class ProjectRules {
   const ProjectRules._();
   static final List<ProjectRule> _rules = <ProjectRule>[
+    /// Novident has three default root folders which cannot be deleted or moved from
+    /// the top level. They can be renamed and moved around among each other, but
+    /// not within each other or other folders. To use Novident effectively, it is very
+    /// important to understand the significance of these folders.
+    ///
+    /// Draft/Manuscript, Research, Trash
     EnsureTrashFolderExistenceRule(),
-    EnsureTrashHasNoDuplicatesRule(),
     EnsureManuscriptExistenceRule(),
     EnsureResearchExistenceRule(),
+    // common
     EnsureTrashedNodesAreIntoTrashRule(),
+    EnsureTrashHasNoDuplicatesRule(),
   ];
 
   static bool checkProjectState(Project project) {

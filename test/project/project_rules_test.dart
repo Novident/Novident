@@ -1,6 +1,5 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/rule/project_rules/project_rules.dart';
@@ -8,7 +7,6 @@ import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/enums/enums.dart';
 import 'package:novident_remake/src/domain/exceptions/bad_project_state_exception.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
-import 'package:novident_remake/src/domain/extensions/nodes_extensions.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_type.dart';
 
 import 'generators/basic_project.dart';
