@@ -1,12 +1,15 @@
+import 'package:meta/meta.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
 import 'package:novident_remake/src/domain/entities/project/project_configurations.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
+import 'package:novident_remake/src/domain/extensions/extensions.dart';
 import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/word_counter_mixin.dart';
 import 'package:novident_remake/src/utils/id_generators.dart';
 
+@immutable
 class Project with WordCounterMixin, CharacterCountMixin, LineCounterMixin {
   final String id;
   final String name;
@@ -18,7 +21,15 @@ class Project with WordCounterMixin, CharacterCountMixin, LineCounterMixin {
     required this.root,
     required this.name,
     required this.config,
-  }) : id = id ?? IdGenerator.gen(version: 1);
+    bool searchPositions = false,
+  }) : id = id ?? IdGenerator.gen(version: 1) {
+    if (searchPositions) {
+      config.cache.templatePosition.value = root.indexWhere(
+        (Node node) => node.isTemplatesSheetFolder,
+      );
+    }
+    root.attachNotifier(config.cache.listenChanges);
+  }
 
   @override
   int charCount({bool acceptWhitespaces = false}) {
@@ -71,4 +82,10 @@ class Project with WordCounterMixin, CharacterCountMixin, LineCounterMixin {
   @override
   int get hashCode =>
       id.hashCode ^ config.hashCode ^ name.hashCode ^ root.hashCode;
+
+  /// close the project
+  void dispose() {
+    config.cache.dispose();
+    root.dispose();
+  }
 }

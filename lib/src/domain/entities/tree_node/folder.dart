@@ -250,6 +250,7 @@ final class Folder extends NodeContainer
           .toList(),
       name: name,
       trashOptions: trashOptions.clone(),
+      folderType: folderType,
       attachedSection: attachedSection,
       content: Delta.from(content),
       details: details,

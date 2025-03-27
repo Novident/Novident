@@ -62,7 +62,7 @@ final class Root extends NodeContainer {
 
     bool ignoreRedepth = false;
     if (checkFirst) {
-      final childLevel = level + 1;
+      final int childLevel = level + 1;
       for (final child in children) {
         if (child.level != childLevel) {
           ignoreRedepth = true;
@@ -72,7 +72,7 @@ final class Root extends NodeContainer {
     }
     if (ignoreRedepth) return;
 
-    redepth(children, currentLevel ?? 0);
+    redepth(children, currentLevel ?? -1);
     notify();
   }
 

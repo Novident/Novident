@@ -11,7 +11,8 @@ extension ResourceExtension on Project {
     if (onlyUseResearch) {
       final Folder? research = root
           .visitAllNodes(
-            shouldGetNode: (node) => node is Folder && node.type.isResearchFolder,
+            shouldGetNode: (node) =>
+                node is Folder && node.type.isResearchFolder,
           )
           .cast<Folder?>();
       if (research != null) {
@@ -61,7 +62,8 @@ extension ResourceExtension on Project {
         ? root.elementAt(config.cache.templatePosition.value).cast<Folder>()
         : root
             .visitNode(
-              shouldGetNode: (node) => node is Folder && node.type.isTemplatesSheetFolder,
+              shouldGetNode: (node) =>
+                  node is Folder && node.type.isTemplatesSheetFolder,
               // commonly, templates sheet is
               // near to the end of the project
               reversed: true,

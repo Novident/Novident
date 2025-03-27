@@ -30,7 +30,8 @@ final class ProjectProcessor {
   static late CompilerContext _context;
 
   //TODO: implement folder and documents separators (given by Format class)
-  static ProcessorResult process(Project project, ProcessorConfiguration configuration) {
+  static ProcessorResult process(
+      Project project, ProcessorConfiguration configuration) {
     assert(
       ProjectRules.checkProjectState(project),
       'Something is wrong with the project',
@@ -112,11 +113,15 @@ final class ProjectProcessor {
         final String betweenSeparatorContent =
             separator.separatorBetweenSection.buildSeparator();
         // before
-        _deltaBuffer.push(beforeSeparatorContent.toOperation().cast<Operation>());
-        _onNeedBreak(node, documents, separator.separateBeforeSection.breakAfterUse);
+        _deltaBuffer
+            .push(beforeSeparatorContent.toOperation().cast<Operation>());
+        _onNeedBreak(
+            node, documents, separator.separateBeforeSection.breakAfterUse);
         // between
-        _deltaBuffer.push(betweenSeparatorContent.toOperation().cast<Operation>());
-        _onNeedBreak(node, documents, separator.separatorBetweenSection.breakAfterUse);
+        _deltaBuffer
+            .push(betweenSeparatorContent.toOperation().cast<Operation>());
+        _onNeedBreak(
+            node, documents, separator.separatorBetweenSection.breakAfterUse);
       }
 
       final Delta delta = layout.applyLayout(node, _context);
@@ -148,7 +153,8 @@ final class ProjectProcessor {
         _onNeedBreak(node, documents, afterOption.breakAfterUse);
         _context.shouldWritePageOptions = afterOption.breakAfterUse;
         final String afterSeparatorContent = afterOption.buildSeparator();
-        _deltaBuffer.push(afterSeparatorContent.toOperation().cast<Operation>());
+        _deltaBuffer
+            .push(afterSeparatorContent.toOperation().cast<Operation>());
       }
     }
   }
@@ -176,14 +182,16 @@ final class ProjectProcessor {
 
   static void _onNoSectionMatch(Node node) {
     if (node is NodeHasValue<Delta>) {
-      for (final Operation op in node.cast<NodeHasValue<Delta>>().value.operations) {
+      for (final Operation op
+          in node.cast<NodeHasValue<Delta>>().value.operations) {
         _deltaBuffer.push(op);
       }
     }
   }
 
   /// Breaks the current content with the next one
-  static void _onNeedBreak(Node node, List<Document> documents, bool needBreak) {
+  static void _onNeedBreak(
+      Node node, List<Document> documents, bool needBreak) {
     if (!needBreak) {
       _context.shouldWritePageOptions = false;
       return;

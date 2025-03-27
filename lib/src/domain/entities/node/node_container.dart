@@ -1,15 +1,43 @@
 import 'package:meta/meta.dart';
+import 'package:novident_remake/src/domain/changes/node_change.dart';
 import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
+import 'package:novident_remake/src/utils/typedefs.dart';
 
 @internal
 abstract class NodeContainer extends Node {
   final List<Node> _children;
+  NodeNotifierChangeCallback? _notifierCallback;
 
   NodeContainer({
     required List<Node> children,
     required super.details,
   }) : _children = children;
+
+  void onChange(NodeChange change) {
+    _notifierCallback?.call(change);
+  }
+
+  void attachNotifier(NodeNotifierChangeCallback callback) {
+    if (_notifierCallback == callback) return;
+    _notifierCallback = callback;
+    for (final Node child in children) {
+      if (child is NodeContainer) {
+        child.attachNotifier(callback);
+      }
+    }
+  }
+
+  void detachNotifier(NodeNotifierChangeCallback? callback) {
+    if (_notifierCallback == null) return;
+    if (_notifierCallback == callback) _notifierCallback = null;
+    for (final Node child in children) {
+      if (child is NodeContainer) {
+        child.detachNotifier(callback);
+      }
+    }
+  }
 
   /// Get all the nodes that satifies the predicate
   Iterable<Node> where(ConditionalPredicate<Node> predicate) {
@@ -174,7 +202,27 @@ abstract class NodeContainer extends Node {
     return _children.lastWhere(callback);
   }
 
+  NodeChange _decideInsertionOrMove({
+    required Node to,
+    required Node? from,
+    required Node newState,
+    required Node? oldState,
+  }) {
+    if (from == null) {
+      return NodeInsertion(to: to, from: from, newState: newState);
+    }
+    return NodeMoveChange(to: to, from: from, newState: newState);
+  }
+
   void add(Node element, {bool shouldNotify = true}) {
+    onChange(
+      _decideInsertionOrMove(
+        to: this,
+        from: element.owner,
+        newState: element.clone()..owner = this,
+        oldState: element,
+      ),
+    );
     if (element.owner != this) {
       element.owner = this;
     }
@@ -184,6 +232,14 @@ abstract class NodeContainer extends Node {
 
   void addAll(Iterable<Node> children, {bool shouldNotify = true}) {
     for (final Node child in children) {
+      onChange(
+        _decideInsertionOrMove(
+          to: this,
+          from: child.owner,
+          newState: child.clone()..owner = this,
+          oldState: child,
+        ),
+      );
       if (child.owner != this) {
         child.owner = this;
       }
@@ -193,10 +249,19 @@ abstract class NodeContainer extends Node {
   }
 
   void insert(int index, Node element, {bool shouldNotify = true}) {
+    final Node originalElement = element.clone();
     if (element.owner != this) {
       element.owner = this;
     }
     _children.insert(index, element);
+    onChange(
+      _decideInsertionOrMove(
+        to: this,
+        from: originalElement.owner,
+        newState: element.clone(),
+        oldState: originalElement,
+      ),
+    );
     if (shouldNotify) notify();
   }
 
@@ -206,13 +271,38 @@ abstract class NodeContainer extends Node {
   }
 
   bool remove(Node element, {bool shouldNotify = true}) {
-    final removed = _children.remove(element);
+    final int index = _children.indexOf(element);
+    if (index <= -1) return false;
+    _children.removeAt(index);
+    onChange(
+      NodeDeletion(
+        originalPosition: index,
+        sourceOwner:
+            jumpToParent(stopAt: (Node node) => node is! Root && node.atRoot)!,
+        inNode: clone(),
+        newState: element,
+        oldState: element,
+      ),
+    );
     if (shouldNotify) notify();
-    return removed;
+    return true;
   }
+
+  @override
+  NodeContainer clone();
 
   Node removeLast({bool shouldNotify = true}) {
     final Node value = _children.removeLast();
+    onChange(
+      NodeDeletion(
+        originalPosition: _children.length,
+        sourceOwner:
+            jumpToParent(stopAt: (Node node) => node is! Root && node.atRoot)!,
+        inNode: clone(),
+        newState: value.clone(),
+        oldState: value.clone(),
+      ),
+    );
     if (shouldNotify) notify();
     return value;
   }
@@ -224,12 +314,28 @@ abstract class NodeContainer extends Node {
 
   Node removeAt(int index, {bool shouldNotify = true}) {
     final Node value = _children.removeAt(index);
+    onChange(
+      NodeDeletion(
+        originalPosition: index,
+        sourceOwner:
+            jumpToParent(stopAt: (Node node) => node is! Root && node.atRoot)!,
+        inNode: clone(),
+        newState: value.clone(),
+        oldState: value.clone(),
+      ),
+    );
     if (shouldNotify) notify();
     return value;
   }
 
   void operator []=(int index, Node newNodeState) {
     if (index < 0) return;
+    onChange(
+      NodeUpdate(
+        newState: newNodeState,
+        oldState: children[index],
+      ),
+    );
     if (newNodeState.owner != this) {
       newNodeState.owner = this;
     }
@@ -239,5 +345,11 @@ abstract class NodeContainer extends Node {
 
   Node operator [](int index) {
     return _children[index];
+  }
+
+  @override
+  void dispose() {
+    detachNotifier(_notifierCallback);
+    super.dispose();
   }
 }

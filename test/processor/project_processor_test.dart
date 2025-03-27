@@ -133,7 +133,7 @@ void main() {
                 breakAfter: false,
                 content: '\n--Basic group--\n',
               ),
-              afterSection: SingleReturnSeparatorStrategy.instance,
+              overrideSeparatorAfter: false,
             ),
             showTitle: false,
             showText: true,
@@ -187,7 +187,7 @@ void main() {
           Delta()
             ..insert('\n--Basic group--\n')
             ..insert(
-                'This is just a simple doc into the root of the project\n\n'),
+                'This is just a simple doc into the root of the project\n'),
           // chapter 1
           Delta()
             ..insert(

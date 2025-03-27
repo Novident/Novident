@@ -21,6 +21,7 @@ Project generateBasicProject({
 }) {
   return Project(
     name: 'My project name',
+    searchPositions: true,
     config: ProjectConfigurations(
       format: format,
       sectionManager: SectionManager(

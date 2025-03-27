@@ -34,6 +34,8 @@ abstract class Node extends NodeNotifier with NodeVisitor, ClonableMixin<Node> {
   @mustCallSuper
   int get level => details.level;
 
+  bool get atRoot => level == 0;
+
   @mustCallSuper
   Node? get owner => details.owner;
 
