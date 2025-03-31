@@ -642,6 +642,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  novident_nodes:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "7e28971ce420a7d3fc7b7b828875fbb3ea835d95"
+      url: "https://github.com/Novident/novident-nodes.git"
+    source: git
+    version: "1.0.0"
   numerus:
     dependency: "direct main"
     description:

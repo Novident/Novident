@@ -1,6 +1,5 @@
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter_quill/quill_delta.dart' show Delta;
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/rule/resources/resource_rules.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
@@ -10,9 +9,8 @@ import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_can_be_trashed.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_resource.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
-import '../node/node.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 
 /// DocumentResource represents a simple type of node
 /// that just contains a resource vlaue

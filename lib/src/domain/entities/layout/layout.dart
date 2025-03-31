@@ -12,7 +12,7 @@ import 'package:novident_remake/src/domain/entities/layout/options/new_page_opti
 import 'package:novident_remake/src/domain/entities/layout/options/section_attributes.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/extensions/map_extensions.dart';

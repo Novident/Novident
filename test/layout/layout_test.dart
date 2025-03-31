@@ -5,7 +5,7 @@ import 'package:novident_remake/src/domain/entities/compiler/compiler_metadata.d
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_attributes.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document_resource.dart';

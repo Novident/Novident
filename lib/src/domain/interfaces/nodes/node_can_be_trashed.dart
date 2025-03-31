@@ -1,4 +1,4 @@
-import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 
 /// [NodeHasName] represents a [Node] that could be into the trash folder

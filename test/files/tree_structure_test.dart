@@ -1,7 +1,6 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';

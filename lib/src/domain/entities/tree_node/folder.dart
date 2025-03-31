@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:collection/collection.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/quill_delta.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/entities/node/node_container.dart';
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
@@ -24,7 +22,7 @@ import 'package:novident_remake/src/domain/interfaces/project/character_count_mi
 import 'package:novident_remake/src/domain/interfaces/project/default_counts_impl.dart';
 import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/word_counter_mixin.dart';
-import 'package:novident_remake/src/domain/logger/tree_logger.dart';
+import 'package:novident_remake/src/domain/logger/logger.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
 /// [Folder] represents a node that can contains all
@@ -86,6 +84,7 @@ final class Folder extends NodeContainer
     bool isExpanded = false,
   }) : _isExpanded = isExpanded;
 
+  @override
   bool get isExpanded => _isExpanded;
 
   set isExpanded(bool expand) {
@@ -158,8 +157,8 @@ final class Folder extends NodeContainer
   void openOrClose({bool forceOpen = false}) {
     isExpanded = forceOpen ? true : !isExpanded;
     final forceMessage = forceOpen ? 'forced to be ' : '';
-    TreeLogger.internalNodes.info(
-      '$runtimeType(id: '
+    NovidentLogger.treeView.info(
+      'Tree: $runtimeType(id: '
       '${id.shortString()} '
       '$forceMessage'
       'opened/closed by user interaction',

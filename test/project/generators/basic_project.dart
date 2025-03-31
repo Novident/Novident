@@ -1,7 +1,6 @@
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:novident_remake/src/domain/entities/format/format.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/project/project_configurations.dart';
 import 'package:novident_remake/src/domain/entities/project/section/section.dart';

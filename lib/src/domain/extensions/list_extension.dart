@@ -1,4 +1,4 @@
-import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 
 extension ListExtension<T> on List<T> {
   void merge(List<List<T>> listToAdd) {

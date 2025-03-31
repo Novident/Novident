@@ -1,6 +1,5 @@
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter_quill/quill_delta.dart' show Delta;
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
@@ -9,14 +8,13 @@ import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_can_be_trashed.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
 import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/default_counts_impl.dart';
 import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/word_counter_mixin.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
-import '../node/node.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 
 /// Document represents a simple type of node
 ///

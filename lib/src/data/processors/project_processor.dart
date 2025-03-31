@@ -1,5 +1,6 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/data/processors/processor_configurations.dart';
 import 'package:novident_remake/src/data/processors/processor_result.dart';
 import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
@@ -8,9 +9,6 @@ import 'package:novident_remake/src/domain/entities/format/format.dart';
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
 import 'package:novident_remake/src/domain/entities/layout/separators/layout_separator.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/entities/node/node_container.dart';
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/project/section/section_types_configuration.dart';

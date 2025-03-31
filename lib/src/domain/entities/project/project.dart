@@ -1,8 +1,7 @@
 import 'package:meta/meta.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/project/project_configurations.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
-import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/extensions/extensions.dart';
 import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';

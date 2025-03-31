@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
-import 'package:novident_remake/src/domain/entities/node/node_container.dart';
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
@@ -303,6 +301,9 @@ final class Root extends NodeContainer {
       e.dispose();
     }
   }
+
+  @override
+  bool get isExpanded => true;
 }
 
 const ListEquality<Node> _equality = ListEquality();

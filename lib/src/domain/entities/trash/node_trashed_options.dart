@@ -1,4 +1,4 @@
-import 'package:novident_remake/src/domain/interfaces/nodes/clonable_mixin.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 
 class NodeTrashedOptions implements ClonableMixin<NodeTrashedOptions> {
   final bool isTrashed;

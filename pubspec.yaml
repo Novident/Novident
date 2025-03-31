@@ -27,6 +27,10 @@ dependencies:
   humanize_duration: ^0.0.2
   numerus: ^2.3.0
   humanize_numbers: ^1.0.1
+  novident_nodes:
+    git:
+      url: https://github.com/Novident/novident-nodes.git
+      ref: master
 
 
 dev_dependencies:

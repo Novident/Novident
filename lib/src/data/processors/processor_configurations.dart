@@ -1,4 +1,4 @@
-import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 
 final class ProcessorConfiguration {
   final Node? frontmatter;

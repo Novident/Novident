@@ -1,5 +1,5 @@
 import 'package:flutter_quill/quill_delta.dart';
-import 'package:novident_remake/src/domain/entities/node/node_details.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 
 Map<String, dynamic> generateTree() {

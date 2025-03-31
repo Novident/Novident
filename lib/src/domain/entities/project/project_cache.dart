@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:novident_remake/src/domain/changes/node_change.dart';
 import 'package:novident_remake/src/domain/common/property_notifier.dart';
-import 'package:novident_remake/src/domain/entities/node/node.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/exceptions/disposed_cache_exception.dart';
 import 'package:novident_remake/src/domain/extensions/extensions.dart';

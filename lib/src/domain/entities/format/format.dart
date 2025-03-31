@@ -7,7 +7,7 @@ import 'package:novident_remake/src/domain/constants.dart';
 import 'package:novident_remake/src/domain/entities/format/replacement_values.dart';
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/enums/project_format_scope.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_visitor.dart';
+import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/utils/id_generators.dart';
 
 @immutable
