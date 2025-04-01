@@ -1,8 +1,8 @@
 <p>
-    <img src="https://github.com/CatHood0/Novident-App/assets/114286961/0b5c9732-d101-4bcf-97a9-8f149d4fa230" alt="Logo of Novident app" style="display: block; margin-left: auto; margin-right: auto; width: 100%"/>
+  <img src="https://github.com/user-attachments/assets/0c2ecd61-62b2-42ad-9781-fc626a408602" style="display: block; margin-top: auto; margin-bottom: auto; width: 100%" alt="Novident logo"/>
 </p>
 
-Novident is an easy to use open source alternative to  Scrivener. Novident has too many features that makes itself a greater option to writer your novels or researchs.
+Novident is an easy to use open source cross-platform alternative to Scrivener. Novident has too many features that makes itself a greater option to writer your novels or researchs.
 
 ## 📖 Novident is a simple and easy
 
@@ -20,10 +20,6 @@ Novident is a free and simple app for writers of all kinds, which can be used by
 - 📘 Templatessheet for new sub documents -> (coming soon)
 - 📃 Layouts (managed by sections)
 - 🖊️ Placeholders tags ([see placeholder docs](https://github.com/CatHood0/Novident/blob/master/documentation/projects/placeholders.md)) 
-
-### 🛠️ Team working
-
-_coming soon_
 
 ### ☁️ cloud as storage
 
