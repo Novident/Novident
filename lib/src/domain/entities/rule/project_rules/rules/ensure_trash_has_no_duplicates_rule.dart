@@ -10,15 +10,16 @@ final class EnsureTrashHasNoDuplicatesRule with ProjectRule {
 
   @override
   ProjectStatusResponse isValid(Project project) {
-    final int count = project.root.countAllNodes(
-        countNode: (Node node) =>
-            node is Folder && node.type == FolderType.trash);
-    final bool isValid = count == 1;
+    final Iterable<Folder> nodes = project.root.collectNodes(
+      shouldGetNode: (Node node) => node is Folder && node.type == FolderType.trash,
+      deep: true,
+    ).cast<Folder>();
+    final bool isValid = nodes.length == 1;
     return ProjectStatusResponse(
         isValid: isValid,
         failReason: isValid
             ? null
-            : 'The current project has more than one($count)'
+            : 'The current project has more than one(${nodes.length})'
                 'trash folder that it should have'
                 'already. This is not a valid '
                 'project to be imported/export');

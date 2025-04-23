@@ -90,6 +90,13 @@ final class Root extends NodeContainer {
     );
   }
 
+  @override
+  Root cloneWithNewLevel(int level) {
+    return clone().copyWith(
+      details: details.cloneWithNewLevel(level),
+    );
+  }
+
   /// Check if the id of the node exist into the [Folder]
   /// checking in its children using a custom predicate passed by the dev
   ///

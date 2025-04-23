@@ -64,35 +64,10 @@ final class DocumentResource extends Node
   }
 
   @override
-  bool deepExist(String id) {
-    return this.id == id;
-  }
-
-  @override
-  bool exist(String id) {
-    return this.id == id;
-  }
-
-  @override
-  DocumentResource? visitAllNodes({required Predicate shouldGetNode}) {
-    if (shouldGetNode(this)) return this;
-    return null;
-  }
-
-  @override
-  DocumentResource? visitNode({required Predicate shouldGetNode}) {
-    if (shouldGetNode(this)) return this;
-    return null;
-  }
-
-  @override
-  int countAllNodes({required Predicate countNode}) {
-    return countNode(this) ? 1 : 0;
-  }
-
-  @override
-  int countNodes({required Predicate countNode}) {
-    return countNode(this) ? 1 : 0;
+  Node cloneWithNewLevel(int level) {
+    return copyWith(
+      details: details.cloneWithNewLevel(level),
+    );
   }
 
   static DocumentResource fromJson(Map<String, dynamic> json) {

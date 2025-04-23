@@ -642,15 +642,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   novident_nodes:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: "7e28971ce420a7d3fc7b7b828875fbb3ea835d95"
-      url: "https://github.com/Novident/novident-nodes.git"
-    source: git
-    version: "1.0.0"
+      name: novident_nodes
+      sha256: "898717de274a1130e37af2aa8c218d33de037ee711d3996272d2072d46698e7a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
+  novident_tree_view:
+    dependency: "direct main"
+    description:
+      name: novident_tree_view
+      sha256: "21b3ca0a5da3c77136d984a801abc040b57a2595648c9d0a973020cb401c2084"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   numerus:
     dependency: "direct main"
     description:
@@ -691,6 +706,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      sha256: "489024f942069c2920c844ee18bb3d467c69e48955a4f32d1677f71be103e310"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.4"
   pub_semver:
     dependency: transitive
     description:

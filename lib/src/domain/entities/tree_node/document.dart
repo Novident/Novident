@@ -90,35 +90,10 @@ final class Document extends Node
   }
 
   @override
-  bool deepExist(String id) {
-    return this.id == id;
-  }
-
-  @override
-  bool exist(String id) {
-    return this.id == id;
-  }
-
-  @override
-  Document? visitAllNodes({required Predicate shouldGetNode}) {
-    if (shouldGetNode(this)) return this;
-    return null;
-  }
-
-  @override
-  Document? visitNode({required Predicate shouldGetNode}) {
-    if (shouldGetNode(this)) return this;
-    return null;
-  }
-
-  @override
-  int countAllNodes({required Predicate countNode}) {
-    return countNode(this) ? 1 : 0;
-  }
-
-  @override
-  int countNodes({required Predicate countNode}) {
-    return countNode(this) ? 1 : 0;
+  Node cloneWithNewLevel(int level) {
+    return copyWith(
+      details: details.cloneWithNewLevel(level),
+    );
   }
 
   static Document fromJson(Map<String, dynamic> json) {
@@ -136,8 +111,8 @@ final class Document extends Node
     }
     return Document(
       synopsis: json['synopsis'] as String? ?? '',
-      trashOptions: NodeTrashedOptions.fromJson(
-          json['trashOptions'] as Map<String, dynamic>),
+      trashOptions:
+          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       attachedSection: json['attachedSection'] as String,
       details: NodeDetails.fromJson(json['details'] as Map<String, dynamic>),
