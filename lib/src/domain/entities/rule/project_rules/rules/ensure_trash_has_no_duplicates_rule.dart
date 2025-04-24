@@ -10,10 +10,13 @@ final class EnsureTrashHasNoDuplicatesRule with ProjectRule {
 
   @override
   ProjectStatusResponse isValid(Project project) {
-    final Iterable<Folder> nodes = project.root.collectNodes(
-      shouldGetNode: (Node node) => node is Folder && node.type == FolderType.trash,
-      deep: true,
-    ).cast<Folder>();
+    final Iterable<Folder> nodes = project.root
+        .collectNodes(
+          shouldGetNode: (Node node) =>
+              node is Folder && node.type == FolderType.trash,
+          deep: true,
+        )
+        .cast<Folder>();
     final bool isValid = nodes.length == 1;
     return ProjectStatusResponse(
         isValid: isValid,

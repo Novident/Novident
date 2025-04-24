@@ -1,11 +1,11 @@
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_metadata.dart';
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_attributes.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
 import 'package:novident_nodes/novident_nodes.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_metadata.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document_resource.dart';
@@ -23,7 +23,7 @@ void main() {
       lettercaseSuffix: LetterCase.uppercase,
     ),
   );
-  final CompilerContext context = CompilerContext(
+  final ProcessorContext context = ProcessorContext(
     resources: <DocumentResource>[],
     documentVariables: <String>[],
     shouldWritePageOptions: false,
@@ -34,7 +34,7 @@ void main() {
     processPlaceholderAtEnd: false,
     linecount: 1,
     author: Author(),
-    metadata: CompilerMetadata.starter(),
+    metadata: ProjectMetadata.basic(),
     rawProjectName: '',
     jumpToDocument: (value) {
       return null;

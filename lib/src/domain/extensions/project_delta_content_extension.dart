@@ -1,7 +1,7 @@
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:meta/meta.dart';
 import 'package:novident_remake/src/domain/constants.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/type_placeholder_enum.dart';
 import 'package:novident_remake/src/domain/extensions/delta_extensions.dart';
 import 'package:novident_remake/src/utils/attributes_utils.dart';
@@ -10,7 +10,7 @@ import 'package:novident_remake/src/utils/attributes_utils.dart';
 extension ProjectDeltaContentExtension on Delta {
   /// Replace all the placeholders keys that are used commonly
   /// into the Novident projects
-  Delta replacePlaceholders(CompilerContext context) {
+  Delta replacePlaceholders(ProcessorContext context) {
     return Constant.kDefaultRules.applyRules(
       denormalize(),
       TypePlaceholder.all,
@@ -18,9 +18,9 @@ extension ProjectDeltaContentExtension on Delta {
     );
   }
 
-  /// Replace all the placeholders keys that are used commonly
+  /// Replace all the indexes placeholders keys that are used commonly
   /// into the Novident projects
-  Delta replaceIndexKeys(CompilerContext context) {
+  Delta replaceIndexKeys(ProcessorContext context) {
     return Constant.kDefaultRules.applyRules(
       denormalize(),
       TypePlaceholder.indexs,
@@ -32,7 +32,7 @@ extension ProjectDeltaContentExtension on Delta {
   /// into the Novident projects
   Delta replaceProjectKeys(
     String name,
-    CompilerContext context,
+    ProcessorContext context,
   ) {
     return Constant.kDefaultRules.applyRules(
       denormalize(),
@@ -43,7 +43,7 @@ extension ProjectDeltaContentExtension on Delta {
 
   /// Replace all the date placeholders keys that are used commonly
   /// into the Novident projects
-  Delta replaceDateKeys(CompilerContext context) {
+  Delta replaceDateKeys(ProcessorContext context) {
     return Constant.kDefaultRules.applyRules(
       denormalize(),
       TypePlaceholder.dates,
@@ -51,8 +51,6 @@ extension ProjectDeltaContentExtension on Delta {
     );
   }
 
-  /// Replace all the date placeholders keys that are used commonly
-  /// into the Novident projects
   Delta overrideAttributes(
     Map<String, dynamic> inline,
     Map<String, dynamic> blockAttributes,

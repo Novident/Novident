@@ -4,10 +4,10 @@ import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
 import 'package:novident_remake/src/domain/entities/layout/helpers/build_delta_part.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_attributes.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 
@@ -160,7 +160,7 @@ class LayoutSection extends Equatable {
   @internal
   Delta? buildDelta({
     required TitleOptions options,
-    required CompilerContext context,
+    required ProcessorContext context,
     required bool assignFamilyBySection,
     required bool ignorePreffixSuffix,
     required String fontFamily,

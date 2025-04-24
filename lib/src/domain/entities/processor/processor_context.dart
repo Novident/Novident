@@ -1,4 +1,4 @@
-import 'package:novident_remake/src/domain/entities/compiler/compiler_metadata.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_metadata.dart';
 import 'package:novident_remake/src/domain/entities/format/replacement_values.dart';
 import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
@@ -9,7 +9,7 @@ import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
 import 'package:novident_remake/src/domain/interfaces/nodes/node_resource.dart';
 
-class CompilerContext {
+class ProcessorContext {
   List<DocumentResource> resources;
   //TODO: change it to a map
   // because is more efficient
@@ -36,14 +36,14 @@ class CompilerContext {
   int linecount;
   ReplacementsValues? customPatterns;
   Author author;
-  CompilerMetadata metadata;
+  ProjectMetadata metadata;
 
   /// this is a way that must be defined when the Context is created
   ///
   /// is useful when we need to get a document and, we just have a name or id
   Document? Function(String name) jumpToDocument;
 
-  CompilerContext({
+  ProcessorContext({
     required this.resources,
     required this.documentVariables,
     required this.shouldWritePageOptions,
@@ -74,8 +74,8 @@ class CompilerContext {
     return null;
   }
 
-  CompilerContext regenerateContext() {
-    return CompilerContext(
+  ProcessorContext regenerateContext() {
+    return ProcessorContext(
       resources: <DocumentResource>[],
       documentVariables: <String>[],
       shouldWritePageOptions: true,
@@ -85,7 +85,7 @@ class CompilerContext {
       wordsCount: 0,
       linecount: 0,
       author: Author(),
-      metadata: CompilerMetadata.starter(),
+      metadata: ProjectMetadata.basic(),
       rawProjectName: '',
       jumpToDocument: jumpToDocument,
       placeholderDisabled: false,

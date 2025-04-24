@@ -5,7 +5,7 @@ import 'package:novident_remake/src/domain/project_defaults.dart';
 
 class Constant {
   const Constant._();
-  static final PlaceholderRules kDefaultRules = PlaceholderRules();
+  static const PlaceholderRules kDefaultRules = PlaceholderRules();
   static const String kDefaultBackupNameForCoverImages = 'nov_cover_images';
   static const String kDefaultDateFormatZone = "yyyy-MM-dd HH:mm:ss Z";
   static const String kWhitespace = ' ';

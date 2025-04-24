@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class CompilerMetadata {
+class ProjectMetadata {
   final String projectTitle;
   final String abbreviateTitle;
   final String isbncode;
@@ -10,7 +10,7 @@ class CompilerMetadata {
   final String keywords;
   final String comments;
 
-  CompilerMetadata({
+  ProjectMetadata({
     required this.projectTitle,
     required this.abbreviateTitle,
     required this.isbncode,
@@ -21,8 +21,8 @@ class CompilerMetadata {
     required this.comments,
   });
 
-  factory CompilerMetadata.starter() {
-    return CompilerMetadata(
+  factory ProjectMetadata.basic() {
+    return ProjectMetadata(
       projectTitle: '', //<$projecttitle>
       abbreviateTitle: '', //<$abbr_title>
       isbncode: '', // <$iscode>
@@ -35,7 +35,7 @@ class CompilerMetadata {
     );
   }
 
-  CompilerMetadata copyWith({
+  ProjectMetadata copyWith({
     String? projectTitle,
     String? abbreviateTitle,
     String? isbncode,
@@ -47,7 +47,7 @@ class CompilerMetadata {
     String? keywords,
     String? comments,
   }) {
-    return CompilerMetadata(
+    return ProjectMetadata(
       projectTitle: projectTitle ?? this.projectTitle,
       abbreviateTitle: abbreviateTitle ?? this.abbreviateTitle,
       isbncode: isbncode ?? this.isbncode,
@@ -72,8 +72,8 @@ class CompilerMetadata {
     };
   }
 
-  factory CompilerMetadata.fromMap(Map<String, dynamic> map) {
-    return CompilerMetadata(
+  factory ProjectMetadata.fromMap(Map<String, dynamic> map) {
+    return ProjectMetadata(
       projectTitle: map['projectTitle'] as String,
       abbreviateTitle: map['abbreviateTitle'] as String,
       isbncode: map['isbncode'] as String? ?? '',
@@ -87,12 +87,12 @@ class CompilerMetadata {
 
   String toJson() => json.encode(toMap());
 
-  factory CompilerMetadata.fromJson(String source) =>
-      CompilerMetadata.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProjectMetadata.fromJson(String source) =>
+      ProjectMetadata.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'CompilerMetadata('
+    return 'ProjectMetadata('
         'projectTitle: $projectTitle, '
         'abbreviateTitle: $abbreviateTitle, '
         'isbncode: $isbncode, '
@@ -105,7 +105,7 @@ class CompilerMetadata {
   }
 
   @override
-  bool operator ==(covariant CompilerMetadata other) {
+  bool operator ==(covariant ProjectMetadata other) {
     if (identical(this, other)) return true;
 
     return other.projectTitle == projectTitle &&

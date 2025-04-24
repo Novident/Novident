@@ -2,7 +2,7 @@ import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:humanize_numbers/humanize_numbers.dart';
 import 'package:meta/meta.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
 import 'package:novident_remake/src/domain/extensions/list_extension.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
@@ -33,7 +33,7 @@ final class ReplaceWordNumberPlaceholderRule with PlaceholderRule {
       );
 
   @override
-  Delta apply(Delta delta, CompilerContext context) {
+  Delta apply(Delta delta, ProcessorContext context) {
     return delta.toQuery
         .replaceAllMapped(
           target: pattern.pattern,
@@ -79,7 +79,7 @@ final class ReplaceWordNumberPlaceholderRule with PlaceholderRule {
   }
 
   @override
-  QueryDelta setConditionRule(QueryDelta query, CompilerContext context) {
+  QueryDelta setConditionRule(QueryDelta query, ProcessorContext context) {
     return query.replaceAllMapped(
       target: pattern.pattern,
       replaceBuilder: (

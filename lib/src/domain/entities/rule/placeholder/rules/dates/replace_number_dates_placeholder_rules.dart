@@ -1,7 +1,7 @@
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:intl/intl.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
@@ -18,7 +18,7 @@ final class ReplaceMillisecondsPlaceholderRule with PlaceholderRule {
       );
 
   @override
-  Delta apply(Delta delta, CompilerContext context) {
+  Delta apply(Delta delta, ProcessorContext context) {
     return delta.toQuery
         .replace(
           target: pattern.pattern,
@@ -31,7 +31,7 @@ final class ReplaceMillisecondsPlaceholderRule with PlaceholderRule {
   }
 
   @override
-  QueryDelta setConditionRule(QueryDelta query, CompilerContext context) {
+  QueryDelta setConditionRule(QueryDelta query, ProcessorContext context) {
     return query.replace(
       target: pattern.pattern,
       replace: '${context.time?.millisecond}',
@@ -54,7 +54,7 @@ final class ReplaceMicrosecondsPlaceholderRule with PlaceholderRule {
       );
 
   @override
-  Delta apply(Delta delta, CompilerContext context) {
+  Delta apply(Delta delta, ProcessorContext context) {
     return delta.toQuery
         .replace(
           target: pattern.pattern,
@@ -67,7 +67,7 @@ final class ReplaceMicrosecondsPlaceholderRule with PlaceholderRule {
   }
 
   @override
-  QueryDelta setConditionRule(QueryDelta query, CompilerContext context) {
+  QueryDelta setConditionRule(QueryDelta query, ProcessorContext context) {
     return query.replace(
       target: pattern.pattern,
       replace: '${context.time?.microsecond}',
@@ -90,7 +90,7 @@ final class ReplaceSecondsPlaceholderRule with PlaceholderRule {
       );
 
   @override
-  Delta apply(Delta delta, CompilerContext context) {
+  Delta apply(Delta delta, ProcessorContext context) {
     return delta.toQuery
         .replace(
           target: pattern.pattern,
@@ -103,7 +103,7 @@ final class ReplaceSecondsPlaceholderRule with PlaceholderRule {
   }
 
   @override
-  QueryDelta setConditionRule(QueryDelta query, CompilerContext context) {
+  QueryDelta setConditionRule(QueryDelta query, ProcessorContext context) {
     return query.replace(
       target: pattern.pattern,
       replace: '${context.time?.second}',
@@ -126,7 +126,7 @@ final class ReplaceMinutePlaceholderRule with PlaceholderRule {
       );
 
   @override
-  Delta apply(Delta delta, CompilerContext context) {
+  Delta apply(Delta delta, ProcessorContext context) {
     return delta.toQuery
         .replace(
           target: pattern.pattern,
@@ -139,7 +139,7 @@ final class ReplaceMinutePlaceholderRule with PlaceholderRule {
   }
 
   @override
-  QueryDelta setConditionRule(QueryDelta query, CompilerContext context) {
+  QueryDelta setConditionRule(QueryDelta query, ProcessorContext context) {
     return query.replace(
       target: pattern.pattern,
       replace: '${context.time?.minute}',
@@ -162,7 +162,7 @@ final class ReplaceHourFormatPlaceholderRule with PlaceholderRule {
       );
 
   @override
-  Delta apply(Delta delta, CompilerContext context) {
+  Delta apply(Delta delta, ProcessorContext context) {
     return delta.toQuery
         .replace(
           target: pattern.pattern,
@@ -175,7 +175,7 @@ final class ReplaceHourFormatPlaceholderRule with PlaceholderRule {
   }
 
   @override
-  QueryDelta setConditionRule(QueryDelta query, CompilerContext context) {
+  QueryDelta setConditionRule(QueryDelta query, ProcessorContext context) {
     return query.replace(
       target: pattern.pattern,
       replace: DateFormat('HH:mm:ss').format(context.time!),

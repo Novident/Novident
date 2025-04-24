@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:novident_remake/src/domain/constants.dart';
 import 'package:novident_remake/src/domain/editor_defaults.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/layout_indents.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/layout_manager.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/new_page_options.dart';
@@ -13,6 +12,7 @@ import 'package:novident_remake/src/domain/entities/layout/options/section_attri
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/title_options.dart';
 import 'package:novident_nodes/novident_nodes.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
@@ -277,6 +277,7 @@ final class Layout extends Equatable {
   /// Generates formatted Delta for document content
   ///
   /// Processes all active sections and applies:
+  ///
   /// - Font family inheritance
   /// - Section-specific formatting
   /// - Metadata replacements
@@ -287,7 +288,7 @@ final class Layout extends Equatable {
   /// [fontFamily]: is the font family configured to the Node (can be overridden by sections)
   Delta applyLayout(
     Node file,
-    CompilerContext context, {
+    ProcessorContext context, {
     String fontFamily = EditorDefaults.kDefaultFontFamily,
   }) {
     final Delta delta = Delta();

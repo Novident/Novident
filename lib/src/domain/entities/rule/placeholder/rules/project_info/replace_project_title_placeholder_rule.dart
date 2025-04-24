@@ -1,6 +1,6 @@
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter_quill/quill_delta.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 import 'package:novident_remake/src/domain/validators/uppercase_validators.dart';
@@ -21,7 +21,7 @@ final class ReplaceProjectTitlePlaceholderRule with PlaceholderRule {
       );
 
   @override
-  Delta apply(Delta delta, CompilerContext context) {
+  Delta apply(Delta delta, ProcessorContext context) {
     return delta.toQuery
         .replaceAllMapped(
           target: pattern.pattern,
@@ -49,7 +49,7 @@ final class ReplaceProjectTitlePlaceholderRule with PlaceholderRule {
   }
 
   @override
-  QueryDelta setConditionRule(QueryDelta query, CompilerContext context) {
+  QueryDelta setConditionRule(QueryDelta query, ProcessorContext context) {
     return query.replaceAllMapped(
       target: pattern.pattern,
       replaceBuilder: (

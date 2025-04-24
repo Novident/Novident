@@ -1,6 +1,7 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
+import 'package:meta/meta.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/dates/replace_day_placeholder_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/dates/replace_month_placeholder_rules.dart';
@@ -21,7 +22,9 @@ import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/repla
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/reset_invokation_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/type_placeholder_enum.dart';
 
+@immutable
 final class PlaceholderRules {
+  const PlaceholderRules();
   static final List<PlaceholderRule> _indexRules = <PlaceholderRule>[
     ResetPlaceholderInvokation(),
     ReplaceRomanNumberPlaceholderRule(),
@@ -56,7 +59,8 @@ final class PlaceholderRules {
     ReplaceISBNPlaceholderRule(),
   ];
 
-  Delta applyRules(Delta delta, TypePlaceholder type, CompilerContext context) {
+  Delta applyRules(
+      Delta delta, TypePlaceholder type, ProcessorContext context) {
     if (context.placeholderDisabled || delta.isEmpty) return delta;
     QueryDelta query = QueryDelta(delta: delta);
     if (type == TypePlaceholder.all) {
@@ -93,9 +97,11 @@ final class PlaceholderRules {
         }
       }
     }
+
     if (query.params.conditions.isEmpty) {
       return delta;
     }
+
     return query.build().delta;
   }
 }

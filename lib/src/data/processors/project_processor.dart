@@ -3,12 +3,12 @@ import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/data/processors/processor_configurations.dart';
 import 'package:novident_remake/src/data/processors/processor_result.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_context.dart';
-import 'package:novident_remake/src/domain/entities/compiler/compiler_metadata.dart';
 import 'package:novident_remake/src/domain/entities/format/format.dart';
 import 'package:novident_remake/src/domain/entities/layout/layout.dart';
 import 'package:novident_remake/src/domain/entities/layout/options/section_separators_options.dart';
 import 'package:novident_remake/src/domain/entities/layout/separators/layout_separator.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
+import 'package:novident_remake/src/domain/entities/processor/processor_metadata.dart';
 import 'package:novident_remake/src/domain/entities/project/author/author.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/project/section/section_types_configuration.dart';
@@ -25,7 +25,7 @@ final class ProjectProcessor {
   ProjectProcessor._();
   static final List<Node> _nodesBeingProcessed = <Node>[];
   static final Delta _deltaBuffer = Delta();
-  static late CompilerContext _context;
+  static late ProcessorContext _context;
 
   //TODO: implement folder and documents separators (given by Format class)
   static ProcessorResult process(
@@ -218,8 +218,8 @@ final class ProjectProcessor {
     }
   }
 
-  static CompilerContext _buildContext(Project project) {
-    return CompilerContext(
+  static ProcessorContext _buildContext(Project project) {
+    return ProcessorContext(
       resources: project.getResources(),
       documentVariables: <String>[],
       shouldWritePageOptions: true,
@@ -229,7 +229,7 @@ final class ProjectProcessor {
       wordsCount: project.wordCount(),
       linecount: project.lineCount(),
       author: Author(),
-      metadata: CompilerMetadata.starter(),
+      metadata: ProjectMetadata.basic(),
       rawProjectName: project.name,
       placeholderDisabled: project.config.placeholderDisabled,
       jumpToDocument: (String nameOrId) {

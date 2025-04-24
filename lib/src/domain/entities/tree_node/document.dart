@@ -111,8 +111,8 @@ final class Document extends Node
     }
     return Document(
       synopsis: json['synopsis'] as String? ?? '',
-      trashOptions:
-          NodeTrashedOptions.fromJson(json['trashOptions'] as Map<String, dynamic>),
+      trashOptions: NodeTrashedOptions.fromJson(
+          json['trashOptions'] as Map<String, dynamic>),
       name: json['name'] as String,
       attachedSection: json['attachedSection'] as String,
       details: NodeDetails.fromJson(json['details'] as Map<String, dynamic>),
