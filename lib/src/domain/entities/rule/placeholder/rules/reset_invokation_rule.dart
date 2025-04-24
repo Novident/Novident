@@ -39,8 +39,7 @@ final class ResetPlaceholderInvokation with PlaceholderRule {
             }
             final String placeholder =
                 '<\$$indexType${indexGroup != null ? ':$indexGroup' : ''}>';
-            context.documentVariables
-                .removeWhere((String element) => element.equals(placeholder));
+            context.documentVariables.remove(placeholder);
             return <Operation>[];
           },
           target: pattern.pattern,
@@ -70,8 +69,7 @@ final class ResetPlaceholderInvokation with PlaceholderRule {
         }
         final String placeholder =
             '<\$$indexType${indexGroup != null ? ':$indexGroup' : ''}>';
-        context.documentVariables
-            .removeWhere((String element) => element.equals(placeholder));
+        context.documentVariables.remove(placeholder);
         return <Operation>[];
       },
       target: pattern.pattern,

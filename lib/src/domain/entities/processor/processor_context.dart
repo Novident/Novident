@@ -11,10 +11,7 @@ import 'package:novident_remake/src/domain/interfaces/nodes/node_resource.dart';
 
 class ProcessorContext {
   List<DocumentResource> resources;
-  //TODO: change it to a map
-  // because is more efficient
-  // manages a {placeholder: count} map
-  List<String> documentVariables;
+  Map<String, int> documentVariables;
   bool shouldWritePageOptions;
   Document? currentDocument;
   bool processPlaceholderAtEnd;
@@ -77,7 +74,7 @@ class ProcessorContext {
   ProcessorContext regenerateContext() {
     return ProcessorContext(
       resources: <DocumentResource>[],
-      documentVariables: <String>[],
+      documentVariables: <String, int>{},
       shouldWritePageOptions: true,
       currentDocument: null,
       language: language,

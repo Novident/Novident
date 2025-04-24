@@ -1,23 +1,17 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
+import 'package:novident_remake/src/domain/extensions/extensions.dart';
+import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 import 'package:numerus/numerus.dart';
 
-final class ReplaceRomanNumberPlaceholderRule with PlaceholderRule {
-  const ReplaceRomanNumberPlaceholderRule();
-
-  @protected
-  static const String romanNumLowercase = 'r';
-
-  @protected
-  static const String romanNumUppercase = 'R';
+final class ReplaceNumCountPlaceholderRule with PlaceholderRule {
+  const ReplaceNumCountPlaceholderRule();
 
   @override
-  RegExp get pattern => ProjectDefaults.kRomanWordNumIndexPattern;
+  RegExp get pattern => ProjectDefaults.kNumCountPattern;
 
   @override
   bool checkIfNeedApply(Delta delta) => delta.contains(
@@ -39,18 +33,14 @@ final class ReplaceRomanNumberPlaceholderRule with PlaceholderRule {
             final RegExpMatch match = pattern.firstMatch(data)!;
             final String? placeholderMatch = match.group(1);
             if (placeholderMatch == null) return <Operation>[];
-            final String indexType = match.group(2)!;
-            final bool isUppercase = indexType == romanNumUppercase;
-            final bool isLowercase = indexType == romanNumLowercase;
             int digitIndex = context.documentVariables[placeholderMatch] ?? 0;
             digitIndex++;
             context.documentVariables[placeholderMatch] = digitIndex;
-            String str = digitIndex.toRomanNumeralString()!;
-            if (isUppercase) {
-              str = str.toUpperCase();
-            } else if (isLowercase) {
-              str = str.toLowerCase();
-            }
+            context.documentVariables.removeEntryWhere(
+              predicate: (String key, int value) =>
+                  key.equals('<\$s${placeholderMatch.replaceRange(0, 2, '')}'),
+            );
+            final String str = digitIndex.toRomanNumeralString()!;
             return <Operation>[
               Operation.insert(
                 str,
@@ -76,18 +66,10 @@ final class ReplaceRomanNumberPlaceholderRule with PlaceholderRule {
         final RegExpMatch match = pattern.firstMatch(data)!;
         final String? placeholderMatch = match.group(1);
         if (placeholderMatch == null) return <Operation>[];
-        final String indexType = match.group(2)!;
-        final bool isUppercase = indexType == romanNumUppercase;
-        final bool isLowercase = indexType == romanNumLowercase;
         int digitIndex = context.documentVariables[placeholderMatch] ?? 0;
         digitIndex++;
         context.documentVariables[placeholderMatch] = digitIndex;
-        String str = digitIndex.toRomanNumeralString()!;
-        if (isUppercase) {
-          str = str.toUpperCase();
-        } else if (isLowercase) {
-          str = str.toLowerCase();
-        }
+        final String str = digitIndex.toRomanNumeralString()!;
         return <Operation>[
           Operation.insert(
             str,

@@ -9,7 +9,9 @@ import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/dates
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/dates/replace_today_placeholder_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/dates/replace_year_placeholder_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/digits/replace_double_num_placeholder_rule.dart';
+import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/digits/replace_num_count_placeholder_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/digits/replace_roman_num_placeholder_rule.dart';
+import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/digits/replace_sub_num_count_placeholder_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/digits/replace_word_num_placeholder_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/project_info/replace_abbreviate_title_placeholder_rule.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/rules/project_info/replace_author_info_placeholder_rule.dart';
@@ -27,10 +29,11 @@ final class PlaceholderRules {
   const PlaceholderRules();
   static final List<PlaceholderRule> _indexRules = <PlaceholderRule>[
     ResetPlaceholderInvokation(),
+    ReplaceNumCountPlaceholderRule(),
+    ReplaceSubNumCountPlaceholderRule(),
     ReplaceRomanNumberPlaceholderRule(),
     ReplaceDoubleNumberingPlaceholderRule(),
     ReplaceWordNumberPlaceholderRule(),
-    ReplaceImagePlaceholderRule(),
   ];
 
   static final List<PlaceholderRule> _dateRules = <PlaceholderRule>[
@@ -52,6 +55,7 @@ final class PlaceholderRules {
     ReplaceCharacterCountPlaceholderRule(),
     ReplaceLineCountPlaceholderRule(),
     // metadata
+    ReplaceImagePlaceholderRule(),
     ReplaceDocumentTitlePlaceholderRule(),
     ReplaceProjectTitlePlaceholderRule(),
     ReplaceAbbreviateTitlePlaceholderRule(),

@@ -4,7 +4,6 @@ import 'package:humanize_numbers/humanize_numbers.dart';
 import 'package:meta/meta.dart';
 import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
-import 'package:novident_remake/src/domain/extensions/list_extension.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
@@ -44,21 +43,16 @@ final class ReplaceWordNumberPlaceholderRule with PlaceholderRule {
             DeltaRange matchRange,
           ) {
             final RegExpMatch match = pattern.firstMatch(data)!;
-            if (match.group(1) == null) return <Operation>[];
+            final String? placeholderMatch = match.group(1);
+            if (placeholderMatch == null) return <Operation>[];
             final String? indexType = match.group(2);
             final bool isTitlecase = indexType == wordNumTitlecase;
             final bool isWordNumUppercase = indexType == wordNumUppercase;
             final bool isWordNumLowercase = indexType == wordNumLowercase;
-            final int digitIndex = context.documentVariables.count(
-                  match.group(1)!,
-                  predicate: (String object) {
-                    return object.equals(match.group(1)!);
-                  },
-                ) +
-                1;
-            context.documentVariables.add(match.group(1)!);
-            String str =
-                parser.parse(digitIndex < 1 ? 1 : digitIndex, context.language);
+            int digitIndex = context.documentVariables[placeholderMatch] ?? 0;
+            digitIndex++;
+            context.documentVariables[placeholderMatch] = digitIndex;
+            String str = parser.parse(digitIndex, context.language);
             if (isTitlecase) {
               str = str.capitalize();
             } else if (isWordNumUppercase) {
@@ -89,21 +83,16 @@ final class ReplaceWordNumberPlaceholderRule with PlaceholderRule {
         DeltaRange matchRange,
       ) {
         final RegExpMatch match = pattern.firstMatch(data)!;
-        if (match.group(1) == null) return <Operation>[];
+        final String? placeholderMatch = match.group(1);
+        if (placeholderMatch == null) return <Operation>[];
         final String? indexType = match.group(2);
         final bool isTitlecase = indexType == wordNumTitlecase;
         final bool isWordNumUppercase = indexType == wordNumUppercase;
         final bool isWordNumLowercase = indexType == wordNumLowercase;
-        final int digitIndex = context.documentVariables.count(
-              match.group(1)!,
-              predicate: (String object) {
-                return object.equals(match.group(1)!);
-              },
-            ) +
-            1;
-        context.documentVariables.add(match.group(1)!);
-        String str =
-            parser.parse(digitIndex < 1 ? 1 : digitIndex, context.language);
+        int digitIndex = context.documentVariables[placeholderMatch] ?? 0;
+        digitIndex++;
+        context.documentVariables[placeholderMatch] = digitIndex;
+        String str = parser.parse(digitIndex, context.language);
         if (isTitlecase) {
           str = str.capitalize();
         } else if (isWordNumUppercase) {

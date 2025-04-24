@@ -2,7 +2,6 @@ import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
-import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
 final class ReplaceDoubleNumberingPlaceholderRule with PlaceholderRule {
@@ -29,19 +28,18 @@ final class ReplaceDoubleNumberingPlaceholderRule with PlaceholderRule {
             DeltaRange matchRange,
           ) {
             final RegExpMatch match = pattern.firstMatch(data)!;
-            // matches with <$dn>
-            //
-            // its output is like:
+            // its output should be like:
             // 1.0 -> 1.1 -> 2.5
-            if (match.group(1) == null) return <Operation>[];
-            double index = 1.0;
+            final String? placeholderMatch = match.group(1);
+            if (placeholderMatch == null) return <Operation>[];
+            double effectiveDoubleIndex = 1.0;
             const double increment = 0.1;
-            for (String element in context.documentVariables) {
-              if (element.equals(match.group(1)!)) {
-                index = double.parse((index + increment).toStringAsFixed(1));
-              }
+            final int count = context.documentVariables[placeholderMatch] ?? 0;
+            for (int i = 0; i < count; i++) {
+              effectiveDoubleIndex = double.parse(
+                  (effectiveDoubleIndex + increment).toStringAsFixed(1));
             }
-            context.documentVariables.add(match.group(1)!);
+            context.documentVariables[placeholderMatch] = count + 1;
             // we need to format the strings, because
             // sometimes, the double value that we are creating
             // looks similar to:
@@ -49,7 +47,8 @@ final class ReplaceDoubleNumberingPlaceholderRule with PlaceholderRule {
             // 1.2000000000002
             // 1.3000000000000003
             return <Operation>[
-              Operation.insert(index.toStringAsFixed(1), attributes),
+              Operation.insert(
+                  effectiveDoubleIndex.toStringAsFixed(1), attributes),
             ];
           },
         )
@@ -68,19 +67,20 @@ final class ReplaceDoubleNumberingPlaceholderRule with PlaceholderRule {
         DeltaRange matchRange,
       ) {
         final RegExpMatch match = pattern.firstMatch(data)!;
-        // matches with <$dn>
-        //
-        // its output is like:
+        // its output should be like:
         // 1.0 -> 1.1 -> 2.5
-        if (match.group(1) == null) return <Operation>[];
-        double index = 1.0;
+        final String? placeholderMatch = match.group(1);
+        if (placeholderMatch == null) return <Operation>[];
         const double increment = 0.1;
-        for (String element in context.documentVariables) {
-          if (element.equals(match.group(1)!)) {
-            index = double.parse((index + increment).toStringAsFixed(1));
-          }
+        double effectiveDoubleIndex = 1.0;
+        final int count = context.documentVariables[placeholderMatch] ?? 0;
+        for (int i = 0; i < count; i++) {
+          effectiveDoubleIndex = double.parse(
+            (effectiveDoubleIndex + increment).toStringAsFixed(1),
+          );
         }
-        context.documentVariables.add(match.group(1)!);
+        context.documentVariables[placeholderMatch] = count + 1;
+
         // we need to format the strings, because
         // sometimes, the double value that we are creating
         // looks similar to:
@@ -88,7 +88,7 @@ final class ReplaceDoubleNumberingPlaceholderRule with PlaceholderRule {
         // 1.2000000000002
         // 1.3000000000000003
         return <Operation>[
-          Operation.insert(index.toStringAsFixed(1), attributes),
+          Operation.insert(effectiveDoubleIndex.toStringAsFixed(1), attributes),
         ];
       },
     );

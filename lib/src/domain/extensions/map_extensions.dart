@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:meta/meta.dart';
 import 'package:novident_remake/src/utils/typedefs.dart';
 
@@ -33,6 +35,18 @@ extension MapExtension<K, V> on Map<K, V> {
         .firstOrNull;
     if (entry == null) return null;
     return entry.value;
+  }
+
+  bool removeEntryWhere({required MapEntryPredicate<K, V> predicate}) {
+    final MapEntry<K, V>? entry = entries
+        .where((MapEntry<K, V> element) => predicate(
+              element.key,
+              element.value,
+            ))
+        .firstOrNull;
+    if (entry == null) return false;
+    remove(entry.key);
+    return true;
   }
 
   bool updateValueWhere(

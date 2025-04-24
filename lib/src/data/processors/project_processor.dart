@@ -221,7 +221,7 @@ final class ProjectProcessor {
   static ProcessorContext _buildContext(Project project) {
     return ProcessorContext(
       resources: project.getResources(),
-      documentVariables: <String>[],
+      documentVariables: <String, int>{},
       shouldWritePageOptions: true,
       currentDocument: null,
       language: 'en',
