@@ -25,7 +25,7 @@ void main() {
   );
   final ProcessorContext context = ProcessorContext(
     resources: <DocumentResource>[],
-    documentVariables: <String>[],
+    documentVariables: <String, int>{},
     shouldWritePageOptions: false,
     currentDocument: Document.empty(details: NodeDetails.zero()),
     language: 'en',

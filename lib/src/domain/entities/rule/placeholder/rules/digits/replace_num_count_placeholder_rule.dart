@@ -3,7 +3,6 @@ import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/entities/rule/placeholder/placeholder_rule_mixin.dart';
 import 'package:novident_remake/src/domain/extensions/extensions.dart';
-import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 import 'package:numerus/numerus.dart';
 

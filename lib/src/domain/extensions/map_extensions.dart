@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:meta/meta.dart';
 import 'package:novident_remake/src/utils/typedefs.dart';
 

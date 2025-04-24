@@ -14,7 +14,7 @@ final class EnsureManuscriptExistenceRule with ProjectRule {
       shouldGetNode: (Node node) =>
           node is Folder && node.type == FolderType.manuscript,
     );
-    final bool isValid = manuscript != null && manuscript.atRoot;
+    final bool isValid = manuscript != null && manuscript.isAtRootLevel;
     return ProjectStatusResponse(
       isValid: isValid,
       failReason: isValid
