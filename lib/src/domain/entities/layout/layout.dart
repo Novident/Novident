@@ -157,10 +157,7 @@ final class Layout extends Equatable {
             attributes: shareThisAttributesToAll ??
                 metaAttr ??
                 SectionAttributes.common(
-                    align: "left",
-                    fontSize: 12,
-                    automaticIndent: false,
-                    bold: false),
+                    align: "left", fontSize: 12, automaticIndent: false, bold: false),
           ),
           synopsisSection: LayoutSection(
             show: showSynopsis,
@@ -168,10 +165,7 @@ final class Layout extends Equatable {
             attributes: shareThisAttributesToAll ??
                 synopsisAttr ??
                 SectionAttributes.common(
-                    align: "left",
-                    fontSize: 12,
-                    automaticIndent: false,
-                    bold: false),
+                    align: "left", fontSize: 12, automaticIndent: false, bold: false),
           ),
           notesSection: LayoutSection(
             show: showNotes,
@@ -179,10 +173,7 @@ final class Layout extends Equatable {
             attributes: shareThisAttributesToAll ??
                 notesAttr ??
                 SectionAttributes.common(
-                    align: "left",
-                    fontSize: 12,
-                    automaticIndent: false,
-                    bold: false),
+                    align: "left", fontSize: 12, automaticIndent: false, bold: false),
           ),
           textSection: LayoutSection(
             show: showText,
@@ -248,17 +239,15 @@ final class Layout extends Equatable {
       assignedSection: map['assignedSection'] as String,
       settings: map['settings'] == null
           ? LayoutSettingsIndent.common()
-          : LayoutSettingsIndent.fromMap(
-              map['settings'] as Map<String, dynamic>),
+          : LayoutSettingsIndent.fromMap(map['settings'] as Map<String, dynamic>),
       newPageOptions: map['pageOptions'] != null
           ? NewPageOptions.fromMap(map['pageOptions'] as Map<String, dynamic>)
           : NewPageOptions.common(),
-      layoutManager: LayoutSectionManager.fromMap(
-          (map['layoutManager'] as Map<String, dynamic>)),
-      titleOptions:
-          TitleOptions.fromMap(map['titleOptions'] as Map<String, dynamic>),
-      separatorSections: SeparatorOptions.fromMap(
-          map['separatorSections'] as Map<String, dynamic>),
+      layoutManager:
+          LayoutSectionManager.fromMap((map['layoutManager'] as Map<String, dynamic>)),
+      titleOptions: TitleOptions.fromMap(map['titleOptions'] as Map<String, dynamic>),
+      separatorSections:
+          SeparatorOptions.fromMap(map['separatorSections'] as Map<String, dynamic>),
     );
   }
 
@@ -299,8 +288,7 @@ final class Layout extends Equatable {
 
     ///if font family is ["by-layout"] then layout decide the font family
     bool assignFamilyBySection = false;
-    if (fontFamily.equals(Constant.kDefaultFormatFontFamily,
-        caseSensitive: false)) {
+    if (fontFamily.equals(Constant.kDefaultFormatFontFamily, caseSensitive: false)) {
       fontFamily = "";
       assignFamilyBySection = true;
     }
@@ -314,8 +302,7 @@ final class Layout extends Equatable {
     final bool showTitle = titleMapped.show;
     final bool showText = textMapped.show;
     final bool showSynopsis = synopsisMapped.show;
-    if (context.shouldWritePageOptions &&
-        newPageOptions.newLinesCount.value > 0) {
+    if (context.shouldWritePageOptions && newPageOptions.newLinesCount.value > 0) {
       context.shouldWritePageOptions = false;
       // adds all the new lines before the content
       applyNewPageOptions().forEach(delta.push);

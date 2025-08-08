@@ -18,17 +18,14 @@ dependencies:
   logging: ^1.3.0
   collection: ^1.19.1
   equatable: ^2.0.7 
-  flutter_quill_test: ^11.1.0 
-  flutter_quill: ^11.1.1
-  flutter_quill_extensions: ^11.0.0
   dart_quill_delta: ^10.8.3 
   dart_quill_delta_simplify: ^10.9.0 
   intl: ^0.19.0
   humanize_duration: ^0.0.2
   numerus: ^2.3.0
   humanize_numbers: ^1.0.1
-  novident_nodes: ^1.1.2
-  novident_tree_view: ^1.0.1
+  novident_nodes: ^1.1.7
+  novident_tree_view: ^1.0.7
 
 dev_dependencies:
   flutter_test:

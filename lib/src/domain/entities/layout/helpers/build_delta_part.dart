@@ -1,4 +1,4 @@
-import 'package:flutter_quill/quill_delta.dart';
+import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:novident_remake/src/domain/entities/processor/processor_context.dart';
 import 'package:novident_remake/src/domain/extensions/project_delta_content_extension.dart';
 

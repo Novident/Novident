@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_quill/quill_delta.dart';
 import 'package:meta/meta.dart';
 import 'package:novident_remake/src/domain/entities/object_value.dart';
 import 'package:novident_remake/src/domain/extensions/delta_extensions.dart';

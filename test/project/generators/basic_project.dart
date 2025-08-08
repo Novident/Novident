@@ -1,4 +1,3 @@
-import 'package:flutter_quill/quill_delta.dart';
 import 'package:novident_remake/src/domain/entities/format/format.dart';
 import 'package:novident_nodes/novident_nodes.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
