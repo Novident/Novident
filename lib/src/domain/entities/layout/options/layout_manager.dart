@@ -186,9 +186,9 @@ class LayoutSection extends Equatable {
     }
 
     if (!ignorePreffixSuffix) {
-      buildDeltaPart(options.buildPrefix(), context).operations.forEach(
-            delta.push,
-          );
+      buildDeltaPart(options.buildPrefix(), context)
+          .operations
+          .forEach(delta.push);
     }
     if (show && content != null && content.isNotEmpty) {
       delta.insert(
@@ -204,10 +204,11 @@ class LayoutSection extends Equatable {
         delta.insert('\n', blockAttributes);
       }
     }
+
     if (!ignorePreffixSuffix) {
-      buildDeltaPart(options.buildSuffix(), context).operations.forEach(
-            delta.push,
-          );
+      buildDeltaPart(options.buildSuffix(), context)
+          .operations
+          .forEach(delta.push);
     }
     if (blockAttributes != null &&
         blockAttributes.isNotEmpty &&
