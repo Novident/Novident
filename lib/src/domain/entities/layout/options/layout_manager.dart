@@ -38,13 +38,16 @@ class LayoutSectionManager extends Equatable {
 
   factory LayoutSectionManager.fromMap(Map<String, dynamic> map) {
     return LayoutSectionManager(
-      titleSection: LayoutSection.fromMap(map['titleSection'] as Map<String, dynamic>),
+      titleSection:
+          LayoutSection.fromMap(map['titleSection'] as Map<String, dynamic>),
       metadataSection:
           LayoutSection.fromMap(map['metadataSection'] as Map<String, dynamic>),
       synopsisSection:
           LayoutSection.fromMap(map['synopsisSection'] as Map<String, dynamic>),
-      notesSection: LayoutSection.fromMap(map['notesSection'] as Map<String, dynamic>),
-      textSection: LayoutSection.fromMap(map['textSection'] as Map<String, dynamic>),
+      notesSection:
+          LayoutSection.fromMap(map['notesSection'] as Map<String, dynamic>),
+      textSection:
+          LayoutSection.fromMap(map['textSection'] as Map<String, dynamic>),
     );
   }
 
@@ -188,7 +191,13 @@ class LayoutSection extends Equatable {
           );
     }
     if (show && content != null && content.isNotEmpty) {
-      delta.insert(content, inlineAttributes);
+      delta.insert(
+        TitleOptions.applyCase(
+          content,
+          lettercase: options.lettercaseTitle,
+        ),
+        inlineAttributes,
+      );
       if (blockAttributes != null &&
           blockAttributes.isNotEmpty &&
           insertBlocksAt == _InsertBlocksPosition.beforeSuffix) {
@@ -203,7 +212,8 @@ class LayoutSection extends Equatable {
     if (blockAttributes != null &&
         blockAttributes.isNotEmpty &&
         insertBlocksAt == _InsertBlocksPosition.afterSuffix &&
-        (content?.isNotEmpty ?? false || !delta.last.isNewLineOrBlockInsertion)) {
+        (content?.isNotEmpty ??
+            false || !delta.last.isNewLineOrBlockInsertion)) {
       delta.insert('\n', blockAttributes);
     }
     return delta;

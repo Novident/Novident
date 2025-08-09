@@ -21,6 +21,7 @@ void main() {
       attrSuffix: SectionAttributes.common(align: 'center'),
       lettercasePreffix: LetterCase.uppercase,
       lettercaseSuffix: LetterCase.uppercase,
+      lettercaseTitle: LetterCase.titlecase,
     ),
   );
   final ProcessorContext context = ProcessorContext(
@@ -57,7 +58,7 @@ void main() {
       result,
       Delta()
         ..insert(
-          'This is a header prefix',
+          'THIS IS A HEADER PREFIX',
           {'size': 12.0, 'family': 'arial'},
         )
         ..insert(
@@ -65,7 +66,7 @@ void main() {
           {'line-height': 1.0, 'align': 'center'},
         )
         ..insert(
-          'Basic document name',
+          'Basic Document Name',
           {'size': 16.0, 'family': 'arial'},
         )
         ..insert(
@@ -94,7 +95,7 @@ void main() {
       result,
       Delta()
         ..insert(
-          'This is a header prefix',
+          'THIS IS A HEADER PREFIX',
           {'size': 12.0, 'family': 'arial'},
         )
         ..insert(
@@ -102,7 +103,7 @@ void main() {
           {'line-height': 1.0, 'align': 'center'},
         )
         ..insert(
-          'Basic document name',
+          'Basic Document Name',
           {'size': 16.0, 'family': 'arial'},
         )
         ..insert(

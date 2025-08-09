@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 class StringContants {
   const StringContants._();
@@ -56,6 +57,20 @@ class StringContants {
   // Defined using regular expression /\s/.
   static bool isWhiteSpace(int char) =>
       RegExp(r'\s').hasMatch(String.fromCharCode(char));
+
+  // Check if parameter character code point is whitespace.
+  static bool isRawWhitespace(String char) {
+    if (char.isEmpty || char.length > 1) return false;
+    final int code = char.codeUnitAt(0);
+    return code == 0x0020 || // Space
+        code == 0x0009 || // Tab
+        code == 0x000A || // Line Feed (LF)
+        code == 0x000D || // Carriage Return (CR)
+        code == 0x00A0 || // No-Break Space
+        (code >= 0x2000 && code <= 0x200A) ||
+        code == 0x2028 || // Line Separator
+        code == 0x2029; // Paragraph Separator
+  }
 
   // Generate a random unicode string of given length.
   static String generateUnicodeString(int length) {

@@ -8,7 +8,16 @@ import 'package:novident_remake/src/domain/extensions/map_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
 import 'package:novident_remake/src/domain/project_defaults.dart';
 
-enum LetterCase { uppercase, lowercase, normal }
+enum LetterCase {
+  // All string is uppercased
+  uppercase,
+  // every word will start with uppercased char
+  titlecase,
+  // All string is lowercased
+  lowercase,
+  // Maintain the same aspect of the original version
+  normal,
+}
 
 class TitleOptions {
   //just works with keywords (<$words> or something as <$n> that count the index)
@@ -16,6 +25,7 @@ class TitleOptions {
   final String titleSuffix;
   final LetterCase lettercasePreffix;
   final LetterCase lettercaseSuffix;
+  final LetterCase lettercaseTitle;
   //attributes added for each section
   //and doesnt work when titlePrefix and titleSuffix are empty
   final SectionAttributes attrPreffix;
@@ -30,6 +40,7 @@ class TitleOptions {
     required this.attrSuffix,
     required this.lettercasePreffix,
     required this.lettercaseSuffix,
+    required this.lettercaseTitle,
     this.preffix,
     this.suffix,
   });
@@ -40,6 +51,7 @@ class TitleOptions {
       titleSuffix: suffix ?? "",
       lettercasePreffix: LetterCase.normal,
       lettercaseSuffix: LetterCase.normal,
+      lettercaseTitle: LetterCase.normal,
       attrPreffix: SectionAttributes.common(),
       attrSuffix: SectionAttributes.common(),
     );
@@ -73,11 +85,15 @@ class TitleOptions {
           );
           continue;
         }
-        delta.insert(effectiveStr, inlineAttributes.getNullIfEmpty());
+        delta.insert(applyCase(effectiveStr, lettercase: lettercasePreffix),
+            inlineAttributes.getNullIfEmpty());
       }
       return delta;
     }
-    delta.insert(titlePrefix, inlineAttributes);
+    delta.insert(
+      applyCase(titlePrefix, lettercase: lettercasePreffix),
+      inlineAttributes,
+    );
     if (blockAttributes.isNotEmpty) {
       delta.insert('\n', blockAttributes);
     }
@@ -110,15 +126,56 @@ class TitleOptions {
               effectiveStr, isBeginningOfPart ? null : blockAttributes);
           continue;
         }
-        delta.insert(effectiveStr, inlineAttributes);
+        delta.insert(applyCase(effectiveStr, lettercase: lettercaseSuffix),
+            inlineAttributes);
       }
       return delta;
     }
-    delta.insert(titleSuffix, inlineAttributes);
+    delta.insert(
+        applyCase(titleSuffix, lettercase: lettercaseSuffix), inlineAttributes);
     if (blockAttributes.isNotEmpty) {
       delta.insert('\n', blockAttributes);
     }
     return delta;
+  }
+
+  static String applyCase(String str, {required LetterCase lettercase}) {
+    switch (lettercase) {
+      case LetterCase.titlecase:
+        final StringBuffer buffer = StringBuffer();
+        bool isStartWithWhitespaces = true;
+        bool ignoreUntilNextWhitespace = false;
+        for (int i = 0; i < str.length; i++) {
+          final bool isWhitespace = str[i].isStrictWhiteSpace;
+          if (isStartWithWhitespaces && !isWhitespace) {
+            isStartWithWhitespaces = false;
+          }
+
+          // Checks if the current character is a whitespace
+          if (isWhitespace) {
+            buffer.write(str[i]);
+            ignoreUntilNextWhitespace = false;
+            continue;
+          }
+
+          if (ignoreUntilNextWhitespace) {
+            buffer.write(str[i]);
+            continue;
+          }
+
+          // Writes the character
+          ignoreUntilNextWhitespace = true;
+
+          buffer.write(str[i].toUpperCase());
+        }
+        return '$buffer';
+      case LetterCase.uppercase:
+        return str.toUpperCase();
+      case LetterCase.lowercase:
+        return str.toLowerCase();
+      default:
+        return str;
+    }
   }
 
   TitleOptions copyWith({
@@ -126,6 +183,7 @@ class TitleOptions {
     String? titleSuffix,
     LetterCase? lettercasePreffix,
     LetterCase? lettercaseSuffix,
+    LetterCase? lettercaseTitle,
     SectionAttributes? attrPreffix,
     SectionAttributes? attrSuffix,
     String? suffix,
@@ -135,6 +193,7 @@ class TitleOptions {
       titlePrefix: titlePrefix ?? this.titlePrefix,
       lettercasePreffix: lettercasePreffix ?? this.lettercasePreffix,
       lettercaseSuffix: lettercaseSuffix ?? this.lettercaseSuffix,
+      lettercaseTitle: lettercaseTitle ?? this.lettercaseTitle,
       titleSuffix: titleSuffix ?? this.titleSuffix,
       attrPreffix: attrPreffix ?? this.attrPreffix,
       attrSuffix: attrSuffix ?? this.attrSuffix,
@@ -149,6 +208,7 @@ class TitleOptions {
       'titleSuffix': titleSuffix,
       'attrPrefix': attrPreffix.toMap(),
       'attrSuffix': attrSuffix.toMap(),
+      'lettercaseTitle': lettercaseTitle.index,
       'lettercasePreffix': lettercasePreffix.index,
       'lettercaseSuffix': lettercaseSuffix.index,
       'preffix': preffix,
@@ -160,9 +220,10 @@ class TitleOptions {
     return TitleOptions(
       titlePrefix: map['titlePrefix'] as String,
       titleSuffix: map['titleSuffix'] as String,
+      lettercaseTitle: LetterCase.values[map['lettercasePreffix'] as int? ?? 3],
       lettercasePreffix:
-          LetterCase.values[map['lettercasePreffix'] as int? ?? 2],
-      lettercaseSuffix: LetterCase.values[map['lettercaseSuffix'] as int? ?? 2],
+          LetterCase.values[map['lettercasePreffix'] as int? ?? 3],
+      lettercaseSuffix: LetterCase.values[map['lettercaseSuffix'] as int? ?? 3],
       suffix: map['suffix'] as String?,
       preffix: map['preffix'] as String?,
       attrPreffix: SectionAttributes.fromMap(
@@ -188,6 +249,7 @@ class TitleOptions {
         other.titleSuffix == titleSuffix &&
         other.lettercasePreffix == lettercasePreffix &&
         other.lettercaseSuffix == lettercaseSuffix &&
+        other.lettercaseTitle == lettercaseTitle &&
         other.attrPreffix == attrPreffix &&
         other.attrSuffix == attrSuffix &&
         other.preffix == preffix &&
@@ -200,6 +262,7 @@ class TitleOptions {
         titleSuffix.hashCode ^
         lettercasePreffix.hashCode ^
         lettercaseSuffix.hashCode ^
+        lettercaseTitle.hashCode ^
         attrPreffix.hashCode ^
         attrSuffix.hashCode ^
         preffix.hashCode ^

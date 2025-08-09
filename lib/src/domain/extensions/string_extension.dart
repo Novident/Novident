@@ -18,6 +18,8 @@ extension StringStadistics on String {
 
   bool get isWhiteSpace => runes.every(StringContants.isWhiteSpace);
 
+  bool get isStrictWhiteSpace => StringContants.isRawWhitespace(this);
+
   String generateUnicodeString(int length) =>
       StringContants.generateUnicodeString(length);
 }
