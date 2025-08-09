@@ -4,6 +4,7 @@ import 'package:novident_remake/src/domain/entities/tree_node/document_resource.
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/enums/enums.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
+import 'package:novident_remake/src/domain/extensions/nodes_extensions.dart';
 
 extension ResourceExtension on Project {
   List<DocumentResource> getResources({bool onlyUseResearch = true}) {
@@ -32,46 +33,23 @@ extension ResourceExtension on Project {
 
   /// Return TemplatesSheet folder
   Folder? getTemplateSheet() {
-    final Folder? template = !config.cache.templatePosition.value.isNegative
-        ? root.elementAt(config.cache.templatePosition.value).cast<Folder>()
+    final Folder? template = config.cache.templatePosition.value.isNotEmpty
+        ? root.atPath(config.cache.templatePosition.value).cast<Folder>()
         : root
-            .visitNode(
-              shouldGetNode: (Node node) =>
-                  node is Folder && node.type.isTemplatesSheetFolder,
-              // commonly, templates sheet is
-              // near to the end of the project
-              reversed: true,
-            )
+            .visitAllNodes(
+                shouldGetNode: (Node node) => node.isTemplatesSheetFolder)
             .cast<Folder?>();
-    if (template != null) {
-      if (config.cache.templatePosition.value.isNegative) {
-        config.cache.templatePosition.value = root.indexOf(
-          template,
-          root.length - 1,
-        );
-      }
-      return template;
+    if (template != null && config.cache.templatePosition.value.isEmpty) {
+      config.cache.templatePosition.value = template.findNodePath();
     }
-    return null;
+    return template;
   }
 
   /// Return all the nodes into the TemplatesSheet folder
   ///
   List<Node> getTemplates() {
-    final Folder? template = !config.cache.templatePosition.value.isNegative
-        ? root.elementAt(config.cache.templatePosition.value).cast<Folder>()
-        : root
-            .visitNode(
-              shouldGetNode: (node) =>
-                  node is Folder && node.type.isTemplatesSheetFolder,
-              // commonly, templates sheet is
-              // near to the end of the project
-              reversed: true,
-            )
-            .cast<Folder?>();
-    if (template != null) {
-      return <Node>[...template.children];
-    }
-    return <Node>[];
+    return <Node>[
+      ...?getTemplateSheet()?.children,
+    ];
   }
 }

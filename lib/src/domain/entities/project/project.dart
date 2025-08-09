@@ -23,9 +23,11 @@ class Project with WordCounterMixin, CharacterCountMixin, LineCounterMixin {
     bool searchPositions = false,
   }) : id = id ?? IdGenerator.gen(version: 1) {
     if (searchPositions) {
-      config.cache.templatePosition.value = root.indexWhere(
-        (Node node) => node.isTemplatesSheetFolder,
-      );
+      config.cache.templatePosition.value = root
+              .visitAllNodes(
+                  shouldGetNode: (Node node) => node.isTemplatesSheetFolder)
+              ?.findNodePath() ??
+          <int>[];
     }
     root.attachNotifier(config.cache.listenChanges);
   }

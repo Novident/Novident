@@ -23,7 +23,7 @@ void main() {
       ],
     );
 
-    int position = 0;
+    List<int> position = [0];
     // add listener
     project.config.cache.templatePosition.addNotifier((value) {
       position = value;
@@ -31,19 +31,25 @@ void main() {
 
     final Folder? template = project.getTemplateSheet().cast<Folder?>();
     expect(template, isNotNull);
-    expect(project.root.elementAt(0).id, template!.id);
-    expect(project.root.elementAt(0).cast<Folder>().type,
+    expect(project.root.atPath(position)?.id, template!.id);
+    expect(project.root.atPath(position)?.cast<Folder?>()?.type,
         FolderType.templatesSheet);
 
-    project.root.removeAt(position);
-    expect(position, -1,
-        reason: 'The current position is $position does not match with -1. '
+    project.root.atPath(position)?.owner?.remove(template);
+    expect(position, <int>[],
+        reason:
+            'The current position is $position does not match with <int>[]. '
             'Check if something on the notifiers are not working.');
-    template.owner = null;
+    expect(template.owner, isNull,
+        reason: 'template should be unlinked from '
+            'its owner after remove event');
     project.root.insert(1, template);
-    expect(position, 1,
+    expect(position, <int>[1],
         reason: 'The current position is $position does not match with 1. '
             'Check if the notifiers are working as expected.');
+    expect(template.owner, isNotNull,
+        reason: 'template should be linked from '
+            'its owner after insert event');
 
     project.config.cache.dispose();
     expect(project.config.cache.isDisposed, isTrue);

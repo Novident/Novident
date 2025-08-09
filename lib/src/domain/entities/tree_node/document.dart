@@ -5,10 +5,7 @@ import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_can_be_trashed.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/interfaces.dart';
 import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/default_counts_impl.dart';
 import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';
@@ -26,6 +23,7 @@ final class Document extends Node
         NodeHasName,
         NodeCanBeTrashed,
         NodeCanAttachSections,
+        NodeHasSpecialFolderCompatibility,
         WordCounterMixin,
         CharacterCountMixin,
         LineCounterMixin,
@@ -62,12 +60,25 @@ final class Document extends Node
   String get section => attachedSection;
 
   @override
+  bool get canMoveIntoSpecialFolders => true;
+
+  @override
+  bool get canMoveIntoAnotherFolders => true;
+
+  @override
   NodeTrashedOptions get trashStatus => trashOptions;
 
   @override
-  Document setTrashState() {
+  Node unsetTrashState() {
+    return copyWith(trashOptions: NodeTrashedOptions.nonTrashed());
+  }
+
+  @override
+  Document setTrashState({int end = Folder.kDefaultEndTime}) {
     return copyWith(
-      trashOptions: NodeTrashedOptions.now(),
+      trashOptions: NodeTrashedOptions.now(
+        end: end,
+      ),
     );
   }
 

@@ -12,12 +12,9 @@ import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
 import 'package:novident_remake/src/domain/enums/enums.dart';
 import 'package:novident_remake/src/domain/exceptions/illegal_type_convertion_exception.dart';
 import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
+import 'package:novident_remake/src/domain/extensions/nodes_extensions.dart';
 import 'package:novident_remake/src/domain/extensions/string_extension.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_can_attach_sections.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_can_be_trashed.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_has_name.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_has_type.dart';
-import 'package:novident_remake/src/domain/interfaces/nodes/node_has_value.dart';
+import 'package:novident_remake/src/domain/interfaces/interfaces.dart';
 import 'package:novident_remake/src/domain/interfaces/project/character_count_mixin.dart';
 import 'package:novident_remake/src/domain/interfaces/project/default_counts_impl.dart';
 import 'package:novident_remake/src/domain/interfaces/project/line_counter_mixin.dart';
@@ -36,6 +33,7 @@ final class Folder extends NodeContainer
         NodeHasName,
         NodeCanBeTrashed,
         NodeCanAttachSections,
+        NodeHasSpecialFolderCompatibility,
         NodeHasType<FolderType>,
         WordCounterMixin,
         CharacterCountMixin,
@@ -68,7 +66,7 @@ final class Folder extends NodeContainer
       child.owner = this;
     }
     if (doRedepthCheck) {
-      redepthChildren(checkFirst: true);
+      adjustChildren(checkFirst: true);
     }
   }
 
@@ -91,6 +89,8 @@ final class Folder extends NodeContainer
     _isExpanded = expand;
     notify();
   }
+
+  static const int kDefaultEndTime = 30;
 
   @override
   FolderType get type => folderType;
@@ -141,11 +141,60 @@ final class Folder extends NodeContainer
   String get section => attachedSection;
 
   @override
+  bool get canMoveIntoSpecialFolders =>
+      isTrashFolder || isManuscriptFolder ? false : true;
+
+  @override
+  bool get canMoveIntoAnotherFolders =>
+      isTrashFolder || isManuscriptFolder ? false : true;
+
+  @override
   NodeTrashedOptions get trashStatus => trashOptions;
 
   @override
-  Folder setTrashState() {
-    return copyWith(trashOptions: NodeTrashedOptions.now());
+  Folder unsetTrashState() {
+    if (!isTrashed) return this;
+    return copyWith(
+      children: [
+        ...children.map((Node e) => e is NodeCanBeTrashed
+            ? e.cast<NodeCanBeTrashed>().unsetTrashState()
+            : e)
+      ],
+      trashOptions: NodeTrashedOptions.nonTrashed(),
+    );
+  }
+
+  @override
+  Folder setTrashState({int end = kDefaultEndTime}) {
+    // can't be trashed if there is no folder
+    // or if this is the [Trash] one
+    if (owner == null || isTrashFolder || isTrashed) {
+      return this;
+    }
+
+    if (owner!.isTrashed) {
+      final int? endOfOwner = owner!.cast<Folder>().trashStatus.end;
+      assert(endOfOwner != null,
+          'trashed Node owner with no end time was founded: ${owner.runtimeType}(${owner!.id})');
+      return copyWith(
+        children: <Node>[
+          ...children.map<Node>((Node e) => e.nodeCanBeTrashed
+              ? e.cast<NodeCanBeTrashed>().setTrashState(end: endOfOwner!)
+              : e)
+        ],
+        trashOptions: NodeTrashedOptions.now(end: endOfOwner!),
+      );
+    }
+    return copyWith(
+      children: <Node>[
+        ...children.map<Node>((Node e) => e.nodeCanBeTrashed
+            ? e.cast<NodeCanBeTrashed>().setTrashState(end: end)
+            : e)
+      ],
+      trashOptions: NodeTrashedOptions.now(
+        end: end,
+      ),
+    );
   }
 
   @override
@@ -166,8 +215,112 @@ final class Folder extends NodeContainer
     notify();
   }
 
+  @override
+  void add(
+    Node element, {
+    bool shouldNotify = true,
+    bool propagateNotifications = false,
+  }) {
+    // is we are into trash or a owner that is aready trashed
+    if (isTrashFolder || isTrashed) {
+      if (!element.isTrashed) {
+        final Node effectiveTrashedEl = applyTrashingFeature(element);
+        super.add(
+          effectiveTrashedEl,
+          shouldNotify: shouldNotify,
+          propagateNotifications: propagateNotifications,
+        );
+        return;
+      }
+    } else if (!(isTrashFolder || isTrashed) && element.isTrashed) {
+      final Node effectiveTrashedEl = unApplyTrashingFeature(element);
+      super.add(
+        effectiveTrashedEl,
+        shouldNotify: shouldNotify,
+        propagateNotifications: propagateNotifications,
+      );
+      return;
+    }
+    super.add(
+      element,
+      shouldNotify: shouldNotify,
+      propagateNotifications: propagateNotifications,
+    );
+  }
+
+  @override
+  void insert(
+    int index,
+    Node element, {
+    bool shouldNotify = true,
+    bool propagateNotifications = false,
+  }) {
+    if (isTrashFolder || trashOptions.isTrashed) {
+      if (!element.isTrashed) {
+        final Node effectiveTrashedEl = applyTrashingFeature(element);
+        super.insert(
+          index,
+          effectiveTrashedEl,
+          shouldNotify: shouldNotify,
+          propagateNotifications: propagateNotifications,
+        );
+        return;
+      }
+    } else if (!(isTrashFolder || isTrashed) && element.isTrashed) {
+      final Node effectiveTrashedEl = unApplyTrashingFeature(element);
+      super.add(
+        effectiveTrashedEl,
+        shouldNotify: shouldNotify,
+        propagateNotifications: propagateNotifications,
+      );
+      return;
+    }
+    super.insert(
+      index,
+      element,
+      shouldNotify: shouldNotify,
+      propagateNotifications: propagateNotifications,
+    );
+  }
+
+  Node unApplyTrashingFeature(Node node) {
+    if (node is! NodeCanBeTrashed) {
+      return this;
+    }
+    final Node effectiveTrashedEl =
+        node.cast<NodeCanBeTrashed>().unsetTrashState();
+    // notifies about the update of the trash options
+    // for the editor listeners (to avoid outdated versions
+    // during editing files)
+    onChange(
+      NodeUpdate(
+        oldState: node.clone(),
+        newState: effectiveTrashedEl.clone(),
+      ),
+    );
+    return effectiveTrashedEl;
+  }
+
+  Node applyTrashingFeature(Node node) {
+    if (node is! NodeCanBeTrashed) {
+      return this;
+    }
+    final Node effectiveTrashedEl =
+        node.cast<NodeCanBeTrashed>().setTrashState();
+    // notifies about the update of the trash options
+    // for the editor listeners (to avoid outdated versions
+    // during editing files)
+    onChange(
+      NodeUpdate(
+        oldState: node.clone(),
+        newState: effectiveTrashedEl.clone(),
+      ),
+    );
+    return effectiveTrashedEl;
+  }
+
   /// adjust the depth level of the children
-  void redepthChildren({int? currentLevel, bool checkFirst = false}) {
+  void adjustChildren({int? currentLevel, bool checkFirst = false}) {
     assert(level >= 0, 'level cannot be less than zero');
     final Node? parent = folderType == FolderType.trash
         ? null

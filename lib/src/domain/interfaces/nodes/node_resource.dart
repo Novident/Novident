@@ -12,6 +12,11 @@ mixin NodeHasResource {
 enum ResourceType {
   image,
   video,
+  pdf,
+  txt,
   formula,
   hyperlink,
+  // just when a file cannot be visualized
+  // this is setted to the [DocumentResource]
+  unknown,
 }

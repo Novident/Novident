@@ -7,7 +7,16 @@ class NodeTrashedOptions implements ClonableMixin<NodeTrashedOptions> {
   final DateTime? at;
 
   /// The time where should be removed this file
-  final DateTime? end;
+  /// 
+  /// Should be added in days time
+  ///
+  /// ```
+  ///  // node will be considered to be 
+  ///  // removed after the 30 days since
+  ///  // the [at] time
+  ///  NodeTrashedOptions.now(end: 30);
+  /// ```
+  final int? end;
 
   const NodeTrashedOptions({
     required this.isTrashed,
@@ -28,7 +37,7 @@ class NodeTrashedOptions implements ClonableMixin<NodeTrashedOptions> {
     return {
       'trashed': isTrashed,
       'at': at?.millisecondsSinceEpoch,
-      'end': end?.millisecondsSinceEpoch,
+      'end': end,
     };
   }
 
@@ -38,9 +47,7 @@ class NodeTrashedOptions implements ClonableMixin<NodeTrashedOptions> {
       at: json['at'] == null
           ? null
           : DateTime.fromMillisecondsSinceEpoch(json['at'] as int),
-      end: json['end'] == null
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['end'] as int),
+      end: json['end'] as int?,
     );
   }
 
