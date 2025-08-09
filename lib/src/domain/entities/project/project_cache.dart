@@ -50,12 +50,7 @@ class ProjectCache {
           return;
         }
         // is at the root, but was moved
-        final Node? root = change.to is! Root ? node.jumpToParent() : change.to;
-        if (root == null) {
-          throw StateError('Root wasn\'t founded while using '
-              'jumpToParent() method that should get the '
-              'Root owner too');
-        }
+        Node root = change.to is! Root ? node.jumpToParent() : change.to;
         final int indexOf = root.cast<Root>().indexWhere(
               (el) => el.isTemplatesSheetFolder,
             );
@@ -64,12 +59,7 @@ class ProjectCache {
       }
       if (node.isManuscriptFolder && change.to is Root) {
         // is at the root, but was moved
-        final Node? root = change.to is! Root ? node.jumpToParent() : change.to;
-        if (root == null) {
-          throw StateError('Root wasn\'t founded while using '
-              'jumpToParent() method that should get the '
-              'Root owner too');
-        }
+        final Node root = change.to is! Root ? node.jumpToParent() : change.to;
         final int indexOf = root.cast<Root>().indexWhere(
               (el) => el.isManuscriptFolder,
             );
@@ -86,12 +76,7 @@ class ProjectCache {
           return;
         }
         // is at the root, but was moved
-        final Node? root = node.jumpToParent();
-        if (root == null) {
-          throw StateError('Root wasn\'t founded while using '
-              'jumpToParent() method that should get the '
-              'Root owner too');
-        }
+        final Node root = node.jumpToParent();
         final int indexOf = root.cast<Root>().indexWhere(
               (el) => el.isTemplatesSheetFolder,
             );
@@ -100,12 +85,7 @@ class ProjectCache {
       }
       if (node.isManuscriptFolder) {
         // is at the root, but was moved
-        final Node? root = change.to is! Root ? node.jumpToParent() : change.to;
-        if (root == null) {
-          throw StateError('Root wasn\'t founded while using '
-              'jumpToParent() method that should get the '
-              'Root owner too');
-        }
+        final Node root = change.to is! Root ? node.jumpToParent() : change.to;
         final int indexOf = root.cast<Root>().indexWhere(
               (el) => el.isManuscriptFolder,
             );
