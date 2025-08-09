@@ -5,7 +5,7 @@ import 'package:novident_nodes/novident_nodes.dart';
 import 'package:collection/collection.dart';
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_quill/quill_delta.dart';
+import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/document.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/root_node.dart';
@@ -240,26 +240,30 @@ final class Folder extends NodeContainer
   }
 
   @override
-  Folder clone() {
+  Folder clone({bool deep = true}) {
     return Folder(
-      children: children
-          .map(
-            (e) => e.clone(),
-          )
-          .toList(),
+      children: deep
+          ? children
+              .map<Node>(
+                (e) => e.clone(
+                  deep: true,
+                ),
+              )
+              .toList()
+          : children,
       name: name,
       trashOptions: trashOptions.clone(),
       folderType: folderType,
       attachedSection: attachedSection,
       content: Delta.from(content),
-      details: details,
+      details: details.clone(),
       isExpanded: isExpanded,
     );
   }
 
   @override
-  Folder cloneWithNewLevel(int level) {
-    return clone().copyWith(
+  Folder cloneWithNewLevel(int level, {bool deep = true}) {
+    return copyWith(
       details: details.cloneWithNewLevel(level),
     );
   }

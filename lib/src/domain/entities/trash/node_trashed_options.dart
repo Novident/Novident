@@ -54,7 +54,7 @@ class NodeTrashedOptions implements ClonableMixin<NodeTrashedOptions> {
   int get hashCode => isTrashed.hashCode ^ at.hashCode ^ end.hashCode;
 
   @override
-  NodeTrashedOptions clone() {
+  NodeTrashedOptions clone({bool deep = true}) {
     return NodeTrashedOptions(
       isTrashed: isTrashed,
       at: at,

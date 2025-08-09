@@ -24,8 +24,8 @@ dependencies:
   humanize_duration: ^0.0.2
   numerus: ^2.3.0
   humanize_numbers: ^1.0.1
-  novident_nodes: ^1.1.7
-  novident_tree_view: ^1.0.7
+  novident_nodes: ^1.1.8
+  novident_tree_view: ^1.0.8
 
 dev_dependencies:
   flutter_test:

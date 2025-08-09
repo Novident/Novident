@@ -85,9 +85,7 @@ final class ProjectProcessor {
       _nodesBeingProcessed.add(node);
 
       final Layout? layout = format.getLayoutWhere(
-        predicate: (Layout layout) => layout.assignedSection.equals(
-          section,
-        ),
+        predicate: (Layout layout) => layout.assignedSection.equals(section),
       );
 
       final bool hasNoMatch = section.isEmpty || layout.isNull;

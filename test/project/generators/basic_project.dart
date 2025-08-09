@@ -1,5 +1,6 @@
 import 'package:novident_remake/src/domain/entities/format/format.dart';
 import 'package:novident_nodes/novident_nodes.dart';
+import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:novident_remake/src/domain/entities/project/project.dart';
 import 'package:novident_remake/src/domain/entities/project/project_configurations.dart';
 import 'package:novident_remake/src/domain/entities/project/section/section.dart';

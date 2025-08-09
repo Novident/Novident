@@ -1,19 +1,33 @@
-import 'package:flutter_quill/flutter_quill.dart';
+import 'package:dart_quill_delta/dart_quill_delta.dart';
+import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
+import 'package:novident_nodes/novident_nodes.dart';
+import 'package:novident_remake/src/domain/extensions/cast_extension.dart';
 import 'package:novident_remake/src/domain/services/editor_service.dart';
 
-class WordCountService extends EditorService<Document, int> {
+import '../interfaces/interfaces.dart';
+
+class WordCountService extends EditorService<Node, int> {
   static final RegExp _wordCountPattern = RegExp(r'\S+');
 
   @override
-  bool shouldExecute(Document data) {
-    return !data.isEmpty();
+  bool shouldExecute(Node data) {
+    if (data is! NodeHasValue<Delta>) {
+      return false;
+    }
+    return data.cast<NodeHasValue<Delta>>().value.isNotEmpty;
   }
 
   @override
-  int execute(Document data) {
-    final String plainText = data.toPlainText();
-    if (plainText == '\n') return 0;
-    final int count = _wordCountPattern.allMatches(plainText).length;
-    return count;
+  void onLoadNewData(Object? oldState, Object newState) {}
+
+  @override
+  int execute(Node data) {
+    if (data is NodeHasValue<Delta>) {
+      final String plainText = data.cast<NodeHasValue<Delta>>().value.toPlain();
+      if (plainText == '\n') return 0;
+      final int count = _wordCountPattern.allMatches(plainText).length;
+      return count;
+    }
+    return -1;
   }
 }

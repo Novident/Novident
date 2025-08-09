@@ -1,5 +1,5 @@
 import 'package:dart_quill_delta_simplify/dart_quill_delta_simplify.dart';
-import 'package:flutter_quill/quill_delta.dart' show Delta;
+import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:novident_remake/src/domain/entities/rule/resources/resource_rules.dart';
 import 'package:novident_remake/src/domain/entities/trash/node_trashed_options.dart';
 import 'package:novident_remake/src/domain/entities/tree_node/folder.dart';
@@ -53,7 +53,7 @@ final class DocumentResource extends Node
   Delta get value => content;
 
   @override
-  DocumentResource clone() {
+  DocumentResource clone({bool deep = true}) {
     return DocumentResource(
       details: details,
       extension: extension,
@@ -64,7 +64,7 @@ final class DocumentResource extends Node
   }
 
   @override
-  Node cloneWithNewLevel(int level) {
+  DocumentResource cloneWithNewLevel(int level, {bool deep = true}) {
     return copyWith(
       details: details.cloneWithNewLevel(level),
     );
